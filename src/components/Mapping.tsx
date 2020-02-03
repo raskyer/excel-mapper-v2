@@ -36,7 +36,6 @@ interface MappingDispatch {
 }
 
 const Mapping: React.FC<MappingProps> = (props: MappingProps) => {
-
   return (
     <>
       <Row>
@@ -76,7 +75,7 @@ const Mapping: React.FC<MappingProps> = (props: MappingProps) => {
           </Row>
         </Col>
         <Col xs={2}>
-          {/* ARROW POINTING */}
+          =>
         </Col>
         <Col>
           <Row>

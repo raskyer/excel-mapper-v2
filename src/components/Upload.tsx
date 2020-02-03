@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import { dbFileChangedAction } from '../redux/app-reducer';
+
+import { dbFileChangedAction, orderFileChangedAction } from '../redux/app-reducer';
 
 interface UploadProps extends UploadDispatch {}
 
 interface UploadDispatch {
   onDbChange: (file: File) => void;
+  onOrderChange: (file: File) => void;
 }
 
 const Upload: React.FC<UploadProps> = (props) => {
@@ -18,8 +20,9 @@ const Upload: React.FC<UploadProps> = (props) => {
     props.onDbChange(e.currentTarget.files[0]);
   };
 
-  const onOrderChange = () => {
-
+  const onOrderChange = (e: React.FormEvent<HTMLInputElement>) => {
+    if (!e.currentTarget.files) return;
+    props.onOrderChange(e.currentTarget.files[0]);
   };
 
   return (
@@ -43,7 +46,8 @@ const Upload: React.FC<UploadProps> = (props) => {
 };
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  onDbChange: (file: File) => dispatch(dbFileChangedAction(file))
+  onDbChange: (file: File) => dispatch(dbFileChangedAction(file)),
+  onOrderChange: (file: File) => dispatch(orderFileChangedAction(file))
 });
 
 export default connect(undefined, mapDispatchToProps)(Upload);

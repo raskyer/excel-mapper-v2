@@ -10,8 +10,8 @@ interface State {
   providerSheetName?: string;
   orderSheetName?: string;
 
-  customerSheet: any[] | null;
-  providerSheet: any[] | null;
+  customerSheet?: any[];
+  providerSheet?: any[];
 
   customerCells: string[];
   providerCells: string[];

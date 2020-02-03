@@ -5,8 +5,6 @@ import Locator from '../utils/locator';
 const INITIAL_STATE: State = {
   sheetsNames: [],
   orderSheetsNames: [],
-  customerSheet: null,
-  providerSheet: null,
   customerCells: [],
   providerCells: [],
   orderCells: []
@@ -26,8 +24,8 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: (a: Action) => v
       const customerSheetName = Locator.findSheet(sheetsNames, Locator.CUSTOMER_SHEET);
       const providerSheetName = Locator.findSheet(sheetsNames, Locator.PROVIDER_SHEET);
       
-      const customerSheet = customerSheetName ? parseSheet(workbook.Sheets[customerSheetName]) : null;
-      const providerSheet = providerSheetName ? parseSheet(workbook.Sheets[providerSheetName]) : null;
+      const customerSheet = customerSheetName ? parseSheet(workbook.Sheets[customerSheetName]) : undefined;
+      const providerSheet = providerSheetName ? parseSheet(workbook.Sheets[providerSheetName]) : undefined;
 
       const customerCells: string[] = customerSheet ? customerSheet[0] : [];
       const providerCells: string[] = providerSheet ? providerSheet[0] : [];
@@ -68,7 +66,7 @@ export const customerSheetChangedAction = (customerSheetName: string) => (dispat
     return;
   }
 
-  const customerSheet = customerSheetName ? parseSheet(state.dbWorkbook.Sheets[customerSheetName]) : null;
+  const customerSheet = customerSheetName ? parseSheet(state.dbWorkbook.Sheets[customerSheetName]) : undefined;
   const customerCells: string[] = customerSheet ? customerSheet[0] : [];
 
   const customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
