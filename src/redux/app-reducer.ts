@@ -12,9 +12,14 @@ const INITIAL_STATE: State = {
   orderCells: []
 };
 
+interface Action {
+  type: string;
+  payload: Partial<State>;
+}
+
 const INIT_DB = 'init_db';
 
-export const dbFileChangedAction = (dbFile: File) => (dispatch: Function) => {
+export const dbFileChangedAction = (dbFile: File) => (dispatch: (a: Action) => void) => {
   parseFile(dbFile)
     .then(workbook => {
       const sheetsNames = workbook.SheetNames;
@@ -47,18 +52,51 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: Function) => {
           customerRatingCell,
           providerRatingCell
         }
-      })
+      });
     });
 };
 
-export const orderFileChangedAction = (orderFile: File) => (dispatch: Function) => {
+export const orderFileChangedAction = (orderFile: File) => (dispatch: (a: Action) => void) => {
   parseFile(orderFile)
     .then(workbook => {
 
     });
 };
 
-const AppReducer = (state: State = INITIAL_STATE, action: any): State => {
+export const customerSheetChangedAction = (customerSheetName: string) => (dispatch: (a: Action) => void, state: State): void => {
+  if (!state.dbWorkbook) {
+    return;
+  }
+
+  const customerSheet = customerSheetName ? parseSheet(state.dbWorkbook.Sheets[customerSheetName]) : null;
+  const customerCells: string[] = customerSheet ? customerSheet[0] : [];
+
+  const customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
+  const customerRatingCell = Locator.findCell(customerCells, Locator.CUSTOMER_RATING);
+
+  dispatch({
+    type: INIT_DB,
+    payload: {
+      customerSheetName,
+      customerSheet,
+      customerCells,
+      customerIDCell,
+      customerRatingCell
+    }
+  })
+};
+
+export const customerIDCellChangedAction = (customerIDCellStr: string) => (dispatch: (a: Action) => void): void => {
+  const customerIDCell = parseInt(customerIDCellStr, 10);
+  dispatch({
+    type: INIT_DB,
+    payload: {
+      customerIDCell
+    }
+  });
+};
+
+const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
   switch (action.type) {
     case INIT_DB:
       return {

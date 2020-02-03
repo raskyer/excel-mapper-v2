@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 import Select from './common/Select';
 import State from '../entities/State';
+import { customerSheetChangedAction, customerIDCellChangedAction } from '../redux/app-reducer';
 
 interface MappingProps extends MappingState, MappingDispatch {}
 
@@ -115,9 +117,9 @@ const mapStateToProps = (state: State): MappingState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): MappingDispatch => ({
-  onCustomerSheetChange: (s: string): void => dispatch(s),
+  onCustomerSheetChange: (s: string): void => dispatch(customerSheetChangedAction(s)),
   onOrderSheetChange: (s: string): void => dispatch(s),
-  onCustomerIDCellChange: (s: string): void => dispatch(s),
+  onCustomerIDCellChange: (s: string): void => dispatch(customerIDCellChangedAction(s)),
   onOrderCustomerIDCellChange: (s: string): void => dispatch(s)
 });
 

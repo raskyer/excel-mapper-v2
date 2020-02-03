@@ -1,4 +1,8 @@
+import XLSX from "xlsx";
+
 interface State {
+  dbWorkbook?: XLSX.WorkBook;
+
   sheetsNames: string[];
   orderSheetsNames: string[];
 
@@ -6,8 +10,8 @@ interface State {
   providerSheetName?: string;
   orderSheetName?: string;
 
-  customerSheet: null;
-  providerSheet: null;
+  customerSheet: any[] | null;
+  providerSheet: any[] | null;
 
   customerCells: string[];
   providerCells: string[];
@@ -17,6 +21,8 @@ interface State {
   providerIDCell?: number;
   orderCustomerIDCell?: number;
   orderProviderIDCell?: number;
+  customerRatingCell?: number;
+  providerRatingCell?: number;
 }
 
 export default State;
