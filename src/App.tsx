@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import Upload from './components/Upload';
-import Mapping from './components/Mapping';
+import Mapping from './components/mapping/Mapping';
 
 const App = () => {
   return (

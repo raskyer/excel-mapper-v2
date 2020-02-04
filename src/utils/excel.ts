@@ -14,17 +14,17 @@ export function parseFile(file: File): Promise<XLSX.WorkBook> {
   });
 }
 
-export function parseSheet(sheet: XLSX.WorkSheet): any[] {
+export function parseSheet(sheet: XLSX.WorkSheet): any[][] {
   return XLSX.utils.sheet_to_json(sheet, { header: 1 });
 }
 
-export function createWorkbook(data: any[]) {
+export function createWorkbook(data: any[]): XLSX.WorkBook {
   const workbook = XLSX.utils.book_new();
   const worksheet = XLSX.utils.aoa_to_sheet(data);
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Feuille 1');
   return workbook;
 }
 
-export function downloadWorkbook(workbook: XLSX.WorkBook) {
+export function downloadWorkbook(workbook: XLSX.WorkBook): void {
   XLSX.writeFile(workbook, 'out.xlsx', { bookType:'xlsx', bookSST:false, type:'array' });
 }

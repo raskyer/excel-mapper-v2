@@ -2,22 +2,18 @@ import State from "../entities/State";
 import { parseFile, parseSheet } from "../utils/excel";
 import Locator from '../utils/locator';
 
-const INITIAL_STATE: State = {
-  sheetsNames: [],
-  orderSheetsNames: [],
-  customerCells: [],
-  providerCells: [],
-  orderCells: []
-};
+const INITIAL_STATE: State = {};
 
 interface Action {
   type: string;
   payload: Partial<State>;
 }
 
+type Dispatcher = (a: Action) => void;
+
 const INIT_DB = 'init_db';
 
-export const dbFileChangedAction = (dbFile: File) => (dispatch: (a: Action) => void) => {
+export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher) => {
   parseFile(dbFile)
     .then(workbook => {
       const sheetsNames = workbook.SheetNames;
@@ -38,13 +34,8 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: (a: Action) => v
       dispatch({
         type: INIT_DB,
         payload: {
-          sheetsNames,
           customerSheetName,
           providerSheetName,
-          customerSheet,
-          providerSheet,
-          customerCells,
-          providerCells,
           customerIDCell,
           providerIDCell,
           customerRatingCell,
@@ -54,14 +45,14 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: (a: Action) => v
     });
 };
 
-export const orderFileChangedAction = (orderFile: File) => (dispatch: (a: Action) => void) => {
+export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher) => {
   parseFile(orderFile)
     .then(workbook => {
 
     });
 };
 
-export const customerSheetChangedAction = (customerSheetName: string) => (dispatch: (a: Action) => void, state: State): void => {
+export const customerSheetChangedAction = (customerSheetName: string) => (dispatch: Dispatcher, state: State): void => {
   if (!state.dbWorkbook) {
     return;
   }
@@ -76,15 +67,13 @@ export const customerSheetChangedAction = (customerSheetName: string) => (dispat
     type: INIT_DB,
     payload: {
       customerSheetName,
-      customerSheet,
-      customerCells,
       customerIDCell,
       customerRatingCell
     }
   })
 };
 
-export const customerIDCellChangedAction = (customerIDCellStr: string) => (dispatch: (a: Action) => void): void => {
+export const customerIDCellChangedAction = (customerIDCellStr: string) => (dispatch: Dispatcher): void => {
   const customerIDCell = parseInt(customerIDCellStr, 10);
   dispatch({
     type: INIT_DB,

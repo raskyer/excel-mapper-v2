@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
-import { dbFileChangedAction, orderFileChangedAction } from '../redux/app-reducer';
+import { dbFileChangedAction, orderFileChangedAction } from '../redux/reducer';
 
 interface UploadProps extends UploadDispatch {}
 

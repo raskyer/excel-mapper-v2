@@ -2,20 +2,11 @@ import XLSX from "xlsx";
 
 interface State {
   dbWorkbook?: XLSX.WorkBook;
-
-  sheetsNames: string[];
-  orderSheetsNames: string[];
+  orderWorkbook?: XLSX.WorkBook;
 
   customerSheetName?: string;
   providerSheetName?: string;
   orderSheetName?: string;
-
-  customerSheet?: any[];
-  providerSheet?: any[];
-
-  customerCells: string[];
-  providerCells: string[];
-  orderCells: string[];
 
   customerIDCell?: number;
   providerIDCell?: number;
