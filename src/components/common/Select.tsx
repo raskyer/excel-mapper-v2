@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 interface SelectProps {
   title: string;
-  value?: string;
+  value?: string | number;
   onChange?: (s: string) => void;
   options: string[];
   byValue?: boolean;
@@ -21,9 +21,10 @@ const Select: React.FC<SelectProps> = (props) => {
       <Form.Label>{props.title}</Form.Label>
       <Form.Control
         as="select"
-        value={props.value}
+        value={props.value !== undefined ? props.value + '' : undefined}
         onChange={onChange}
         isValid={props.value !== undefined}
+        disabled={props.options.length < 1}
       >
         {props.options.map((option, index) => (
           <option key={index} value={props.byValue ? option : index + ''}>{option}</option>

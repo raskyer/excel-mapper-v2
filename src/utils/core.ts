@@ -1,3 +1,4 @@
+import XLSX from 'xlsx';
 import { parseSheet } from './excel';
 
 const DEFAULT_PROJECTION = {
@@ -15,7 +16,9 @@ const DEFAULT_PROJECTION = {
   'Commentaires': 'Commentaires'
 };
 
-export function compute(settings, dbWorkbook, orderWorkbook) {
+type CellMap = Map<string | number, any[]>;
+
+export function compute(settings: any, dbWorkbook: XLSX.WorkBook, orderWorkbook: XLSX.WorkBook) {
   const customerSheet = parseSheet(dbWorkbook.Sheets[settings.customerSheet]);
   const providerSheet = parseSheet(dbWorkbook.Sheets[settings.providerSheet]);
   const orderSheet    = parseSheet(orderWorkbook.Sheets[settings.orderSheet]);
@@ -28,7 +31,7 @@ export function compute(settings, dbWorkbook, orderWorkbook) {
   return createProjection(orders, orderSheet[0], DEFAULT_PROJECTION);
 }
 
-export function createMap(sheet: any[][], idCell: number): Map<string | number, any[]> {
+export function createMap(sheet: any[][], idCell: number): CellMap {
   const map = new Map();
   for (let i = 1; i < sheet.length; i++) {
     let id = sheet[i][idCell];
@@ -44,7 +47,17 @@ export function createMap(sheet: any[][], idCell: number): Map<string | number, 
   return map;
 }
 
-function createOrderRanking(customerMap, providerMap, orderSheet, settings) {
+export function getMissing(orderMap: CellMap, itemMap: CellMap): any[][] {
+  const missing: any[][] = [];
+  for (const [key, value] of orderMap.entries()) {
+    if (!itemMap.has(key)) {
+      missing.push(value);
+    }
+  }
+  return missing;
+}
+
+function createOrderRanking(customerMap: CellMap, providerMap: CellMap, orderSheet: any[][], settings: any) {
   const orders = [];
   for (let i = 1; i < orderSheet.length; i++) {
     const o = orderSheet[i];
@@ -60,7 +73,7 @@ function createOrderRanking(customerMap, providerMap, orderSheet, settings) {
   });
 }
 
-function getRanking(o, customerMap, providerMap, settings) {
+function getRanking(o: any[], customerMap: CellMap, providerMap: CellMap, settings: any) {
   const customerRanking = getCustomerRanking(o[settings.orderCustomerID], customerMap, settings);
   const providerRanking = getProviderRanking(o[settings.orderProviderID], providerMap, settings);
   const dateRanking     = getDateRanking(o, settings);
@@ -68,7 +81,7 @@ function getRanking(o, customerMap, providerMap, settings) {
   return providerRanking + dateRanking + customerRanking;
 }
 
-function getCustomerRanking(customerKey, customerMap, settings) {
+function getCustomerRanking(customerKey: string | number, customerMap: CellMap, settings: any) {
   if (customerKey === undefined || customerKey === null || customerKey === '') {
     console.error('GET CUSTOMER RANKING : customer key is empty', customerKey);
     return 0;
@@ -109,7 +122,7 @@ function getCustomerRanking(customerKey, customerMap, settings) {
   }
 }
 
-function getProviderRanking(providerKey, providerMap, settings) {
+function getProviderRanking(providerKey: string | number, providerMap: CellMap, settings: any) {
   if (providerKey === undefined || providerKey === null || providerKey === '') {
     console.error('GET PROVIDER RANKING : provider key is empty', providerKey);
     return 0;
@@ -152,7 +165,7 @@ function getProviderRanking(providerKey, providerMap, settings) {
   return mark * coef;
 }
 
-function getDateRanking(o, settings) {
+function getDateRanking(o: any[], settings: any) {
   const type = o[settings.orderType];
 
   if (type === undefined || type === null || type === '') {
@@ -187,7 +200,7 @@ function getDateRanking(o, settings) {
   return mark * coef;
 }
 
-function createProjection(orders, headers, projection) {
+function createProjection(orders: any[], headers: string[], projection: any) {
   const newHeaders = Object
     .keys(projection)
     .map(key => ({

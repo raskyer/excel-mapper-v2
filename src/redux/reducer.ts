@@ -11,7 +11,7 @@ interface Action {
 
 type Dispatcher = (a: Action) => void;
 
-const INIT_DB = 'init_db';
+const MERGE = 'merge';
 
 export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher) => {
   parseFile(dbFile)
@@ -32,8 +32,9 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher) => {
       const providerRatingCell = Locator.findCell(providerCells, Locator.PROVIDER_RATING);
 
       dispatch({
-        type: INIT_DB,
+        type: MERGE,
         payload: {
+          dbWorkbook: workbook,
           customerSheetName,
           providerSheetName,
           customerIDCell,
@@ -48,7 +49,23 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher) => {
 export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher) => {
   parseFile(orderFile)
     .then(workbook => {
+      const sheetsNames = workbook.SheetNames;
+      const orderSheetName = Locator.findSheet(sheetsNames, Locator.ORDER_SHEET);
 
+      const orderSheet = orderSheetName ? parseSheet(workbook.Sheets[orderSheetName]) : undefined;
+      const orderCells = orderSheet ? orderSheet[0] : [];
+      const orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
+      const orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
+
+      dispatch({
+        type: MERGE,
+        payload: {
+          orderWorkbook: workbook,
+          orderSheetName,
+          orderCustomerIDCell,
+          orderProviderIDCell
+        }
+      });
     });
 };
 
@@ -64,7 +81,7 @@ export const customerSheetChangedAction = (customerSheetName: string) => (dispat
   const customerRatingCell = Locator.findCell(customerCells, Locator.CUSTOMER_RATING);
 
   dispatch({
-    type: INIT_DB,
+    type: MERGE,
     payload: {
       customerSheetName,
       customerIDCell,
@@ -76,16 +93,27 @@ export const customerSheetChangedAction = (customerSheetName: string) => (dispat
 export const customerIDCellChangedAction = (customerIDCellStr: string) => (dispatch: Dispatcher): void => {
   const customerIDCell = parseInt(customerIDCellStr, 10);
   dispatch({
-    type: INIT_DB,
+    type: MERGE,
     payload: {
       customerIDCell
     }
   });
 };
 
+export const orderCustomerIDCellChangedAction = (orderCustomerIDCellStr: string) => (dispatch: Dispatcher): void => {
+  const orderCustomerIDCell = parseInt(orderCustomerIDCellStr, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      orderCustomerIDCell
+    }
+  });
+};
+
 const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
   switch (action.type) {
-    case INIT_DB:
+    case MERGE:
+      console.log(action.payload);
       return {
         ...state,
         ...action.payload
