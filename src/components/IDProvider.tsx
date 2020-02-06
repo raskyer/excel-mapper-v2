@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 import Select from './common/Select';
 import State from '../entities/State';
 import { getProviderCells, getOrderCells, getProviderMap, getOrderProviderMap } from '../redux/selector';
-import { customerIDCellChangedAction, orderCustomerIDCellChangedAction } from '../redux/reducer';
+import { providerIDCellChangedAction, orderProviderIDCellChangedAction } from '../redux/reducer';
 import { getMissing } from '../utils/core';
 
 interface IDProviderProps extends IDProviderState, IDProviderDispatch {}
@@ -26,8 +26,8 @@ interface IDProviderState {
 }
 
 interface IDProviderDispatch {
-  onCustomerIDCellChange: (s: string) => void;
-  onOrderCustomerIDCellChange: (s: string) => void;
+  onProviderIDCellChange: (s: string) => void;
+  onOrderProviderIDCellChange: (s: string) => void;
 }
 
 const IDProvider: React.FC<IDProviderProps> = (props: IDProviderProps) => {
@@ -76,7 +76,7 @@ const IDProvider: React.FC<IDProviderProps> = (props: IDProviderProps) => {
                   <Select
                     title={`Cellule ID Transporteur`}
                     value={props.providerIDCell}
-                    onChange={props.onCustomerIDCellChange}
+                    onChange={props.onProviderIDCellChange}
                     options={props.providerCells}
                   />
                 </Col>
@@ -106,7 +106,7 @@ const IDProvider: React.FC<IDProviderProps> = (props: IDProviderProps) => {
                   <Select
                     title={`Cellule ID Transporteur`}
                     value={props.orderProviderIDCell}
-                    onChange={props.onOrderCustomerIDCellChange}
+                    onChange={props.onOrderProviderIDCellChange}
                     options={props.orderCells}
                   />
                 </Col>
@@ -150,8 +150,8 @@ const mapStateToProps = (state: State): IDProviderState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): IDProviderDispatch => ({
-  onCustomerIDCellChange: (s: string): void => dispatch(customerIDCellChangedAction(s)),
-  onOrderCustomerIDCellChange: (s: string): void => dispatch(orderCustomerIDCellChangedAction(s))
+  onProviderIDCellChange: (s: string): void => dispatch(providerIDCellChangedAction(s)),
+  onOrderProviderIDCellChange: (s: string): void => dispatch(orderProviderIDCellChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IDProvider);

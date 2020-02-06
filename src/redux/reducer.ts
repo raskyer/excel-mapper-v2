@@ -90,8 +90,8 @@ export const customerSheetChangedAction = (customerSheetName: string) => (dispat
   })
 };
 
-export const customerIDCellChangedAction = (customerIDCellStr: string) => (dispatch: Dispatcher): void => {
-  const customerIDCell = parseInt(customerIDCellStr, 10);
+export const customerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const customerIDCell = parseInt(str, 10);
   dispatch({
     type: MERGE,
     payload: {
@@ -100,12 +100,32 @@ export const customerIDCellChangedAction = (customerIDCellStr: string) => (dispa
   });
 };
 
-export const orderCustomerIDCellChangedAction = (orderCustomerIDCellStr: string) => (dispatch: Dispatcher): void => {
-  const orderCustomerIDCell = parseInt(orderCustomerIDCellStr, 10);
+export const orderCustomerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const orderCustomerIDCell = parseInt(str, 10);
   dispatch({
     type: MERGE,
     payload: {
       orderCustomerIDCell
+    }
+  });
+};
+
+export const providerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const providerIDCell = parseInt(str, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      providerIDCell
+    }
+  });
+};
+
+export const orderProviderIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const orderProviderIDCell = parseInt(str, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      orderProviderIDCell
     }
   });
 };
