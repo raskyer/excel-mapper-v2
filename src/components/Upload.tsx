@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 
 import { dbFileChangedAction, orderFileChangedAction } from '../redux/reducer';
 
@@ -26,22 +27,27 @@ const Upload: React.FC<UploadProps> = (props) => {
   };
 
   return (
-    <Form>
-      <Row>
-        <Col>
-          <Form.Group>
-            <Form.Label>Choissisez un fichier</Form.Label>
-            <Form.Control type="file" onChange={onDbChange} />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group>
-            <Form.Label>Choissisez un fichier </Form.Label>
-            <Form.Control type="file" onChange={onOrderChange} />
-          </Form.Group>
-        </Col>
-      </Row>
-    </Form>
+    <Card>
+      <Card.Header>Fichiers</Card.Header>
+      <Card.Body>
+        <Form>
+          <Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Fichier Clients / Transporteurs</Form.Label>
+                <Form.Control type="file" onChange={onDbChange} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Fichier Commandes</Form.Label>
+                <Form.Control type="file" onChange={onOrderChange} isValid={true} />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 };
 

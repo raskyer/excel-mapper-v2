@@ -5,7 +5,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import Upload from './components/Upload';
-import Mapping from './components/mapping/Mapping';
+import Sheets from './components/Sheets';
+import IDCustomer from './components/IDCustomer';
+import IDProvider from './components/IDProvider';
 
 const App = () => {
   return (
@@ -17,7 +19,17 @@ const App = () => {
       </Row>
       <Row>
         <Col>
-          <Mapping />
+          <Sheets />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <IDCustomer />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <IDProvider />
         </Col>
       </Row>
     </Container>
