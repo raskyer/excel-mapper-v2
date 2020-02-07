@@ -33,7 +33,6 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
   const [missing, setMissing] = useState<any[][]>([]);
 
   useEffect(() => {
-    console.log('effect');
     setMissing(getMissing(props.orderMap, props.map));
   }, [props.map, props.orderMap]);
 

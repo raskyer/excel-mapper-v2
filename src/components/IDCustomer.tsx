@@ -26,7 +26,7 @@ interface IDCustomerDispatch {
 const IDCustomer: React.FC<IDCustomerProps> = (props: IDCustomerProps) => {
   return (
     <IDLink
-      header={"Cellule ID Client"}
+      header={"Cellules ID Client"}
       cells={props.customerCells}
       orderCells={props.orderCells}
       IDCell={props.customerIDCell}

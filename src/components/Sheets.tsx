@@ -40,9 +40,8 @@ const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
               options={props.dbSheetsNames}
               byValue
             />
-          </Col>
-          <Col>
-          <Select
+
+            <Select
               title="Feuille Transporteurs"
               value={props.providerSheetName}
               onChange={props.onProviderSheetChange}

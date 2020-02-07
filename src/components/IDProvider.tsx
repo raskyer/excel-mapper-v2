@@ -26,7 +26,7 @@ interface IDProviderDispatch {
 const IDProvider: React.FC<IDProviderProps> = (props: IDProviderProps) => {
   return (
     <IDLink
-      header={"Cellule ID Transporteur"}
+      header={"Cellules ID Transporteur"}
       cells={props.providerCells}
       orderCells={props.orderCells}
       IDCell={props.providerIDCell}

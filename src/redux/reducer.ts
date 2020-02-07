@@ -57,6 +57,9 @@ export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher
       const orderCells = orderSheet ? orderSheet[0] : [];
       const orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
       const orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
+      const orderTypeCell = Locator.findCell(orderCells, Locator.ORDER_TYPE);
+      const orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
+      const orderDeliveryDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_DELIVERY);
 
       dispatch({
         type: MERGE,
@@ -64,7 +67,10 @@ export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher
           orderWorkbook: workbook,
           orderSheetName,
           orderCustomerIDCell,
-          orderProviderIDCell
+          orderProviderIDCell,
+          orderTypeCell,
+          orderShippingDateCell,
+          orderDeliveryDateCell
         }
       });
     });
@@ -128,13 +134,19 @@ export const orderSheetChangedAction = (orderSheetName: string) => (dispatch: Di
 
   const orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
   const orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
+  const orderTypeCell = Locator.findCell(orderCells, Locator.ORDER_TYPE);
+  const orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
+  const orderDeliveryDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_DELIVERY);
 
   dispatch({
     type: MERGE,
     payload: {
       orderSheetName,
       orderCustomerIDCell,
-      orderProviderIDCell
+      orderProviderIDCell,
+      orderTypeCell,
+      orderShippingDateCell,
+      orderDeliveryDateCell
     }
   });
 };
@@ -175,6 +187,56 @@ export const orderProviderIDCellChangedAction = (str: string) => (dispatch: Disp
     type: MERGE,
     payload: {
       orderProviderIDCell
+    }
+  });
+};
+
+export const customerRatingCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const customerRatingCell = parseInt(str, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      customerRatingCell
+    }
+  });
+};
+
+export const providerRatingCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const providerRatingCell = parseInt(str, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      providerRatingCell
+    }
+  });
+};
+
+export const orderTypeCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const orderTypeCell = parseInt(str, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      orderTypeCell
+    }
+  });
+};
+
+export const orderShippingDateCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const orderShippingDateCell = parseInt(str, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      orderShippingDateCell
+    }
+  });
+};
+
+export const orderDeliveryDateCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const orderDeliveryDateCell = parseInt(str, 10);
+  dispatch({
+    type: MERGE,
+    payload: {
+      orderDeliveryDateCell
     }
   });
 };

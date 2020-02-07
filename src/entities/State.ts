@@ -14,6 +14,10 @@ interface State {
   orderProviderIDCell?: number;
   customerRatingCell?: number;
   providerRatingCell?: number;
+
+  orderTypeCell?: number;
+  orderShippingDateCell?: number;
+  orderDeliveryDateCell?: number;
 }
 
 export default State;
