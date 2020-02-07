@@ -10,6 +10,7 @@ interface Action {
 }
 
 type Dispatcher = (a: Action) => void;
+type Getter = () => State;
 
 const MERGE = 'merge';
 
@@ -69,12 +70,14 @@ export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher
     });
 };
 
-export const customerSheetChangedAction = (customerSheetName: string) => (dispatch: Dispatcher, state: State): void => {
-  if (!state.dbWorkbook) {
+export const customerSheetChangedAction = (customerSheetName: string) => (dispatch: Dispatcher, getState: Getter): void => {
+  const { dbWorkbook } = getState();
+
+  if (!dbWorkbook) {
     return;
   }
 
-  const customerSheet = customerSheetName ? parseSheet(state.dbWorkbook.Sheets[customerSheetName]) : undefined;
+  const customerSheet = customerSheetName ? parseSheet(dbWorkbook.Sheets[customerSheetName]) : undefined;
   const customerCells: string[] = customerSheet ? customerSheet[0] : [];
 
   const customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
@@ -87,7 +90,53 @@ export const customerSheetChangedAction = (customerSheetName: string) => (dispat
       customerIDCell,
       customerRatingCell
     }
+  });
+};
+
+export const providerSheetChangedAction = (providerSheetName: string) => (dispatch: Dispatcher, getState: Getter): void => {
+  const { dbWorkbook } = getState();
+
+  if (!dbWorkbook) {
+    return;
+  }
+
+  const providerSheet = providerSheetName ? parseSheet(dbWorkbook.Sheets[providerSheetName]) : undefined;
+  const providerCells: string[] = providerSheet ? providerSheet[0] : [];
+
+  const providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
+  const providerRatingCell = Locator.findCell(providerCells, Locator.PROVIDER_RATING);
+
+  dispatch({
+    type: MERGE,
+    payload: {
+      providerSheetName,
+      providerIDCell,
+      providerRatingCell
+    }
   })
+};
+
+export const orderSheetChangedAction = (orderSheetName: string) => (dispatch: Dispatcher, getState: Getter): void => {
+  const { orderWorkbook } = getState();
+
+  if (!orderWorkbook) {
+    return;
+  }
+
+  const orderSheet = orderSheetName ? parseSheet(orderWorkbook.Sheets[orderSheetName]) : undefined;
+  const orderCells: string[] = orderSheet ? orderSheet[0] : [];
+
+  const orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
+  const orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
+
+  dispatch({
+    type: MERGE,
+    payload: {
+      orderSheetName,
+      orderCustomerIDCell,
+      orderProviderIDCell
+    }
+  });
 };
 
 export const customerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
@@ -133,7 +182,6 @@ export const orderProviderIDCellChangedAction = (str: string) => (dispatch: Disp
 const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
   switch (action.type) {
     case MERGE:
-      console.log(action.payload);
       return {
         ...state,
         ...action.payload
