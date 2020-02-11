@@ -25,6 +25,7 @@ const Select: React.FC<SelectProps> = (props) => {
         onChange={onChange}
         isValid={props.value !== undefined}
         disabled={props.options.length < 1}
+        required
       >
         {props.options.map((option, index) => (
           <option key={index} value={props.byValue ? option : index + ''}>{option}</option>

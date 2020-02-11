@@ -34,13 +34,13 @@ const Upload: React.FC<UploadProps> = (props) => {
           <Col>
             <Form.Group>
               <Form.Label>Fichier Clients / Transporteurs</Form.Label>
-              <Form.Control type="file" onChange={onDbChange} />
+              <Form.Control type="file" onChange={onDbChange} required />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group>
               <Form.Label>Fichier Commandes</Form.Label>
-              <Form.Control type="file" onChange={onOrderChange} isValid={true} />
+              <Form.Control type="file" onChange={onOrderChange} required />
             </Form.Group>
           </Col>
         </Row>
