@@ -4,24 +4,24 @@ interface LocatorEntity {
 }
 
 class Locator {
-  CUSTOMER_SHEET = 'customerSheet';
-  CUSTOMER_ID = 'customerIDCell';
-  CUSTOMER_MARK = 'customerMarkCell';
+  CUSTOMER_SHEET = 'sheet::customer';
+  CUSTOMER_ID = 'cell::id::customer';
+  CUSTOMER_MARK = 'cell::mark::customer';
 
-  PROVIDER_SHEET = 'providerSheet';
-  PROVIDER_ID = 'providerIDCell';
-  PROVIDER_MARK = 'providerMarkCell';
+  PROVIDER_SHEET = 'sheet::provider';
+  PROVIDER_ID = 'cell::id::provider';
+  PROVIDER_MARK = 'cell::mark::provider';
 
-  ORDER_SHEET = 'orderSheet';
-  ORDER_TYPE = 'orderTypeCell';
-  ORDER_CUSTOMER_ID = 'orderCustomerIDCell';
-  ORDER_PROVIDER_ID = 'orderProviderIDCell';
-  ORDER_DATE_SHIPPING = 'orderDateShippingCell';
-  ORDER_DATE_DELIVERY = 'orderDateDeliveryCell';
+  ORDER_SHEET = 'sheet::order';
+  ORDER_TYPE = 'cell::type::order';
+  ORDER_CUSTOMER_ID = 'cell::id::customer::order';
+  ORDER_PROVIDER_ID = 'cell::id::provider::order';
+  ORDER_DATE_SHIPPING = 'cell::date::shipping::order';
+  ORDER_DATE_DELIVERY = 'cell::date::delivery::order';
 
-  PROVIDER_RATE = 'providerRate';
-  DATE_RATE = 'dateRate';
-  CUSTOMER_RATE = 'customerRate';
+  CUSTOMER_RATE = 'rate::customer';
+  PROVIDER_RATE = 'rate::provider';
+  DATE_RATE = 'rate::date';
 
   DEFAULT_KEYS = {
     [this.CUSTOMER_SHEET]: 'Client',
