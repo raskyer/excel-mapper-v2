@@ -56,6 +56,12 @@ class Compute {
     switch (mark) {
       case 'sensible':
         return 5 * customerRate;
+      case 'rdv':
+        return 4 * customerRate;
+      case 'flexible/fragile':
+        return 3 * customerRate;
+      case 'ponctuel':
+        return 2 * customerRate;
       default:
         return 1 * customerRate;
     }
