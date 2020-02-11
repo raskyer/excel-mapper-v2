@@ -5,19 +5,19 @@ interface LocatorEntity {
 
 class Locator {
   CUSTOMER_SHEET = 'customerSheet';
-  CUSTOMER_ID = 'customerID';
-  CUSTOMER_RATING = 'customerRating';
+  CUSTOMER_ID = 'customerIDCell';
+  CUSTOMER_MARK = 'customerMarkCell';
 
   PROVIDER_SHEET = 'providerSheet';
-  PROVIDER_ID = 'providerID';
-  PROVIDER_RATING = 'providerRating';
+  PROVIDER_ID = 'providerIDCell';
+  PROVIDER_MARK = 'providerMarkCell';
 
   ORDER_SHEET = 'orderSheet';
-  ORDER_TYPE = 'orderType';
-  ORDER_CUSTOMER_ID = 'orderCustomerID';
-  ORDER_PROVIDER_ID = 'orderProviderID';
-  ORDER_DATE_SHIPPING = 'orderDateShipping';
-  ORDER_DATE_DELIVERY = 'orderDateDelivery';
+  ORDER_TYPE = 'orderTypeCell';
+  ORDER_CUSTOMER_ID = 'orderCustomerIDCell';
+  ORDER_PROVIDER_ID = 'orderProviderIDCell';
+  ORDER_DATE_SHIPPING = 'orderDateShippingCell';
+  ORDER_DATE_DELIVERY = 'orderDateDeliveryCell';
 
   PROVIDER_RATE = 'providerRate';
   DATE_RATE = 'dateRate';
@@ -26,10 +26,10 @@ class Locator {
   DEFAULT_KEYS = {
     [this.CUSTOMER_SHEET]: 'Client',
     [this.CUSTOMER_ID]: 'ID',
-    [this.CUSTOMER_RATING]: 'Niveau',
+    [this.CUSTOMER_MARK]: 'Niveau',
     [this.PROVIDER_SHEET]: 'Transporteur',
     [this.PROVIDER_ID]: 'ID',
-    [this.PROVIDER_RATING]: 'Note',
+    [this.PROVIDER_MARK]: 'Note',
     [this.ORDER_SHEET]: '',
     [this.ORDER_TYPE]: 'Type',
     [this.ORDER_CUSTOMER_ID]: 'N° Client',

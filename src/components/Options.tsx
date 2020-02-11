@@ -9,8 +9,8 @@ import Select from './common/Select';
 import State from '../entities/State';
 import { getCustomerCells, getProviderCells, getOrderCells } from '../redux/selector';
 import {
-  customerRatingCellChangedAction,
-  providerRatingCellChangedAction,
+  customerMarkCellChangedAction,
+  providerMarkCellChangedAction,
   orderTypeCellChangedAction,
   orderShippingDateCellChangedAction,
   orderDeliveryDateCellChangedAction
@@ -19,8 +19,8 @@ import {
 interface OptionsProps extends OptionsState, OptionsDispatch {}
 
 interface OptionsState {
-  customerRatingCell?: number;
-  providerRatingCell?: number;
+  customerMarkCell?: number;
+  providerMarkCell?: number;
   customerCells: string[];
   providerCells: string[];
   orderCells: string[];
@@ -31,8 +31,8 @@ interface OptionsState {
 }
 
 interface OptionsDispatch {
-  onCustomerRatingCellChange: (s: string) => void;
-  onProviderRatingCellChange: (s: string) => void;
+  onCustomerMarkCellChange: (s: string) => void;
+  onProviderMarkCellChange: (s: string) => void;
   onOrderTypeCellChange: (s: string) => void;
   onOrderShippingDateCellChange: (s: string) => void;
   onOrderDeliveryDateCellChange: (s: string) => void;
@@ -47,14 +47,14 @@ const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
           <Col>
             <Select
               title="Cellule de note client"
-              value={props.customerRatingCell}
-              onChange={props.onCustomerRatingCellChange}
+              value={props.customerMarkCell}
+              onChange={props.onCustomerMarkCellChange}
               options={props.customerCells}
             />
             <Select
               title="Cellule de note client"
-              value={props.providerRatingCell}
-              onChange={props.onProviderRatingCellChange}
+              value={props.providerMarkCell}
+              onChange={props.onProviderMarkCellChange}
               options={props.providerCells}
             />
           </Col>
@@ -85,8 +85,8 @@ const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
 };
 
 const mapStateToProps = (state: State): OptionsState => ({
-  customerRatingCell: state.customerRatingCell,
-  providerRatingCell: state.providerRatingCell,
+  customerMarkCell: state.customerMarkCell,
+  providerMarkCell: state.providerMarkCell,
   customerCells: getCustomerCells(state),
   providerCells: getProviderCells(state),
   orderCells: getOrderCells(state),
@@ -97,8 +97,8 @@ const mapStateToProps = (state: State): OptionsState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): OptionsDispatch => ({
-  onCustomerRatingCellChange: (s: string) => dispatch(customerRatingCellChangedAction(s)),
-  onProviderRatingCellChange: (s: string) => dispatch(providerRatingCellChangedAction(s)),
+  onCustomerMarkCellChange: (s: string) => dispatch(customerMarkCellChangedAction(s)),
+  onProviderMarkCellChange: (s: string) => dispatch(providerMarkCellChangedAction(s)),
   onOrderTypeCellChange: (s: string) => dispatch(orderTypeCellChangedAction(s)),
   onOrderShippingDateCellChange: (s: string) => dispatch(orderShippingDateCellChangedAction(s)),
   onOrderDeliveryDateCellChange: (s: string) => dispatch(orderDeliveryDateCellChangedAction(s))

@@ -56,7 +56,6 @@ export const getOrderCells = createSelector(getOrderSheet, (sheet): string[] => 
 });
 
 export const getCustomerMap = createSelector([getCustomerSheet, getCustomerIDCell], (sheet, idCell): Map<ID, any[]> => {
-  console.log(sheet, idCell);
   if (sheet.length === 0 || idCell === undefined) return new Map();
   return createMap(sheet, idCell);
 });

@@ -12,12 +12,16 @@ interface State {
   providerIDCell?: number;
   orderCustomerIDCell?: number;
   orderProviderIDCell?: number;
-  customerRatingCell?: number;
-  providerRatingCell?: number;
+  customerMarkCell?: number;
+  providerMarkCell?: number;
 
   orderTypeCell?: number;
   orderShippingDateCell?: number;
   orderDeliveryDateCell?: number;
+
+  customerMarkRate?: number;
+  providerMarkRate?: number;
+  dateMarkRate?: number;
 }
 
 export default State;

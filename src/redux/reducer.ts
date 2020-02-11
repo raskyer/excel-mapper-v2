@@ -1,6 +1,9 @@
 import State from "../entities/State";
 import { parseFile, parseSheet } from "../utils/excel";
 import Locator from '../utils/locator';
+import { getCustomerMap, getProviderMap, getOrderSheet } from './selector';
+import Compute from "../utils/compute";
+import { fromState } from "../utils/core";
 
 const INITIAL_STATE: State = {};
 
@@ -29,8 +32,8 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher) => {
 
       const customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
       const providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
-      const customerRatingCell = Locator.findCell(customerCells, Locator.CUSTOMER_RATING);
-      const providerRatingCell = Locator.findCell(providerCells, Locator.PROVIDER_RATING);
+      const customerMarkCell = Locator.findCell(customerCells, Locator.CUSTOMER_MARK);
+      const providerMarkCell = Locator.findCell(providerCells, Locator.PROVIDER_MARK);
 
       dispatch({
         type: MERGE,
@@ -40,8 +43,8 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher) => {
           providerSheetName,
           customerIDCell,
           providerIDCell,
-          customerRatingCell,
-          providerRatingCell
+          customerMarkCell,
+          providerMarkCell
         }
       });
     });
@@ -87,14 +90,14 @@ export const customerSheetChangedAction = (customerSheetName: string) => (dispat
   const customerCells: string[] = customerSheet ? customerSheet[0] : [];
 
   const customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
-  const customerRatingCell = Locator.findCell(customerCells, Locator.CUSTOMER_RATING);
+  const customerMarkCell = Locator.findCell(customerCells, Locator.CUSTOMER_MARK);
 
   dispatch({
     type: MERGE,
     payload: {
       customerSheetName,
       customerIDCell,
-      customerRatingCell
+      customerMarkCell
     }
   });
 };
@@ -110,14 +113,14 @@ export const providerSheetChangedAction = (providerSheetName: string) => (dispat
   const providerCells: string[] = providerSheet ? providerSheet[0] : [];
 
   const providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
-  const providerRatingCell = Locator.findCell(providerCells, Locator.PROVIDER_RATING);
+  const providerMarkCell = Locator.findCell(providerCells, Locator.PROVIDER_MARK);
 
   dispatch({
     type: MERGE,
     payload: {
       providerSheetName,
       providerIDCell,
-      providerRatingCell
+      providerMarkCell
     }
   })
 };
@@ -149,6 +152,19 @@ export const orderSheetChangedAction = (orderSheetName: string) => (dispatch: Di
       orderDeliveryDateCell
     }
   });
+};
+
+export const submit = () => (dispatch: Dispatcher, getState: Getter): void => {
+  const state = getState();
+
+  const customerMap = getCustomerMap(state);
+  const providerMap = getProviderMap(state);
+  const orderSheet = getOrderSheet(state);
+
+  const compute = new Compute(customerMap, providerMap, fromState(state));
+  const rankedOrder = compute.compute(orderSheet);
+
+  console.log(rankedOrder);
 };
 
 export const customerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
@@ -191,22 +207,22 @@ export const orderProviderIDCellChangedAction = (str: string) => (dispatch: Disp
   });
 };
 
-export const customerRatingCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const customerRatingCell = parseInt(str, 10);
+export const customerMarkCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const customerMarkCell = parseInt(str, 10);
   dispatch({
     type: MERGE,
     payload: {
-      customerRatingCell
+      customerMarkCell
     }
   });
 };
 
-export const providerRatingCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const providerRatingCell = parseInt(str, 10);
+export const providerMarkCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
+  const providerMarkCell = parseInt(str, 10);
   dispatch({
     type: MERGE,
     payload: {
-      providerRatingCell
+      providerMarkCell
     }
   });
 };
