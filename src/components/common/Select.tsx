@@ -24,6 +24,7 @@ const Select: React.FC<SelectProps> = (props) => {
         value={props.value !== undefined ? props.value + '' : undefined}
         onChange={onChange}
         isValid={props.value !== undefined}
+        isInvalid={props.value === undefined}
         disabled={props.options.length < 1}
         required
       >

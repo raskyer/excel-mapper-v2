@@ -68,7 +68,6 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
     <>
       <Card>
         <Card.Header>{props.header}</Card.Header>
-
         <Card.Body>
           <Row>
             <Col style={{textAlign: 'center'}}>

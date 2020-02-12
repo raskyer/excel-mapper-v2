@@ -19,9 +19,9 @@ interface State {
   orderShippingDateCell?: number;
   orderDeliveryDateCell?: number;
 
-  customerMarkRate?: number;
-  providerMarkRate?: number;
-  dateMarkRate?: number;
+  customerMarkRate: number;
+  providerMarkRate: number;
+  dateMarkRate: number;
 }
 
 export default State;

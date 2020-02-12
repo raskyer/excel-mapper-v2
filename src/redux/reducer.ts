@@ -5,7 +5,11 @@ import { getCustomerMap, getProviderMap, getOrderSheet } from './selector';
 import Compute from "../utils/compute";
 import { fromState } from "../utils/core";
 
-const INITIAL_STATE: State = {};
+const INITIAL_STATE: State = {
+  customerMarkRate: 1,
+  providerMarkRate: 1,
+  dateMarkRate: 1
+};
 
 interface Action {
   type: string;
@@ -253,6 +257,19 @@ export const orderDeliveryDateCellChangedAction = (str: string) => (dispatch: Di
     type: MERGE,
     payload: {
       orderDeliveryDateCell
+    }
+  });
+};
+
+export const keyChangedAction = (key: string, str: string) => (dispatch: Dispatcher): void => {
+  let int = parseInt(str, 10);
+  if (isNaN(int)) {
+    int = 0;
+  }
+  dispatch({
+    type: MERGE,
+    payload: {
+      [key]: int
     }
   });
 };
