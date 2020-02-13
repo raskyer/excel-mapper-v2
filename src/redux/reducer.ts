@@ -1,9 +1,9 @@
-import State from "../entities/State";
-import { parseFile, parseSheet } from "../utils/excel";
+import State from '../entities/State';
+import { parseFile, parseSheet } from '../utils/excel';
 import Locator from '../utils/locator';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selector';
-import Compute from "../utils/compute";
-import { fromState } from "../utils/core";
+import Compute from '../utils/compute';
+import { fromState } from '../utils/core';
 
 const INITIAL_STATE: State = {
   customerMarkRate: 1,

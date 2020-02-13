@@ -14,6 +14,7 @@ import IDCustomer from './components/IDCustomer';
 import IDProvider from './components/IDProvider';
 import Options from './components/Options';
 import Rates from './components/Rates';
+import Columns from './components/Columns';
 
 import { submit } from './redux/reducer';
 
@@ -66,6 +67,11 @@ const App: React.FC<AppProps> = (props: AppProps) => {
           <Row>
             <Col>
               <Rates />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Columns />
             </Col>
           </Row>
           <Row>

@@ -1,4 +1,4 @@
-import XLSX from "xlsx";
+import XLSX from 'xlsx';
 
 interface FinalState {
   dbWorkbook: XLSX.WorkBook;
