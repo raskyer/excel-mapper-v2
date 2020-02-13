@@ -8,7 +8,8 @@ import { fromState } from '../utils/core';
 const INITIAL_STATE: State = {
   customerMarkRate: 1,
   providerMarkRate: 1,
-  dateMarkRate: 1
+  dateMarkRate: 1,
+  activeKey: '0'
 };
 
 interface Action {

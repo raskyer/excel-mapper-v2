@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import Accordion from 'react-bootstrap/Accordion';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -16,9 +17,14 @@ import Options from './components/Options';
 import Rates from './components/Rates';
 import Columns from './components/Columns';
 
+import State from './entities/State';
 import { submit } from './redux/reducer';
 
-interface AppProps extends AppDispatch {}
+interface AppProps extends AppState, AppDispatch {}
+
+interface AppState {
+  activeKey: string;
+}
 
 interface AppDispatch {
   submit: () => void;
@@ -39,6 +45,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       </Navbar>
       <Container>
         <Form onSubmit={onSubmit}>
+        <Accordion activeKey={props.activeKey}>
           <Row>
             <Col>
               <Upload />
@@ -81,14 +88,19 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               </Form.Group>
             </Col>
           </Row>
+        </Accordion>
         </Form>
       </Container>
     </>
   );
 };
 
+const mapStateToProps = (state: State): AppState => ({
+  activeKey: state.activeKey
+});
+
 const mapDispatchToProps = (dispatch: Function): AppDispatch => ({
   submit: () => dispatch(submit())
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

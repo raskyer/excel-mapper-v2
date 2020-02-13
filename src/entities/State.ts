@@ -22,6 +22,8 @@ interface State {
   customerMarkRate: number;
   providerMarkRate: number;
   dateMarkRate: number;
+
+  activeKey: string;
 }
 
 export default State;

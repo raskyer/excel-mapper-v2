@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Card from 'react-bootstrap/Card';
+import Accordion from 'react-bootstrap/Accordion';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
 
 import Select from './common/Select';
 import State from '../entities/State';
@@ -29,37 +30,41 @@ interface SheetsDispatch {
 const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
   return (
     <Card>
-      <Card.Header>Feuilles</Card.Header>
-      <Card.Body>
-        <Row>
-          <Col>
-            <Select
-              title="Feuille Clients"
-              value={props.customerSheetName}
-              onChange={props.onCustomerSheetChange}
-              options={props.dbSheetsNames}
-              byValue
-            />
+      <Accordion.Toggle as={Card.Header} eventKey="1">
+        Feuilles
+      </Accordion.Toggle>
+      <Accordion.Collapse eventKey="1">
+        <Card.Body>
+          <Row>
+            <Col>
+              <Select
+                title="Feuille Clients"
+                value={props.customerSheetName}
+                onChange={props.onCustomerSheetChange}
+                options={props.dbSheetsNames}
+                byValue
+              />
 
-            <Select
-              title="Feuille Transporteurs"
-              value={props.providerSheetName}
-              onChange={props.onProviderSheetChange}
-              options={props.dbSheetsNames}
-              byValue
-            />
-          </Col>
-          <Col>
-            <Select
-              title="Feuille Commandes"
-              value={props.orderSheetName}
-              onChange={props.onOrderSheetChange}
-              options={props.orderSheetsNames}
-              byValue
-            />
-          </Col>
-        </Row>
-      </Card.Body>
+              <Select
+                title="Feuille Transporteurs"
+                value={props.providerSheetName}
+                onChange={props.onProviderSheetChange}
+                options={props.dbSheetsNames}
+                byValue
+              />
+            </Col>
+            <Col>
+              <Select
+                title="Feuille Commandes"
+                value={props.orderSheetName}
+                onChange={props.onOrderSheetChange}
+                options={props.orderSheetsNames}
+                byValue
+              />
+            </Col>
+          </Row>
+        </Card.Body>
+      </Accordion.Collapse>
     </Card>
   );
 };

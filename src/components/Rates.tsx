@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Card from 'react-bootstrap/Card';
+import Accordion from 'react-bootstrap/Accordion';
 import Form from 'react-bootstrap/Form';
 
 import State from '../entities/State';
@@ -24,39 +25,43 @@ interface RatesDispatch {
 const Rates: React.FC<RatesProps> = (props: RatesProps) => {
   return (
     <Card>
-      <Card.Header>Ajustement</Card.Header>
-      <Card.Body>
-        <Form.Group>
-          <Form.Label>Coéfficient Client</Form.Label>
-          <Form.Control
-            type="number"
-            value={props.customerMarkRate !== undefined ? (props.customerMarkRate + '') : props.customerMarkRate}
-            onChange={(e: React.FormEvent<HTMLInputElement>) => props.onCustomerRateChange(e.currentTarget.value)}
-            isInvalid={props.customerMarkRate < 0}
-            required
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Coéfficient Transporteur</Form.Label>
-          <Form.Control
-            type="number"
-            value={props.providerMarkRate !== undefined ? props.providerMarkRate + '' : props.providerMarkRate}
-            onChange={(e: React.FormEvent<HTMLInputElement>) => props.onProviderRateChange(e.currentTarget.value)}
-            isInvalid={props.providerMarkRate < 0}
-            required
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Coéfficient Date</Form.Label>
-          <Form.Control
-            type="number"
-            value={props.dateMarkRate !== undefined ? props.dateMarkRate + '' : props.dateMarkRate}
-            onChange={(e: React.FormEvent<HTMLInputElement>) => props.onDateRateChange(e.currentTarget.value)}
-            isInvalid={props.dateMarkRate < 0}
-            required
-          />
-        </Form.Group>
-      </Card.Body>
+      <Accordion.Toggle as={Card.Header} eventKey="4">
+        Ajustement
+      </Accordion.Toggle>
+      <Accordion.Collapse eventKey="4">
+        <Card.Body>
+          <Form.Group>
+            <Form.Label>Coéfficient Client</Form.Label>
+            <Form.Control
+              type="number"
+              value={props.customerMarkRate !== undefined ? (props.customerMarkRate + '') : props.customerMarkRate}
+              onChange={(e: React.FormEvent<HTMLInputElement>) => props.onCustomerRateChange(e.currentTarget.value)}
+              isInvalid={props.customerMarkRate < 0}
+              required
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Coéfficient Transporteur</Form.Label>
+            <Form.Control
+              type="number"
+              value={props.providerMarkRate !== undefined ? props.providerMarkRate + '' : props.providerMarkRate}
+              onChange={(e: React.FormEvent<HTMLInputElement>) => props.onProviderRateChange(e.currentTarget.value)}
+              isInvalid={props.providerMarkRate < 0}
+              required
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Coéfficient Date</Form.Label>
+            <Form.Control
+              type="number"
+              value={props.dateMarkRate !== undefined ? props.dateMarkRate + '' : props.dateMarkRate}
+              onChange={(e: React.FormEvent<HTMLInputElement>) => props.onDateRateChange(e.currentTarget.value)}
+              isInvalid={props.dateMarkRate < 0}
+              required
+            />
+          </Form.Group>
+        </Card.Body>
+      </Accordion.Collapse>
     </Card>
   );
 };
