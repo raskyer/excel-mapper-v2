@@ -23,7 +23,7 @@ interface State {
   providerMarkRate: number;
   dateMarkRate: number;
 
-  activeKey: string;
+  activeKeys: Set<string>;
 }
 
 export default State;

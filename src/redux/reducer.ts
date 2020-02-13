@@ -9,7 +9,7 @@ const INITIAL_STATE: State = {
   customerMarkRate: 1,
   providerMarkRate: 1,
   dateMarkRate: 1,
-  activeKey: '0'
+  activeKeys: new Set()
 };
 
 interface Action {
@@ -271,6 +271,23 @@ export const keyChangedAction = (key: string, str: string) => (dispatch: Dispatc
     type: MERGE,
     payload: {
       [key]: int
+    }
+  });
+};
+
+export const activeKeyChangedAction = (activeKey: string) => (dispatch: Dispatcher, getState: Getter): void => {
+  const { activeKeys } = getState();
+
+  if (activeKeys.has(activeKey)) {
+    activeKeys.delete(activeKey);
+  } else {
+    activeKeys.add(activeKey);
+  }
+
+  dispatch({
+    type: MERGE,
+    payload: {
+      activeKeys: new Set(activeKeys)
     }
   });
 };

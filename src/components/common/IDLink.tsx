@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 import Select from './Select';
 
@@ -15,6 +16,7 @@ import { getMissing } from '../../utils/core';
 interface IDLink extends IDLinkState, IDLinkDispatch {}
 
 interface IDLinkState {
+  activeKey: string;
   header: string;
   cells: string[];
   orderCells: string[];
@@ -27,6 +29,7 @@ interface IDLinkState {
 interface IDLinkDispatch {
   onIDCellChange: (s: string) => void;
   onOrderIDCellChange: (s: string) => void;
+  onActiveKeyChange: (s: string) => void;
 }
 
 const IDLink: React.FC<IDLink> = (props: IDLink) => {
@@ -68,10 +71,10 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
   return (
     <>
       <Card>
-        <Accordion.Toggle as={Card.Header} eventKey="2">
+        <Accordion.Toggle as={Card.Header} eventKey={props.activeKey} onClick={() => props.onActiveKeyChange(props.activeKey)}>
           {props.header}
         </Accordion.Toggle>
-        <Accordion.Collapse eventKey="2">
+        <Accordion.Collapse eventKey={props.activeKey}>
           <Card.Body>
             <Row>
               <Col style={{textAlign: 'center'}}>
@@ -129,9 +132,12 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
           <Modal.Title>Missing</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {display.map(m => (
-            <li key={m}>{m}</li>
-          ))}
+          <ListGroup>
+            {display.map(m => (
+              <ListGroup.Item key={m}>{m}</ListGroup.Item>
+            ))}
+          </ListGroup>
+          
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={() => setDisplay([])}>

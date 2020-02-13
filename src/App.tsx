@@ -23,7 +23,6 @@ import { submit } from './redux/reducer';
 interface AppProps extends AppState, AppDispatch {}
 
 interface AppState {
-  activeKey: string;
 }
 
 interface AppDispatch {
@@ -45,7 +44,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       </Navbar>
       <Container>
         <Form onSubmit={onSubmit}>
-        <Accordion activeKey={props.activeKey}>
+        <Accordion activeKey="1">
           <Row>
             <Col>
               <Upload />
@@ -96,7 +95,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
 };
 
 const mapStateToProps = (state: State): AppState => ({
-  activeKey: state.activeKey
 });
 
 const mapDispatchToProps = (dispatch: Function): AppDispatch => ({

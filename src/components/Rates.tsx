@@ -6,7 +6,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Form from 'react-bootstrap/Form';
 
 import State from '../entities/State';
-import { keyChangedAction } from '../redux/reducer';
+import { keyChangedAction, activeKeyChangedAction } from '../redux/reducer';
 
 interface RatesProps extends RatesState, RatesDispatch {}
 
@@ -17,18 +17,19 @@ interface RatesState {
 }
 
 interface RatesDispatch {
-  onCustomerRateChange: (str: string) => void;
-  onProviderRateChange: (str: string) => void;
-  onDateRateChange: (str: string) => void;
+  onCustomerRateChange: (s: string) => void;
+  onProviderRateChange: (s: string) => void;
+  onDateRateChange: (s: string) => void;
+  onActiveKeyChange: (s: string) => void;
 }
 
 const Rates: React.FC<RatesProps> = (props: RatesProps) => {
   return (
     <Card>
-      <Accordion.Toggle as={Card.Header} eventKey="4">
+      <Accordion.Toggle as={Card.Header} eventKey="5" onClick={() => props.onActiveKeyChange('5')}>
         Ajustement
       </Accordion.Toggle>
-      <Accordion.Collapse eventKey="4">
+      <Accordion.Collapse eventKey="5">
         <Card.Body>
           <Form.Group>
             <Form.Label>Coéfficient Client</Form.Label>
@@ -73,9 +74,10 @@ const mapStateToProps = (state: State): RatesState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): RatesDispatch => ({
-  onCustomerRateChange: (str: string) => dispatch(keyChangedAction('customerMarkRate', str)),
-  onProviderRateChange: (str: string) => dispatch(keyChangedAction('providerMarkRate', str)),
-  onDateRateChange: (str: string) => dispatch(keyChangedAction('dateMarkRate', str))
+  onCustomerRateChange: (s: string) => dispatch(keyChangedAction('customerMarkRate', s)),
+  onProviderRateChange: (s: string) => dispatch(keyChangedAction('providerMarkRate', s)),
+  onDateRateChange: (s: string) => dispatch(keyChangedAction('dateMarkRate', s)),
+  onActiveKeyChange: (s: string): void => dispatch(activeKeyChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Rates);

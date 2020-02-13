@@ -9,11 +9,12 @@ import Col from 'react-bootstrap/Col';
 import Select from './common/Select';
 import State from '../entities/State';
 import { getDbSheetNames, getOrderSheetNames } from '../redux/selector';
-import { customerSheetChangedAction, providerSheetChangedAction, orderSheetChangedAction } from '../redux/reducer';
+import { customerSheetChangedAction, providerSheetChangedAction, orderSheetChangedAction, activeKeyChangedAction } from '../redux/reducer';
 
 interface SheetsProps extends SheetsState, SheetsDispatch {}
 
 interface SheetsState {
+  activeKeys: Set<string>;
   dbSheetsNames: string[];
   orderSheetsNames: string[];
   customerSheetName?: string;
@@ -25,15 +26,16 @@ interface SheetsDispatch {
   onCustomerSheetChange: (s: string) => void;
   onProviderSheetChange: (s: string) => void;
   onOrderSheetChange: (s: string) => void;
+  onActiveKeyChange: (s: string) => void;
 }
 
 const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
   return (
     <Card>
-      <Accordion.Toggle as={Card.Header} eventKey="1">
+      <Accordion.Toggle as={Card.Header} eventKey="1" onClick={() => props.onActiveKeyChange('1')}>
         Feuilles
       </Accordion.Toggle>
-      <Accordion.Collapse eventKey="1">
+      <Accordion.Collapse eventKey={props.activeKeys.has('1') ? '1' : '0'}>
         <Card.Body>
           <Row>
             <Col>
@@ -80,7 +82,8 @@ const mapStateToProps = (state: State): SheetsState => ({
 const mapDispatchToProps = (dispatch: Function): SheetsDispatch => ({
   onCustomerSheetChange: (s: string): void => dispatch(customerSheetChangedAction(s)),
   onProviderSheetChange: (s: string): void => dispatch(providerSheetChangedAction(s)),
-  onOrderSheetChange: (s: string): void => dispatch(orderSheetChangedAction(s))
+  onOrderSheetChange: (s: string): void => dispatch(orderSheetChangedAction(s)),
+  onActiveKeyChange: (s: string): void => dispatch(activeKeyChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sheets);

@@ -15,7 +15,8 @@ import {
   providerMarkCellChangedAction,
   orderTypeCellChangedAction,
   orderShippingDateCellChangedAction,
-  orderDeliveryDateCellChangedAction
+  orderDeliveryDateCellChangedAction,
+  activeKeyChangedAction
 } from '../redux/reducer';
 
 interface OptionsProps extends OptionsState, OptionsDispatch {}
@@ -38,15 +39,16 @@ interface OptionsDispatch {
   onOrderTypeCellChange: (s: string) => void;
   onOrderShippingDateCellChange: (s: string) => void;
   onOrderDeliveryDateCellChange: (s: string) => void;
+  onActiveKeyChange: (s: string) => void;
 }
 
 const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
   return (
     <Card>
-      <Accordion.Toggle as={Card.Header} eventKey="3">
+      <Accordion.Toggle as={Card.Header} eventKey="4" onClick={() => props.onActiveKeyChange('4')}>
         Cellules d'options
       </Accordion.Toggle>
-      <Accordion.Collapse eventKey="3">
+      <Accordion.Collapse eventKey="4">
         <Card.Body>
           <Row>
             <Col>
@@ -107,7 +109,8 @@ const mapDispatchToProps = (dispatch: Function): OptionsDispatch => ({
   onProviderMarkCellChange: (s: string) => dispatch(providerMarkCellChangedAction(s)),
   onOrderTypeCellChange: (s: string) => dispatch(orderTypeCellChangedAction(s)),
   onOrderShippingDateCellChange: (s: string) => dispatch(orderShippingDateCellChangedAction(s)),
-  onOrderDeliveryDateCellChange: (s: string) => dispatch(orderDeliveryDateCellChangedAction(s))
+  onOrderDeliveryDateCellChange: (s: string) => dispatch(orderDeliveryDateCellChangedAction(s)),
+  onActiveKeyChange: (s: string): void => dispatch(activeKeyChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Options);
