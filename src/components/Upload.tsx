@@ -1,73 +1,69 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Card from 'react-bootstrap/Card';
-import Accordion from 'react-bootstrap/Accordion';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
-import { dbFileChangedAction, orderFileChangedAction, activeKeyChangedAction } from '../redux/reducer';
+import Step from './common/Step';
 import State from '../entities/State';
+import Status from '../entities/Status';
+import { dbFileChangedAction, orderFileChangedAction } from '../redux/actions';
+import { getFileStatus } from '../redux/selector';
 
 interface UploadProps extends UploadState, UploadDispatch {}
 
 interface UploadState {
-  activeKeys: Set<string>;
+  fileStatus?: Status;
 }
 
 interface UploadDispatch {
   onDbChange: (f: File) => void;
   onOrderChange: (f: File) => void;
-  onActiveKeyChange: (s: string) => void;
 }
 
-const Upload: React.FC<UploadProps> = (props) => {
+const Upload: React.FC<UploadProps> = (props: UploadProps) => {
   const onDbChange = (e: React.FormEvent<HTMLInputElement>) => {
     if (!e.currentTarget.files) return;
-    props.onDbChange(e.currentTarget.files[0]);
+    if (e.currentTarget.files.length > 0) {
+      props.onDbChange(e.currentTarget.files[0]);
+    }
   };
 
   const onOrderChange = (e: React.FormEvent<HTMLInputElement>) => {
     if (!e.currentTarget.files) return;
-    props.onOrderChange(e.currentTarget.files[0]);
+    if (e.currentTarget.files.length > 0) {
+      props.onOrderChange(e.currentTarget.files[0]);
+    }
   };
 
   return (
-    <Card>
-      <Accordion.Toggle as={Card.Header} eventKey="1" onClick={() => props.onActiveKeyChange('0')}>
-        Fichiers
-      </Accordion.Toggle>
-      <Accordion.Collapse eventKey={props.activeKeys.has('0') ? '1' : '0'}>
-        <Card.Body>
-          <Row>
-            <Col>
-              <Form.Group>
-                <Form.Label>Fichier Clients / Transporteurs</Form.Label>
-                <Form.Control type="file" onChange={onDbChange} required />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group>
-                <Form.Label>Fichier Commandes</Form.Label>
-                <Form.Control type="file" onChange={onOrderChange} required />
-              </Form.Group>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Accordion.Collapse>
-    </Card>
+    <Step eventKey="1" title="Fichiers" state={props.fileStatus}>
+      <Row>
+        <Col>
+          <Form.Group>
+            <Form.Label>Fichier Clients / Transporteurs</Form.Label>
+            <Form.Control type="file" onChange={onDbChange} required />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group>
+            <Form.Label>Fichier Commandes</Form.Label>
+            <Form.Control type="file" onChange={onOrderChange} required />
+          </Form.Group>
+        </Col>
+      </Row>
+    </Step>
   );
 };
 
-const mapStateToProps = (state: State) => ({
-  activeKeys: state.activeKeys
+const mapStateToProps = (state: State): UploadState => ({
+  fileStatus: getFileStatus(state)
 });
 
-const mapDispatchToProps = (dispatch: Function) => ({
+const mapDispatchToProps = (dispatch: Function): UploadDispatch => ({
   onDbChange: (f: File) => dispatch(dbFileChangedAction(f)),
-  onOrderChange: (f: File) => dispatch(orderFileChangedAction(f)),
-  onActiveKeyChange: (s: string): void => dispatch(activeKeyChangedAction(s))
+  onOrderChange: (f: File) => dispatch(orderFileChangedAction(f))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Upload);

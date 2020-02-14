@@ -5,25 +5,22 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
+import Step from './components/common/Step';
 import Upload from './components/Upload';
 import Sheets from './components/Sheets';
 import IDCustomer from './components/IDCustomer';
 import IDProvider from './components/IDProvider';
 import Options from './components/Options';
 import Rates from './components/Rates';
-import Columns from './components/Columns';
+import Projection from './components/Projection';
 
-import State from './entities/State';
-import { submit } from './redux/reducer';
+import { submit } from './redux/actions';
 
 interface AppProps extends AppState, AppDispatch {}
 
-interface AppState {
-}
+interface AppState {}
 
 interface AppDispatch {
   submit: () => void;
@@ -42,63 +39,34 @@ const App: React.FC<AppProps> = (props: AppProps) => {
           Excel Mapper
         </Navbar.Brand>
       </Navbar>
-      <Container>
+
+      <Container className="mt-3">
         <Form onSubmit={onSubmit}>
-        <Accordion activeKey="1">
-          <Row>
-            <Col>
-              <Upload />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Sheets />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <IDCustomer />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <IDProvider />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Options />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
+          <Accordion activeKey="0">
+            <Upload />
+            <Sheets />
+            <IDCustomer />
+            <IDProvider />
+            <Options />
+            <Step eventKey="6" title="Ajustement" state="dark">
               <Rates />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Columns />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Group>
-                <Button type="submit">Valider</Button>
-              </Form.Group>
-            </Col>
-          </Row>
-        </Accordion>
+            </Step>
+            <Step eventKey="7" title="Projection" state="dark">
+              <Projection />
+            </Step>
+          </Accordion>
+
+          <Form.Group className="mt-3">
+            <Button type="submit">Valider</Button>
+          </Form.Group>
         </Form>
       </Container>
     </>
   );
 };
 
-const mapStateToProps = (state: State): AppState => ({
-});
-
 const mapDispatchToProps = (dispatch: Function): AppDispatch => ({
   submit: () => dispatch(submit())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(undefined, mapDispatchToProps)(App);

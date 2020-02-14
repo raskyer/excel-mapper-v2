@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
-import Card from 'react-bootstrap/Card';
-import Accordion from 'react-bootstrap/Accordion';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
@@ -13,10 +11,7 @@ import Select from './Select';
 
 import { getMissing } from '../../utils/core';
 
-interface IDLink extends IDLinkState, IDLinkDispatch {}
-
-interface IDLinkState {
-  activeKey: string;
+interface IDLink {
   header: string;
   cells: string[];
   orderCells: string[];
@@ -24,12 +19,9 @@ interface IDLinkState {
   orderIDCell?: number;
   map: Map<string | number, any[]>;
   orderMap: Map<string | number, any[]>;
-}
 
-interface IDLinkDispatch {
   onIDCellChange: (s: string) => void;
   onOrderIDCellChange: (s: string) => void;
-  onActiveKeyChange: (s: string) => void;
 }
 
 const IDLink: React.FC<IDLink> = (props: IDLink) => {
@@ -70,62 +62,53 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
 
   return (
     <>
-      <Card>
-        <Accordion.Toggle as={Card.Header} eventKey={props.activeKey} onClick={() => props.onActiveKeyChange(props.activeKey)}>
-          {props.header}
-        </Accordion.Toggle>
-        <Accordion.Collapse eventKey={props.activeKey}>
-          <Card.Body>
-            <Row>
-              <Col style={{textAlign: 'center'}}>
-                <Select
-                  title={props.header}
-                  value={props.IDCell}
-                  onChange={props.onIDCellChange}
-                  options={props.cells}
-                />
+      <Row>
+        <Col style={{textAlign: 'center'}}>
+          <Select
+            title={props.header}
+            value={props.IDCell}
+            onChange={props.onIDCellChange}
+            options={props.cells}
+          />
 
-                <Button onClick={onClickID} disabled={props.map.size === 0}>
-                  {props.map.size} {props.header}
-                </Button>
-              </Col>
-              <Col xs={12} md={2} style={{textAlign: 'center'}}>
-                <CircularProgressbar
-                  value={percentage}
-                  text={`${percentage} %`}
-                  styles={{
-                    root: {
-                      width: '100px'
-                    },
-                    path: {
-                      stroke: fillColor,
-                      strokeWidth: '3px'
-                    },
-                    trail: {
-                      strokeWidth: '3px'
-                    },
-                    text: {
-                      fill: fillColor
-                    }
-                  }}
-                />
-              </Col>
-              <Col style={{textAlign: 'center'}}>
-                <Select
-                  title={props.header}
-                  value={props.orderIDCell}
-                  onChange={props.onOrderIDCellChange}
-                  options={props.orderCells}
-                />
+          <Button onClick={onClickID} disabled={props.map.size === 0}>
+            {props.map.size} {props.header}
+          </Button>
+        </Col>
+        <Col xs={12} md={2} style={{textAlign: 'center'}}>
+          <CircularProgressbar
+            value={percentage}
+            text={`${percentage} %`}
+            styles={{
+              root: {
+                width: '100px'
+              },
+              path: {
+                stroke: fillColor,
+                strokeWidth: '3px'
+              },
+              trail: {
+                strokeWidth: '3px'
+              },
+              text: {
+                fill: fillColor
+              }
+            }}
+          />
+        </Col>
+        <Col style={{textAlign: 'center'}}>
+          <Select
+            title={props.header}
+            value={props.orderIDCell}
+            onChange={props.onOrderIDCellChange}
+            options={props.orderCells}
+          />
 
-                <Button onClick={onClickOrder} disabled={props.orderMap.size === 0}>
-                  {props.orderMap.size} {props.header}
-                </Button>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Accordion.Collapse>
-      </Card>
+          <Button onClick={onClickOrder} disabled={props.orderMap.size === 0}>
+            {props.orderMap.size} {props.header}
+          </Button>
+        </Col>
+      </Row>
 
       <Modal show={display.length > 0} onHide={() => setDisplay([])}>
         <Modal.Header closeButton>

@@ -1,27 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Card from 'react-bootstrap/Card';
-import Accordion from 'react-bootstrap/Accordion';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import Step from './common/Step';
 import Select from './common/Select';
 
 import State from '../entities/State';
-import { getCustomerCells, getProviderCells, getOrderCells } from '../redux/selector';
+import Status from '../entities/Status';
+import { getCustomerCells, getProviderCells, getOrderCells, getOptionsStatus } from '../redux/selector';
 import {
   customerMarkCellChangedAction,
   providerMarkCellChangedAction,
   orderTypeCellChangedAction,
   orderShippingDateCellChangedAction,
-  orderDeliveryDateCellChangedAction,
-  activeKeyChangedAction
-} from '../redux/reducer';
+  orderDeliveryDateCellChangedAction
+} from '../redux/actions';
 
 interface OptionsProps extends OptionsState, OptionsDispatch {}
 
 interface OptionsState {
+  optionsStatus?: Status;
   customerMarkCell?: number;
   providerMarkCell?: number;
   customerCells: string[];
@@ -39,60 +39,53 @@ interface OptionsDispatch {
   onOrderTypeCellChange: (s: string) => void;
   onOrderShippingDateCellChange: (s: string) => void;
   onOrderDeliveryDateCellChange: (s: string) => void;
-  onActiveKeyChange: (s: string) => void;
 }
 
 const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
   return (
-    <Card>
-      <Accordion.Toggle as={Card.Header} eventKey="4" onClick={() => props.onActiveKeyChange('4')}>
-        Cellules d'options
-      </Accordion.Toggle>
-      <Accordion.Collapse eventKey="4">
-        <Card.Body>
-          <Row>
-            <Col>
-              <Select
-                title="Cellule de note client"
-                value={props.customerMarkCell}
-                onChange={props.onCustomerMarkCellChange}
-                options={props.customerCells}
-              />
-              <Select
-                title="Cellule de note client"
-                value={props.providerMarkCell}
-                onChange={props.onProviderMarkCellChange}
-                options={props.providerCells}
-              />
-            </Col>
-            <Col>
-              <Select
-                title="Cellule de type"
-                value={props.orderTypeCell}
-                onChange={props.onOrderTypeCellChange}
-                options={props.orderCells}
-              />
-              <Select
-                title="Cellule de date chargement"
-                value={props.orderShippingDateCell}
-                onChange={props.onOrderShippingDateCellChange}
-                options={props.orderCells}
-              />
-              <Select
-                title="Cellule de date livraison"
-                value={props.orderDeliveryDateCell}
-                onChange={props.onOrderDeliveryDateCellChange}
-                options={props.orderCells}
-              />
-            </Col>
-          </Row>
-        </Card.Body>
-      </Accordion.Collapse>
-    </Card>
+    <Step eventKey="5" title="Options" state={props.optionsStatus}>
+      <Row>
+        <Col>
+          <Select
+            title="Cellule de note client"
+            value={props.customerMarkCell}
+            onChange={props.onCustomerMarkCellChange}
+            options={props.customerCells}
+          />
+          <Select
+            title="Cellule de note transporteur"
+            value={props.providerMarkCell}
+            onChange={props.onProviderMarkCellChange}
+            options={props.providerCells}
+          />
+        </Col>
+        <Col>
+          <Select
+            title="Cellule de type"
+            value={props.orderTypeCell}
+            onChange={props.onOrderTypeCellChange}
+            options={props.orderCells}
+          />
+          <Select
+            title="Cellule de date chargement"
+            value={props.orderShippingDateCell}
+            onChange={props.onOrderShippingDateCellChange}
+            options={props.orderCells}
+          />
+          <Select
+            title="Cellule de date livraison"
+            value={props.orderDeliveryDateCell}
+            onChange={props.onOrderDeliveryDateCellChange}
+            options={props.orderCells}
+          />
+        </Col>
+      </Row>
+    </Step>
   );
 };
 
 const mapStateToProps = (state: State): OptionsState => ({
+  optionsStatus: getOptionsStatus(state),
   customerMarkCell: state.customerMarkCell,
   providerMarkCell: state.providerMarkCell,
   customerCells: getCustomerCells(state),
@@ -109,8 +102,7 @@ const mapDispatchToProps = (dispatch: Function): OptionsDispatch => ({
   onProviderMarkCellChange: (s: string) => dispatch(providerMarkCellChangedAction(s)),
   onOrderTypeCellChange: (s: string) => dispatch(orderTypeCellChangedAction(s)),
   onOrderShippingDateCellChange: (s: string) => dispatch(orderShippingDateCellChangedAction(s)),
-  onOrderDeliveryDateCellChange: (s: string) => dispatch(orderDeliveryDateCellChangedAction(s)),
-  onActiveKeyChange: (s: string): void => dispatch(activeKeyChangedAction(s))
+  onOrderDeliveryDateCellChange: (s: string) => dispatch(orderDeliveryDateCellChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Options);
