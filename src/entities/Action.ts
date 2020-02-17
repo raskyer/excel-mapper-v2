@@ -1,8 +1,6 @@
-import State from './State';
-
 interface Action {
   type: string;
-  payload: Partial<State>;
+  payload: any;
 }
 
 export default Action;

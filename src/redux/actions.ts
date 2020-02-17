@@ -1,150 +1,111 @@
 import Dispatcher from '../entities/Dispatcher';
 import StateGetter from '../entities/StateGetter';
+import Action from '../entities/Action';
 
-import { MERGE } from './constants';
+import { DB_FILE_CHANGE, ORDER_FILE_CHANGE, CUSTOMER_SHEET_CHANGE, PROVIDER_SHEET_CHANGE, ORDER_SHEET_CHANGE, CUSTOMER_ID_CELL_CHANGE, ORDER_CUSTOMER_ID_CELL_CHANGE, PROVIDER_ID_CELL_CHANGE, ORDER_PROVIDER_ID_CELL_CHANGE, ORDER_TYPE_CELL_CHANGE, ORDER_SHIPPING_DATE_CELL_CHANGE, ORDER_DELIVERY_DATE_CELL_CHANGE, CUSTOMER_MARK_CELL_CHANGE, PROVIDER_MARK_CELL_CHANGE, CUSTOMER_MARK_RATE_CHANGE, PROVIDER_MARK_RATE_CHANGE, DATE_MARK_RATE_CHANGE, EVENT_KEY_TOGGLE } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selector';
 
-import { parseFile, parseSheet } from '../utils/excel';
-import Locator from '../utils/locator';
+import { parseFile } from '../utils/excel';
 import Compute from '../utils/compute';
 import { fromState } from '../utils/core';
 
-export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher) => {
-  parseFile(dbFile)
-    .then(workbook => {
-      const sheetsNames = workbook.SheetNames;
-      const customerSheetName = Locator.findSheet(sheetsNames, Locator.CUSTOMER_SHEET);
-      const providerSheetName = Locator.findSheet(sheetsNames, Locator.PROVIDER_SHEET);
-      
-      const customerSheet = customerSheetName ? parseSheet(workbook.Sheets[customerSheetName]) : undefined;
-      const providerSheet = providerSheetName ? parseSheet(workbook.Sheets[providerSheetName]) : undefined;
-
-      const customerCells: string[] = customerSheet ? customerSheet[0] : [];
-      const providerCells: string[] = providerSheet ? providerSheet[0] : [];
-
-      const customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
-      const providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
-      const customerMarkCell = Locator.findCell(customerCells, Locator.CUSTOMER_MARK);
-      const providerMarkCell = Locator.findCell(providerCells, Locator.PROVIDER_MARK);
-
-      dispatch({
-        type: MERGE,
-        payload: {
-          dbWorkbook: workbook,
-          customerSheetName,
-          providerSheetName,
-          customerIDCell,
-          providerIDCell,
-          customerMarkCell,
-          providerMarkCell
-        }
-      });
+export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher): void => {
+  parseFile(dbFile).then(workbook => {
+    dispatch({
+      type: DB_FILE_CHANGE,
+      payload: workbook
     });
-};
-
-export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher) => {
-  parseFile(orderFile)
-    .then(workbook => {
-      const sheetsNames = workbook.SheetNames;
-      const orderSheetName = Locator.findSheet(sheetsNames, Locator.ORDER_SHEET);
-
-      const orderSheet = orderSheetName ? parseSheet(workbook.Sheets[orderSheetName]) : undefined;
-      const orderCells = orderSheet ? orderSheet[0] : [];
-      const orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
-      const orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
-      const orderTypeCell = Locator.findCell(orderCells, Locator.ORDER_TYPE);
-      const orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
-      const orderDeliveryDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_DELIVERY);
-
-      dispatch({
-        type: MERGE,
-        payload: {
-          orderWorkbook: workbook,
-          orderSheetName,
-          orderCustomerIDCell,
-          orderProviderIDCell,
-          orderTypeCell,
-          orderShippingDateCell,
-          orderDeliveryDateCell
-        }
-      });
-    });
-};
-
-export const customerSheetChangedAction = (customerSheetName: string) => (dispatch: Dispatcher, getState: StateGetter): void => {
-  const { dbWorkbook } = getState();
-
-  if (!dbWorkbook) {
-    return;
-  }
-
-  const customerSheet = customerSheetName ? parseSheet(dbWorkbook.Sheets[customerSheetName]) : undefined;
-  const customerCells: string[] = customerSheet ? customerSheet[0] : [];
-
-  const customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
-  const customerMarkCell = Locator.findCell(customerCells, Locator.CUSTOMER_MARK);
-
-  dispatch({
-    type: MERGE,
-    payload: {
-      customerSheetName,
-      customerIDCell,
-      customerMarkCell
-    }
   });
 };
 
-export const providerSheetChangedAction = (providerSheetName: string) => (dispatch: Dispatcher, getState: StateGetter): void => {
-  const { dbWorkbook } = getState();
-
-  if (!dbWorkbook) {
-    return;
-  }
-
-  const providerSheet = providerSheetName ? parseSheet(dbWorkbook.Sheets[providerSheetName]) : undefined;
-  const providerCells: string[] = providerSheet ? providerSheet[0] : [];
-
-  const providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
-  const providerMarkCell = Locator.findCell(providerCells, Locator.PROVIDER_MARK);
-
-  dispatch({
-    type: MERGE,
-    payload: {
-      providerSheetName,
-      providerIDCell,
-      providerMarkCell
-    }
-  })
-};
-
-export const orderSheetChangedAction = (orderSheetName: string) => (dispatch: Dispatcher, getState: StateGetter): void => {
-  const { orderWorkbook } = getState();
-
-  if (!orderWorkbook) {
-    return;
-  }
-
-  const orderSheet = orderSheetName ? parseSheet(orderWorkbook.Sheets[orderSheetName]) : undefined;
-  const orderCells: string[] = orderSheet ? orderSheet[0] : [];
-
-  const orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
-  const orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
-  const orderTypeCell = Locator.findCell(orderCells, Locator.ORDER_TYPE);
-  const orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
-  const orderDeliveryDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_DELIVERY);
-
-  dispatch({
-    type: MERGE,
-    payload: {
-      orderSheetName,
-      orderCustomerIDCell,
-      orderProviderIDCell,
-      orderTypeCell,
-      orderShippingDateCell,
-      orderDeliveryDateCell
-    }
+export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher): void => {
+  parseFile(orderFile).then(workbook => {
+    dispatch({
+      type: ORDER_FILE_CHANGE,
+      payload: workbook
+    });
   });
 };
+
+export const customerSheetChangedAction = (customerSheetName: string): Action => ({
+  type: CUSTOMER_SHEET_CHANGE,
+  payload: customerSheetName
+});
+
+export const providerSheetChangedAction = (providerSheetName: string): Action => ({
+  type: PROVIDER_SHEET_CHANGE,
+  payload: providerSheetName
+});
+
+export const orderSheetChangedAction = (orderSheetName: string): Action => ({
+  type: ORDER_SHEET_CHANGE,
+  payload: orderSheetName
+});
+
+export const customerIDCellChangedAction = (customerIDCell: string): Action => ({
+  type: CUSTOMER_ID_CELL_CHANGE,
+  payload: customerIDCell
+});
+
+export const providerIDCellChangedAction = (providerIDCell: string): Action => ({
+  type: PROVIDER_ID_CELL_CHANGE,
+  payload: providerIDCell
+});
+
+export const orderCustomerIDCellChangedAction = (orderCustomerIDCell: string): Action => ({
+  type: ORDER_CUSTOMER_ID_CELL_CHANGE,
+  payload: orderCustomerIDCell
+});
+
+export const orderProviderIDCellChangedAction = (orderProviderIDCell: string): Action => ({
+  type: ORDER_PROVIDER_ID_CELL_CHANGE,
+  payload: orderProviderIDCell
+});
+
+export const orderTypeCellChangedAction = (orderTypeCell: string): Action => ({
+  type: ORDER_TYPE_CELL_CHANGE,
+  payload: orderTypeCell
+});
+
+export const orderShippingDateCellChangedAction = (orderShippingDateCell: string): Action => ({
+  type: ORDER_SHIPPING_DATE_CELL_CHANGE,
+  payload: orderShippingDateCell
+});
+
+export const orderDeliveryDateCellChangedAction = (orderDeliveryDateCell: string): Action => ({
+  type: ORDER_DELIVERY_DATE_CELL_CHANGE,
+  payload: orderDeliveryDateCell
+});
+
+export const customerMarkCellChangedAction = (customerMarkCell: string): Action => ({
+  type: CUSTOMER_MARK_CELL_CHANGE,
+  payload: customerMarkCell
+});
+
+export const providerMarkCellChangedAction = (providerMarkCell: string): Action => ({
+  type: PROVIDER_MARK_CELL_CHANGE,
+  payload: providerMarkCell
+});
+
+export const customerMarkRateChangedAction = (customerMarkRate: string): Action => ({
+  type: CUSTOMER_MARK_RATE_CHANGE,
+  payload: customerMarkRate
+});
+
+export const providerMarkRateChangedAction = (providerMarkRate: string): Action => ({
+  type: PROVIDER_MARK_RATE_CHANGE,
+  payload: providerMarkRate
+});
+
+export const dateMarkRateChangedAction = (dateMarkRate: string): Action => ({
+  type: DATE_MARK_RATE_CHANGE,
+  payload: dateMarkRate
+});
+
+export const eventKeyToggledAction = (eventKey: string) => ({
+  type: EVENT_KEY_TOGGLE,
+  payload: eventKey
+});
 
 export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void => {
   const state = getState();
@@ -157,124 +118,4 @@ export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void 
   const rankedOrder = compute.compute(orderSheet);
 
   console.log(rankedOrder);
-};
-
-export const customerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const customerIDCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      customerIDCell
-    }
-  });
-};
-
-export const orderCustomerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const orderCustomerIDCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      orderCustomerIDCell
-    }
-  });
-};
-
-export const providerIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const providerIDCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      providerIDCell
-    }
-  });
-};
-
-export const orderProviderIDCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const orderProviderIDCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      orderProviderIDCell
-    }
-  });
-};
-
-export const customerMarkCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const customerMarkCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      customerMarkCell
-    }
-  });
-};
-
-export const providerMarkCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const providerMarkCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      providerMarkCell
-    }
-  });
-};
-
-export const orderTypeCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const orderTypeCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      orderTypeCell
-    }
-  });
-};
-
-export const orderShippingDateCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const orderShippingDateCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      orderShippingDateCell
-    }
-  });
-};
-
-export const orderDeliveryDateCellChangedAction = (str: string) => (dispatch: Dispatcher): void => {
-  const orderDeliveryDateCell = parseInt(str, 10);
-  dispatch({
-    type: MERGE,
-    payload: {
-      orderDeliveryDateCell
-    }
-  });
-};
-
-export const keyChangedAction = (key: string, str: string) => (dispatch: Dispatcher): void => {
-  let int = parseInt(str, 10);
-  if (isNaN(int)) {
-    int = 0;
-  }
-  dispatch({
-    type: MERGE,
-    payload: {
-      [key]: int
-    }
-  });
-};
-
-export const eventKeyChangedAction = (activeKey: string) => (dispatch: Dispatcher, getState: StateGetter): void => {
-  const { activeKeys } = getState();
-
-  if (activeKeys.has(activeKey)) {
-    activeKeys.delete(activeKey);
-  } else {
-    activeKeys.add(activeKey);
-  }
-
-  dispatch({
-    type: MERGE,
-    payload: {
-      activeKeys: new Set(activeKeys)
-    }
-  });
 };

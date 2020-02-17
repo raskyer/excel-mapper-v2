@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 
 import State from '../entities/State';
-import { keyChangedAction } from '../redux/actions';
+import { customerMarkRateChangedAction, providerMarkRateChangedAction, dateMarkRateChangedAction } from '../redux/actions';
 
 interface RatesProps extends RatesState, RatesDispatch {}
 
@@ -64,9 +64,9 @@ const mapStateToProps = (state: State): RatesState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): RatesDispatch => ({
-  onCustomerRateChange: (s: string) => dispatch(keyChangedAction('customerMarkRate', s)),
-  onProviderRateChange: (s: string) => dispatch(keyChangedAction('providerMarkRate', s)),
-  onDateRateChange: (s: string) => dispatch(keyChangedAction('dateMarkRate', s))
+  onCustomerRateChange: (s: string) => dispatch(customerMarkRateChangedAction(s)),
+  onProviderRateChange: (s: string) => dispatch(providerMarkRateChangedAction(s)),
+  onDateRateChange: (s: string) => dispatch(dateMarkRateChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Rates);
