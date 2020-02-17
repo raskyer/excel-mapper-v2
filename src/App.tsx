@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 
-import Step from './components/common/Step';
 import Upload from './components/Upload';
 import Sheets from './components/Sheets';
 import IDCustomer from './components/IDCustomer';
@@ -48,12 +47,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             <IDCustomer />
             <IDProvider />
             <Options />
-            <Step eventKey="6" title="Ajustement" state="dark">
-              <Rates />
-            </Step>
-            <Step eventKey="7" title="Projection" state="dark">
-              <Projection />
-            </Step>
+            <Rates />
+            <Projection />
           </Accordion>
 
           <Form.Group className="mt-3">

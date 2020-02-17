@@ -1,17 +1,27 @@
-import { WorkBook } from "xlsx";
+import { WorkBook } from 'xlsx';
 
-import State from "../entities/State";
+import State from '../entities/State';
 import Locator from '../utils/locator';
 
-import { getCustomerCells, getProviderCells, getFileStatus, getSheetStatus, getOrderSheetNames, getDbSheetNames, getOrderCells } from "./selector";
+import {
+  getCustomerCells,
+  getProviderCells,
+  getOrderCells,
+  getCustomerIDStatus,
+  getProviderIDStatus
+} from './selectors';
+
+import { extractSheetNames, extractCells, extractSheet, extractFileStatus, extractSheetStatus } from './extractors';
 
 class StateBuilder {
   private state: State;
+  private hasToCompute: boolean;
 
   constructor(state: State) {
     this.state = {
       ...state
     };
+    this.hasToCompute = true;
   }
 
   setWorkbook(workbook?: WorkBook): StateBuilder {
@@ -21,7 +31,7 @@ class StateBuilder {
       return this.resetDb();
     }
     
-    const sheetsNames = getDbSheetNames(this.state);
+    const sheetsNames = extractSheetNames(workbook);
     const customerSheetName = Locator.findSheet(sheetsNames, Locator.CUSTOMER_SHEET);
     const providerSheetName = Locator.findSheet(sheetsNames, Locator.PROVIDER_SHEET);
 
@@ -38,7 +48,7 @@ class StateBuilder {
       return this.resetOrder();
     }
 
-    const sheetsNames = getOrderSheetNames(this.state);
+    const sheetsNames = extractSheetNames(workbook);
     const orderSheetName = Locator.findSheet(sheetsNames, Locator.ORDER_SHEET);
 
     this.setOrderSheetName(orderSheetName);
@@ -53,7 +63,7 @@ class StateBuilder {
       return this.resetCustomerCells();
     }
 
-    const customerCells = getCustomerCells(this.state);
+    const customerCells = extractCells(extractSheet(customerSheetName, this.state.dbWorkbook));
 
     this.state.customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
     this.state.customerMarkCell = Locator.findCell(customerCells, Locator.CUSTOMER_MARK);
@@ -68,7 +78,7 @@ class StateBuilder {
       return this.resetProviderCells();
     }
 
-    const providerCells = getProviderCells(this.state);
+    const providerCells = extractCells(extractSheet(providerSheetName, this.state.dbWorkbook));
 
     this.state.providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
     this.state.providerMarkCell = Locator.findCell(providerCells, Locator.PROVIDER_MARK);
@@ -83,7 +93,7 @@ class StateBuilder {
       return this.resetOrderCells();
     }
 
-    const orderCells = getOrderCells(this.state);
+    const orderCells = extractCells(extractSheet(orderSheetName, this.state.orderWorkbook));
 
     this.state.orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
     this.state.orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
@@ -94,57 +104,102 @@ class StateBuilder {
     return this;
   }
 
-  setCustomerIDCell(str: string): StateBuilder {
+  setCustomerIDCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.customerIDCell = undefined;
+      return this;
+    }
     this.state.customerIDCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getCustomerCells(this.state);
+    Locator.save(Locator.CUSTOMER_ID, cells[this.state.customerIDCell]);
     return this;
   }
 
-  setProviderIDCell(str: string): StateBuilder {
+  setProviderIDCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.providerIDCell = undefined;
+      return this;
+    }
     this.state.providerIDCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getProviderCells(this.state);
+    Locator.save(Locator.PROVIDER_ID, cells[this.state.providerIDCell]);
     return this;
   }
 
-  setOrderCustomerIDCell(str: string): StateBuilder {
+  setOrderCustomerIDCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.orderCustomerIDCell = undefined;
+      return this;
+    }
     this.state.orderCustomerIDCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getOrderCells(this.state);
+    Locator.save(Locator.ORDER_CUSTOMER_ID, cells[this.state.orderCustomerIDCell]);
     return this;
   }
 
-  setOrderProviderIDCell(str: string): StateBuilder {
+  setOrderProviderIDCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.orderProviderIDCell = undefined;
+      return this;
+    }
     this.state.orderProviderIDCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getOrderCells(this.state);
+    Locator.save(Locator.ORDER_PROVIDER_ID, cells[this.state.orderProviderIDCell]);
     return this;
   }
 
-  setOrderTypeCell(str: string): StateBuilder {
+  setOrderTypeCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.orderTypeCell = undefined;
+      return this;
+    }
     this.state.orderTypeCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getOrderCells(this.state);
+    Locator.save(Locator.ORDER_TYPE, cells[this.state.orderTypeCell]);
     return this;
   }
 
-  setOrderShippingDateCell(str: string): StateBuilder {
+  setOrderShippingDateCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.orderShippingDateCell = undefined;
+      return this;
+    }
     this.state.orderShippingDateCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getOrderCells(this.state);
+    Locator.save(Locator.CUSTOMER_ID, cells[this.state.orderShippingDateCell]);
     return this;
   }
 
-  setOrderDeliveryDateCell(str: string): StateBuilder {
+  setOrderDeliveryDateCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.orderDeliveryDateCell = undefined;
+      return this;
+    }
     this.state.orderDeliveryDateCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getOrderCells(this.state);
+    Locator.save(Locator.CUSTOMER_ID, cells[this.state.orderDeliveryDateCell]);
     return this;
   }
 
-  setCustomerMarkCell(str: string): StateBuilder {
+  setCustomerMarkCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.customerMarkCell = undefined;
+      return this;
+    }
     this.state.customerMarkCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getCustomerCells(this.state);
+    Locator.save(Locator.CUSTOMER_ID, cells[this.state.customerMarkCell]);
     return this;
   }
 
-  setProviderMarkCell(str: string): StateBuilder {
+  setProviderMarkCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.providerMarkCell = undefined;
+      return this;
+    }
     this.state.providerMarkCell = parseInt(str, 10);
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    const cells = getProviderCells(this.state);
+    Locator.save(Locator.CUSTOMER_ID, cells[this.state.providerMarkCell]);
     return this;
   }
 
@@ -154,7 +209,7 @@ class StateBuilder {
       rate = 0;
     }
     this.state.customerMarkRate = rate;
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    Locator.save(Locator.CUSTOMER_RATE, rate.toString());
     return this;
   }
 
@@ -164,7 +219,7 @@ class StateBuilder {
       rate = 0;
     }
     this.state.providerMarkRate = rate;
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    Locator.save(Locator.PROVIDER_RATE, rate.toString());
     return this;
   }
 
@@ -174,7 +229,7 @@ class StateBuilder {
       rate = 0;
     }
     this.state.dateMarkRate = rate;
-    //Locator.save(Locator.CUSTOMER_ID, this.state.customerIDCell);
+    Locator.save(Locator.DATE_RATE, rate.toString());
     return this;
   }
 
@@ -186,10 +241,14 @@ class StateBuilder {
       activeKeys.add(eventKey);
     }
     this.state.activeKeys = activeKeys;
+    this.hasToCompute = false;
     return this;
   }
 
   build(): State {
+    if (this.hasToCompute) {
+      this.computeActiveKeys();
+    }
     return this.state;
   }
 
@@ -239,15 +298,25 @@ class StateBuilder {
   }
 
   private computeActiveKeys(): StateBuilder {
-    const fileStatus = getFileStatus(this.state);
-    if (fileStatus !== 'success') {
-      this.state.activeKeys = new Set<string>().add('1');
+    const set = new Set<string>();
+
+    if (extractFileStatus(this.state.dbWorkbook, this.state.orderWorkbook) !== 'success') {
+      set.add('1');
     }
   
-    const sheetStatus = getSheetStatus(this.state);
-    if (sheetStatus !== 'success') {
-      this.state.activeKeys = new Set<string>().add('2');
+    if (extractSheetStatus(this.state.customerSheetName, this.state.providerSheetName, this.state.orderSheetName) === 'danger') {
+      set.add('2');
     }
+
+    if (getCustomerIDStatus(this.state) === 'danger') {
+      set.add('3');
+    }
+
+    if (getProviderIDStatus(this.state) === 'danger') {
+      set.add('4');
+    }
+
+    this.state.activeKeys = set;
   
     return this;
   }

@@ -9,7 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 import Select from './Select';
 
-import { getMissing } from '../../utils/core';
+import { difference, diffPercentage } from '../../utils/core';
 
 interface IDLink {
   header: string;
@@ -20,8 +20,8 @@ interface IDLink {
   map: Map<string | number, any[]>;
   orderMap: Map<string | number, any[]>;
 
-  onIDCellChange: (s: string) => void;
-  onOrderIDCellChange: (s: string) => void;
+  onIDCellChange: (s?: string) => void;
+  onOrderIDCellChange: (s?: string) => void;
 }
 
 const IDLink: React.FC<IDLink> = (props: IDLink) => {
@@ -29,7 +29,7 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
   const [missing, setMissing] = useState<any[][]>([]);
 
   useEffect(() => {
-    setMissing(getMissing(props.orderMap, props.map));
+    setMissing(difference(props.orderMap, props.map));
   }, [props.map, props.orderMap]);
 
   const onClickID = () => {
@@ -48,10 +48,7 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
     setDisplay(missing.map(m => m[props.orderCustomerIDCell ? props.orderCustomerIDCell : 0]));
   };*/
 
-  let percentage = Math.round(((props.orderMap.size - missing.length) / props.orderMap.size) * 100);
-  if (isNaN(percentage)) {
-    percentage = 0;
-  }
+  const percentage = diffPercentage(props.orderMap.size, missing.length);
 
   let fillColor = 'red';
   if (percentage > 80) {

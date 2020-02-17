@@ -6,7 +6,7 @@ import IDLink from './common/IDLink';
 
 import State from '../entities/State';
 import Status from '../entities/Status';
-import { getProviderCells, getOrderCells, getProviderMap, getOrderProviderMap, getProviderIDStatus } from '../redux/selector';
+import { getProviderCells, getOrderCells, getProviderMap, getOrderProviderMap, getProviderIDStatus } from '../redux/selectors';
 import { providerIDCellChangedAction, orderProviderIDCellChangedAction } from '../redux/actions';
 
 interface IDProviderProps extends IDProviderState, IDProviderDispatch {}
@@ -22,8 +22,8 @@ interface IDProviderState {
 }
 
 interface IDProviderDispatch {
-  onProviderIDCellChange: (s: string) => void;
-  onOrderProviderIDCellChange: (s: string) => void;
+  onProviderIDCellChange: (s?: string) => void;
+  onOrderProviderIDCellChange: (s?: string) => void;
 }
 
 const IDProvider: React.FC<IDProviderProps> = (props: IDProviderProps) => {
@@ -55,8 +55,8 @@ const mapStateToProps = (state: State): IDProviderState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): IDProviderDispatch => ({
-  onProviderIDCellChange: (s: string): void => dispatch(providerIDCellChangedAction(s)),
-  onOrderProviderIDCellChange: (s: string): void => dispatch(orderProviderIDCellChangedAction(s))
+  onProviderIDCellChange: (s?: string): void => dispatch(providerIDCellChangedAction(s)),
+  onOrderProviderIDCellChange: (s?: string): void => dispatch(orderProviderIDCellChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IDProvider);

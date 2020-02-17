@@ -9,7 +9,7 @@ import Step from './common/Step';
 import State from '../entities/State';
 import Status from '../entities/Status';
 import { dbFileChangedAction, orderFileChangedAction } from '../redux/actions';
-import { getFileStatus } from '../redux/selector';
+import { getFileStatus } from '../redux/selectors';
 
 interface UploadProps extends UploadState, UploadDispatch {}
 

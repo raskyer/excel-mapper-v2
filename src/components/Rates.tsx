@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
 
+import Step from './common/Step';
+
 import State from '../entities/State';
 import { customerMarkRateChangedAction, providerMarkRateChangedAction, dateMarkRateChangedAction } from '../redux/actions';
 
@@ -22,7 +24,7 @@ interface RatesDispatch {
 
 const Rates: React.FC<RatesProps> = (props: RatesProps) => {
   return (
-    <>
+    <Step eventKey="6" title="Ajustement" state="success">
       <Form.Group>
         <Form.Label>Coéfficient Client</Form.Label>
         <Form.Control
@@ -53,7 +55,7 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
           required
         />
       </Form.Group>
-    </>
+    </Step>
   );
 };
 

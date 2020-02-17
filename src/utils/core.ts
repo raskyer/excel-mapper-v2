@@ -1,6 +1,6 @@
 import State from "../entities/State";
 import FinalState from "../entities/FinalState";
-import { getCustomerSheet, getProviderSheet, getOrderSheet } from '../redux/selector';
+import { getCustomerSheet, getProviderSheet, getOrderSheet } from '../redux/selectors';
 
 const DEFAULT_PROJECTION = {
   'Type': 'Type',
@@ -35,7 +35,7 @@ export function createMap(sheet: any[][], idCell: number): CellMap {
   return map;
 }
 
-export function getMissing(orderMap: CellMap, itemMap: CellMap): any[][] {
+export function difference(orderMap: CellMap, itemMap: CellMap): any[][] {
   const missing: any[][] = [];
   for (const [key, value] of orderMap.entries()) {
     if (!itemMap.has(key)) {
@@ -43,6 +43,14 @@ export function getMissing(orderMap: CellMap, itemMap: CellMap): any[][] {
     }
   }
   return missing;
+}
+
+export function diffPercentage(size: number, missingSize: number): number {
+  const percentage = Math.round(((size - missingSize) / size) * 100);
+  if (isNaN(percentage)) {
+    return 0;
+  }
+  return percentage;
 }
 
 export function fromState(state: State): FinalState {

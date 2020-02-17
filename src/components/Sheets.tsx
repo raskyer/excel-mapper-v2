@@ -9,7 +9,7 @@ import Step from './common/Step';
 import Select from './common/Select';
 import State from '../entities/State';
 import Status from '../entities/Status';
-import { getDbSheetNames, getOrderSheetNames, getSheetStatus } from '../redux/selector';
+import { getDbSheetNames, getOrderSheetNames, getSheetStatus } from '../redux/selectors';
 import { customerSheetChangedAction, providerSheetChangedAction, orderSheetChangedAction } from '../redux/actions';
 
 interface SheetsProps extends SheetsState, SheetsDispatch {}
@@ -24,9 +24,9 @@ interface SheetsState {
 }
 
 interface SheetsDispatch {
-  onCustomerSheetChange: (s: string) => void;
-  onProviderSheetChange: (s: string) => void;
-  onOrderSheetChange: (s: string) => void;
+  onCustomerSheetChange: (s?: string) => void;
+  onProviderSheetChange: (s?: string) => void;
+  onOrderSheetChange: (s?: string) => void;
 }
 
 const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
@@ -74,9 +74,9 @@ const mapStateToProps = (state: State): SheetsState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): SheetsDispatch => ({
-  onCustomerSheetChange: (s: string): void => dispatch(customerSheetChangedAction(s)),
-  onProviderSheetChange: (s: string): void => dispatch(providerSheetChangedAction(s)),
-  onOrderSheetChange: (s: string): void => dispatch(orderSheetChangedAction(s)),
+  onCustomerSheetChange: (s?: string): void => dispatch(customerSheetChangedAction(s)),
+  onProviderSheetChange: (s?: string): void => dispatch(providerSheetChangedAction(s)),
+  onOrderSheetChange: (s?: string): void => dispatch(orderSheetChangedAction(s)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sheets);

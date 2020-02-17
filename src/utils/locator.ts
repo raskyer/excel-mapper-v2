@@ -38,12 +38,27 @@ class Locator {
     [this.ORDER_DATE_DELIVERY]: 'Date Livr.'
   };
 
+  DEFAULT_RATES = {
+    [this.CUSTOMER_RATE]: 1,
+    [this.PROVIDER_RATE]: 1,
+    [this.DATE_RATE]: 1
+  };
+
   findSheet(arr: string[], key: string): string | undefined {
     return this._findElement(arr, key);
   }
 
   findCell(arr: string[], key: string): number | undefined {
     return this._findIndex(arr, key);
+  }
+
+  findRate(key: string): number {
+    const token = localStorage.getItem(key);
+    if (!token) {
+      this.save(key, this.DEFAULT_KEYS[key]);
+      return this.DEFAULT_RATES[key];
+    }
+    return parseInt(token, 10);
   }
 
   save(key: string, value: string): void {

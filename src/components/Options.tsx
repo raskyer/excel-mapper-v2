@@ -9,7 +9,7 @@ import Select from './common/Select';
 
 import State from '../entities/State';
 import Status from '../entities/Status';
-import { getCustomerCells, getProviderCells, getOrderCells, getOptionsStatus } from '../redux/selector';
+import { getCustomerCells, getProviderCells, getOrderCells, getOptionsStatus } from '../redux/selectors';
 import {
   customerMarkCellChangedAction,
   providerMarkCellChangedAction,
@@ -34,11 +34,11 @@ interface OptionsState {
 }
 
 interface OptionsDispatch {
-  onCustomerMarkCellChange: (s: string) => void;
-  onProviderMarkCellChange: (s: string) => void;
-  onOrderTypeCellChange: (s: string) => void;
-  onOrderShippingDateCellChange: (s: string) => void;
-  onOrderDeliveryDateCellChange: (s: string) => void;
+  onCustomerMarkCellChange: (s?: string) => void;
+  onProviderMarkCellChange: (s?: string) => void;
+  onOrderTypeCellChange: (s?: string) => void;
+  onOrderShippingDateCellChange: (s?: string) => void;
+  onOrderDeliveryDateCellChange: (s?: string) => void;
 }
 
 const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
@@ -98,11 +98,11 @@ const mapStateToProps = (state: State): OptionsState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): OptionsDispatch => ({
-  onCustomerMarkCellChange: (s: string) => dispatch(customerMarkCellChangedAction(s)),
-  onProviderMarkCellChange: (s: string) => dispatch(providerMarkCellChangedAction(s)),
-  onOrderTypeCellChange: (s: string) => dispatch(orderTypeCellChangedAction(s)),
-  onOrderShippingDateCellChange: (s: string) => dispatch(orderShippingDateCellChangedAction(s)),
-  onOrderDeliveryDateCellChange: (s: string) => dispatch(orderDeliveryDateCellChangedAction(s))
+  onCustomerMarkCellChange: (s?: string) => dispatch(customerMarkCellChangedAction(s)),
+  onProviderMarkCellChange: (s?: string) => dispatch(providerMarkCellChangedAction(s)),
+  onOrderTypeCellChange: (s?: string) => dispatch(orderTypeCellChangedAction(s)),
+  onOrderShippingDateCellChange: (s?: string) => dispatch(orderShippingDateCellChangedAction(s)),
+  onOrderDeliveryDateCellChange: (s?: string) => dispatch(orderDeliveryDateCellChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Options);

@@ -31,13 +31,13 @@ const Step: React.FC<StepProps> = (props: StepProps) => {
       wording = 'Valide';
       break;
     case 'warning':
-      wording = 'Attention';
+      wording = 'Incomplet';
       break;
     case 'danger':
-      wording = 'Invalide';
+      wording = 'Erreur';
       break;
     default:
-      wording = 'Manquant';
+      wording = 'Non renseigné';
       break;
   }
 

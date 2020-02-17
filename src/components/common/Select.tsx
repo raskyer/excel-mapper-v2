@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 interface SelectProps {
   title: string;
   value?: string | number;
-  onChange?: (s: string) => void;
+  onChange?: (s?: string) => void;
   options: string[];
   byValue?: boolean;
 }
@@ -13,7 +13,7 @@ interface SelectProps {
 const Select: React.FC<SelectProps> = (props) => {
   const onChange = (e: React.FormEvent<HTMLSelectElement>): void => {
     if (!props.onChange) return;
-    props.onChange(e.currentTarget.value);
+    props.onChange(e.currentTarget.value === '' ? undefined : e.currentTarget.value);
   };
 
   return (
@@ -28,6 +28,7 @@ const Select: React.FC<SelectProps> = (props) => {
         disabled={props.options.length < 1}
         required
       >
+        <option></option>
         {props.options.map((option, index) => (
           <option key={index} value={props.byValue ? option : index + ''}>{option}</option>
         ))}

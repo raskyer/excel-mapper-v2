@@ -2,8 +2,27 @@ import Dispatcher from '../entities/Dispatcher';
 import StateGetter from '../entities/StateGetter';
 import Action from '../entities/Action';
 
-import { DB_FILE_CHANGE, ORDER_FILE_CHANGE, CUSTOMER_SHEET_CHANGE, PROVIDER_SHEET_CHANGE, ORDER_SHEET_CHANGE, CUSTOMER_ID_CELL_CHANGE, ORDER_CUSTOMER_ID_CELL_CHANGE, PROVIDER_ID_CELL_CHANGE, ORDER_PROVIDER_ID_CELL_CHANGE, ORDER_TYPE_CELL_CHANGE, ORDER_SHIPPING_DATE_CELL_CHANGE, ORDER_DELIVERY_DATE_CELL_CHANGE, CUSTOMER_MARK_CELL_CHANGE, PROVIDER_MARK_CELL_CHANGE, CUSTOMER_MARK_RATE_CHANGE, PROVIDER_MARK_RATE_CHANGE, DATE_MARK_RATE_CHANGE, EVENT_KEY_TOGGLE } from './constants';
-import { getCustomerMap, getProviderMap, getOrderSheet } from './selector';
+import {
+  DB_FILE_CHANGE,
+  ORDER_FILE_CHANGE,
+  CUSTOMER_SHEET_CHANGE,
+  PROVIDER_SHEET_CHANGE,
+  ORDER_SHEET_CHANGE,
+  CUSTOMER_ID_CELL_CHANGE,
+  ORDER_CUSTOMER_ID_CELL_CHANGE,
+  PROVIDER_ID_CELL_CHANGE,
+  ORDER_PROVIDER_ID_CELL_CHANGE,
+  ORDER_TYPE_CELL_CHANGE,
+  ORDER_SHIPPING_DATE_CELL_CHANGE,
+  ORDER_DELIVERY_DATE_CELL_CHANGE,
+  CUSTOMER_MARK_CELL_CHANGE,
+  PROVIDER_MARK_CELL_CHANGE,
+  CUSTOMER_MARK_RATE_CHANGE,
+  PROVIDER_MARK_RATE_CHANGE,
+  DATE_MARK_RATE_CHANGE,
+  EVENT_KEY_TOGGLE
+} from './constants';
+import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
 import { parseFile } from '../utils/excel';
 import Compute from '../utils/compute';
@@ -27,62 +46,62 @@ export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher
   });
 };
 
-export const customerSheetChangedAction = (customerSheetName: string): Action => ({
+export const customerSheetChangedAction = (customerSheetName?: string): Action => ({
   type: CUSTOMER_SHEET_CHANGE,
   payload: customerSheetName
 });
 
-export const providerSheetChangedAction = (providerSheetName: string): Action => ({
+export const providerSheetChangedAction = (providerSheetName?: string): Action => ({
   type: PROVIDER_SHEET_CHANGE,
   payload: providerSheetName
 });
 
-export const orderSheetChangedAction = (orderSheetName: string): Action => ({
+export const orderSheetChangedAction = (orderSheetName?: string): Action => ({
   type: ORDER_SHEET_CHANGE,
   payload: orderSheetName
 });
 
-export const customerIDCellChangedAction = (customerIDCell: string): Action => ({
+export const customerIDCellChangedAction = (customerIDCell?: string): Action => ({
   type: CUSTOMER_ID_CELL_CHANGE,
   payload: customerIDCell
 });
 
-export const providerIDCellChangedAction = (providerIDCell: string): Action => ({
+export const providerIDCellChangedAction = (providerIDCell?: string): Action => ({
   type: PROVIDER_ID_CELL_CHANGE,
   payload: providerIDCell
 });
 
-export const orderCustomerIDCellChangedAction = (orderCustomerIDCell: string): Action => ({
+export const orderCustomerIDCellChangedAction = (orderCustomerIDCell?: string): Action => ({
   type: ORDER_CUSTOMER_ID_CELL_CHANGE,
   payload: orderCustomerIDCell
 });
 
-export const orderProviderIDCellChangedAction = (orderProviderIDCell: string): Action => ({
+export const orderProviderIDCellChangedAction = (orderProviderIDCell?: string): Action => ({
   type: ORDER_PROVIDER_ID_CELL_CHANGE,
   payload: orderProviderIDCell
 });
 
-export const orderTypeCellChangedAction = (orderTypeCell: string): Action => ({
+export const orderTypeCellChangedAction = (orderTypeCell?: string): Action => ({
   type: ORDER_TYPE_CELL_CHANGE,
   payload: orderTypeCell
 });
 
-export const orderShippingDateCellChangedAction = (orderShippingDateCell: string): Action => ({
+export const orderShippingDateCellChangedAction = (orderShippingDateCell?: string): Action => ({
   type: ORDER_SHIPPING_DATE_CELL_CHANGE,
   payload: orderShippingDateCell
 });
 
-export const orderDeliveryDateCellChangedAction = (orderDeliveryDateCell: string): Action => ({
+export const orderDeliveryDateCellChangedAction = (orderDeliveryDateCell?: string): Action => ({
   type: ORDER_DELIVERY_DATE_CELL_CHANGE,
   payload: orderDeliveryDateCell
 });
 
-export const customerMarkCellChangedAction = (customerMarkCell: string): Action => ({
+export const customerMarkCellChangedAction = (customerMarkCell?: string): Action => ({
   type: CUSTOMER_MARK_CELL_CHANGE,
   payload: customerMarkCell
 });
 
-export const providerMarkCellChangedAction = (providerMarkCell: string): Action => ({
+export const providerMarkCellChangedAction = (providerMarkCell?: string): Action => ({
   type: PROVIDER_MARK_CELL_CHANGE,
   payload: providerMarkCell
 });

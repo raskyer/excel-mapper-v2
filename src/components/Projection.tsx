@@ -4,8 +4,10 @@ import chunk from 'lodash/chunk';
 
 import ListGroup from 'react-bootstrap/ListGroup';
 
+import Step from './common/Step';
+
 import State from '../entities/State';
-import { getOrderCells } from '../redux/selector';
+import { getOrderCells } from '../redux/selectors';
 
 interface ProjectionProps extends ProjectionState, ProjectionDispatch {}
 
@@ -22,7 +24,7 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
   };
 
   return (
-    <>
+    <Step eventKey="7" title="Projection" state="dark">
       {props.chunks.map((chunk, index) => (
         <ListGroup key={index} as="ul" horizontal>
           {chunk.map((cell, index) => (
@@ -38,7 +40,7 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
           ))}
         </ListGroup>
       ))}
-    </>
+    </Step>
   );
 };
 

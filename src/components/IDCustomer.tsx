@@ -6,7 +6,7 @@ import IDLink from './common/IDLink';
 
 import State from '../entities/State';
 import Status from '../entities/Status';
-import { getCustomerCells, getOrderCells, getCustomerMap, getOrderCustomerMap, getCustomerIDStatus } from '../redux/selector';
+import { getCustomerCells, getOrderCells, getCustomerMap, getOrderCustomerMap, getCustomerIDStatus } from '../redux/selectors';
 import { customerIDCellChangedAction, orderCustomerIDCellChangedAction } from '../redux/actions';
 
 interface IDCustomerProps extends IDCustomerState, IDCustomerDispatch {}
@@ -22,8 +22,8 @@ interface IDCustomerState {
 }
 
 interface IDCustomerDispatch {
-  onCustomerIDCellChange: (s: string) => void;
-  onOrderCustomerIDCellChange: (s: string) => void;
+  onCustomerIDCellChange: (s?: string) => void;
+  onOrderCustomerIDCellChange: (s?: string) => void;
 }
 
 const IDCustomer: React.FC<IDCustomerProps> = (props: IDCustomerProps) => {
@@ -55,8 +55,8 @@ const mapStateToProps = (state: State): IDCustomerState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): IDCustomerDispatch => ({
-  onCustomerIDCellChange: (s: string): void => dispatch(customerIDCellChangedAction(s)),
-  onOrderCustomerIDCellChange: (s: string): void => dispatch(orderCustomerIDCellChangedAction(s))
+  onCustomerIDCellChange: (s?: string): void => dispatch(customerIDCellChangedAction(s)),
+  onOrderCustomerIDCellChange: (s?: string): void => dispatch(orderCustomerIDCellChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IDCustomer);
