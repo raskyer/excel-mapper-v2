@@ -19,7 +19,8 @@ import {
   CUSTOMER_MARK_RATE_CHANGE,
   PROVIDER_MARK_RATE_CHANGE,
   DATE_MARK_RATE_CHANGE,
-  EVENT_KEY_TOGGLE
+  EVENT_KEY_TOGGLE,
+  PROJECTION_CELL_TOGGLE
 } from './constants';
 
 import StateBuilder from './StateBuilder';
@@ -28,7 +29,8 @@ const INITIAL_STATE: State = {
   customerMarkRate: 1,
   providerMarkRate: 1,
   dateMarkRate: 1,
-  activeKeys: new Set<string>().add('1')
+  activeKeys: new Set<string>().add('1'),
+  projection: new Set<string>()
 };
 
 const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
@@ -104,6 +106,10 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
     case EVENT_KEY_TOGGLE:
       return new StateBuilder(state)
         .toggleEventKey(action.payload)
+        .build();
+    case PROJECTION_CELL_TOGGLE:
+      return new StateBuilder(state)
+        .toggleProjectionCell(action.payload)
         .build();
     default:
       return state;

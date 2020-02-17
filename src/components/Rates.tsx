@@ -29,8 +29,9 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
         <Form.Label>Coéfficient Client</Form.Label>
         <Form.Control
           type="number"
-          value={props.customerMarkRate !== undefined ? (props.customerMarkRate + '') : props.customerMarkRate}
+          value={props.customerMarkRate + ''}
           onChange={(e: React.FormEvent<HTMLInputElement>) => props.onCustomerRateChange(e.currentTarget.value)}
+          isValid={props.customerMarkRate > -1}
           isInvalid={props.customerMarkRate < 0}
           required
         />
@@ -39,8 +40,9 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
         <Form.Label>Coéfficient Transporteur</Form.Label>
         <Form.Control
           type="number"
-          value={props.providerMarkRate !== undefined ? props.providerMarkRate + '' : props.providerMarkRate}
+          value={props.providerMarkRate + ''}
           onChange={(e: React.FormEvent<HTMLInputElement>) => props.onProviderRateChange(e.currentTarget.value)}
+          isValid={props.providerMarkRate > -1}
           isInvalid={props.providerMarkRate < 0}
           required
         />
@@ -49,8 +51,9 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
         <Form.Label>Coéfficient Date</Form.Label>
         <Form.Control
           type="number"
-          value={props.dateMarkRate !== undefined ? props.dateMarkRate + '' : props.dateMarkRate}
+          value={props.dateMarkRate + ''}
           onChange={(e: React.FormEvent<HTMLInputElement>) => props.onDateRateChange(e.currentTarget.value)}
+          isValid={props.dateMarkRate > -1}
           isInvalid={props.dateMarkRate < 0}
           required
         />

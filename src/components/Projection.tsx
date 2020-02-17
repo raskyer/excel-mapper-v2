@@ -8,21 +8,20 @@ import Step from './common/Step';
 
 import State from '../entities/State';
 import { getOrderCells } from '../redux/selectors';
+import { projectionCellToggledAction } from '../redux/actions';
 
 interface ProjectionProps extends ProjectionState, ProjectionDispatch {}
 
 interface ProjectionState {
   chunks: string[][],
-  activeSells: Set<String>
+  projection: Set<String>
 }
 
-interface ProjectionDispatch {}
+interface ProjectionDispatch {
+  onProjectionCellToggle: (s: string) => void;
+}
 
 const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
-  const onClickCell = (cell: string) => {
-    console.log(cell);
-  };
-
   return (
     <Step eventKey="7" title="Projection" state="dark">
       {props.chunks.map((chunk, index) => (
@@ -31,8 +30,8 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
             <ListGroup.Item
               key={index}
               as="li"
-              active={props.activeSells.has(cell)}
-              onClick={() => onClickCell(cell)}
+              active={props.projection.has(cell)}
+              onClick={() => props.onProjectionCellToggle(cell)}
               action
             >
               {cell}
@@ -46,7 +45,11 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
 
 const mapStateToProps = (state: State): ProjectionState => ({
   chunks: chunk(getOrderCells(state), 4),
-  activeSells: new Set()
+  projection: state.projection
 });
 
-export default connect(mapStateToProps)(Projection);
+const mapDispatchToProps = (dispatch: Function): ProjectionDispatch => ({
+  onProjectionCellToggle: (s: string) => dispatch(projectionCellToggledAction(s))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Projection);

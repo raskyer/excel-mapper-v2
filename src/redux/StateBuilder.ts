@@ -4,14 +4,16 @@ import State from '../entities/State';
 import Locator from '../utils/locator';
 
 import {
+  getDbSheetNames,
+  getOrderSheetNames,
   getCustomerCells,
   getProviderCells,
   getOrderCells,
+  getFileStatus,
+  getSheetStatus,
   getCustomerIDStatus,
   getProviderIDStatus
 } from './selectors';
-
-import { extractSheetNames, extractCells, extractSheet, extractFileStatus, extractSheetStatus } from './extractors';
 
 class StateBuilder {
   private state: State;
@@ -21,7 +23,7 @@ class StateBuilder {
     this.state = {
       ...state
     };
-    this.hasToCompute = true;
+    this.hasToCompute = false;
   }
 
   setWorkbook(workbook?: WorkBook): StateBuilder {
@@ -31,12 +33,13 @@ class StateBuilder {
       return this.resetDb();
     }
     
-    const sheetsNames = extractSheetNames(workbook);
+    const sheetsNames = getDbSheetNames({ ...this.state });
     const customerSheetName = Locator.findSheet(sheetsNames, Locator.CUSTOMER_SHEET);
     const providerSheetName = Locator.findSheet(sheetsNames, Locator.PROVIDER_SHEET);
 
     this.setCustomerSheetName(customerSheetName);
     this.setProviderSheetName(providerSheetName);
+    this.hasToCompute = true;
 
     return this;
   }
@@ -48,10 +51,11 @@ class StateBuilder {
       return this.resetOrder();
     }
 
-    const sheetsNames = extractSheetNames(workbook);
+    const sheetsNames = getOrderSheetNames({ ...this.state });
     const orderSheetName = Locator.findSheet(sheetsNames, Locator.ORDER_SHEET);
 
     this.setOrderSheetName(orderSheetName);
+    this.hasToCompute = true;
 
     return this;
   }
@@ -64,10 +68,11 @@ class StateBuilder {
     }
 
     Locator.save(Locator.CUSTOMER_SHEET, customerSheetName);
-    const customerCells = extractCells(extractSheet(customerSheetName, this.state.dbWorkbook));
+    const customerCells = getCustomerCells({ ...this.state });
 
     this.state.customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
     this.state.customerMarkCell = Locator.findCell(customerCells, Locator.CUSTOMER_MARK);
+    this.hasToCompute = true;
 
     return this;
   }
@@ -80,10 +85,11 @@ class StateBuilder {
     }
 
     Locator.save(Locator.PROVIDER_SHEET, providerSheetName);
-    const providerCells = extractCells(extractSheet(providerSheetName, this.state.dbWorkbook));
+    const providerCells = getProviderCells({ ...this.state });
 
     this.state.providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
     this.state.providerMarkCell = Locator.findCell(providerCells, Locator.PROVIDER_MARK);
+    this.hasToCompute = true;
 
     return this;
   }
@@ -96,13 +102,14 @@ class StateBuilder {
     }
 
     Locator.save(Locator.ORDER_SHEET, orderSheetName);
-    const orderCells = extractCells(extractSheet(orderSheetName, this.state.orderWorkbook));
+    const orderCells = getOrderCells({ ...this.state });
 
     this.state.orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
     this.state.orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
     this.state.orderTypeCell = Locator.findCell(orderCells, Locator.ORDER_TYPE);
     this.state.orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
     this.state.orderDeliveryDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_DELIVERY);
+    this.hasToCompute = true;
 
     return this;
   }
@@ -244,7 +251,17 @@ class StateBuilder {
       activeKeys.add(eventKey);
     }
     this.state.activeKeys = activeKeys;
-    this.hasToCompute = false;
+    return this;
+  }
+
+  toggleProjectionCell(cell: string): StateBuilder {
+    const projection = new Set(this.state.projection);
+    if (projection.has(cell)) {
+      projection.delete(cell);
+    } else {
+      projection.add(cell);
+    }
+    this.state.projection = projection;
     return this;
   }
 
@@ -303,18 +320,11 @@ class StateBuilder {
   private computeActiveKeys(): StateBuilder {
     const set = new Set<string>();
 
-    if (extractFileStatus(this.state.dbWorkbook, this.state.orderWorkbook) !== 'success') {
+    if (getFileStatus({ ...this.state }) !== 'success') {
       set.add('1');
     }
   
-    const sheetStatus = extractSheetStatus(
-      extractSheetNames(this.state.dbWorkbook),
-      extractSheetNames(this.state.orderWorkbook),
-      this.state.customerSheetName,
-      this.state.providerSheetName,
-      this.state.orderSheetName
-    );
-    if (sheetStatus === 'danger') {
+    if (getSheetStatus({ ...this.state }) === 'danger') {
       set.add('2');
     }
 

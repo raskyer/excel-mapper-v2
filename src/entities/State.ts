@@ -24,6 +24,7 @@ interface State {
   dateMarkRate: number;
 
   activeKeys: Set<string>;
+  projection: Set<string>;
 }
 
 export default State;

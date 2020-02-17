@@ -1,5 +1,3 @@
-export const MERGE = 'merge';
-
 export const DB_FILE_CHANGE = 'change::file::db';
 export const ORDER_FILE_CHANGE = 'change::file::order';
 
@@ -22,5 +20,5 @@ export const CUSTOMER_MARK_RATE_CHANGE = 'change::rate::mark::customer';
 export const PROVIDER_MARK_RATE_CHANGE = 'change::rate::mark::provider';
 export const DATE_MARK_RATE_CHANGE = 'change::rate::mark::date';
 
-
 export const EVENT_KEY_TOGGLE = 'toggle::key::event';
+export const PROJECTION_CELL_TOGGLE = 'toggle::cell::projection';

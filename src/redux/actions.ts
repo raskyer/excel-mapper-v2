@@ -20,7 +20,8 @@ import {
   CUSTOMER_MARK_RATE_CHANGE,
   PROVIDER_MARK_RATE_CHANGE,
   DATE_MARK_RATE_CHANGE,
-  EVENT_KEY_TOGGLE
+  EVENT_KEY_TOGGLE,
+  PROJECTION_CELL_TOGGLE
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
@@ -124,6 +125,11 @@ export const dateMarkRateChangedAction = (dateMarkRate: string): Action => ({
 export const eventKeyToggledAction = (eventKey: string) => ({
   type: EVENT_KEY_TOGGLE,
   payload: eventKey
+});
+
+export const projectionCellToggledAction = (cell: string) => ({
+  type: PROJECTION_CELL_TOGGLE,
+  payload: cell
 });
 
 export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void => {
