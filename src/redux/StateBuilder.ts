@@ -63,6 +63,7 @@ class StateBuilder {
       return this.resetCustomerCells();
     }
 
+    Locator.save(Locator.CUSTOMER_SHEET, customerSheetName);
     const customerCells = extractCells(extractSheet(customerSheetName, this.state.dbWorkbook));
 
     this.state.customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
@@ -78,6 +79,7 @@ class StateBuilder {
       return this.resetProviderCells();
     }
 
+    Locator.save(Locator.PROVIDER_SHEET, providerSheetName);
     const providerCells = extractCells(extractSheet(providerSheetName, this.state.dbWorkbook));
 
     this.state.providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
@@ -93,6 +95,7 @@ class StateBuilder {
       return this.resetOrderCells();
     }
 
+    Locator.save(Locator.ORDER_SHEET, orderSheetName);
     const orderCells = extractCells(extractSheet(orderSheetName, this.state.orderWorkbook));
 
     this.state.orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
@@ -304,7 +307,14 @@ class StateBuilder {
       set.add('1');
     }
   
-    if (extractSheetStatus(this.state.customerSheetName, this.state.providerSheetName, this.state.orderSheetName) === 'danger') {
+    const sheetStatus = extractSheetStatus(
+      extractSheetNames(this.state.dbWorkbook),
+      extractSheetNames(this.state.orderWorkbook),
+      this.state.customerSheetName,
+      this.state.providerSheetName,
+      this.state.orderSheetName
+    );
+    if (sheetStatus === 'danger') {
       set.add('2');
     }
 

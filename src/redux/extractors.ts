@@ -34,25 +34,68 @@ export const extractFileStatus = (dbWorkbook?: WorkBook, orderWorkbook?: WorkBoo
   return 'warning';
 };
 
-export const extractSheetStatus = (customerSheetName?: string, providerSheetName?: string, orderSheetName?: string): Status => {
+// Add cells ?
+export const extractSheetStatus = (
+  sheetNames: string[],
+  orderSheetNames: string[],
+  customerSheetName?: string,
+  providerSheetName?: string,
+  orderSheetName?: string
+): Status => {
   if (customerSheetName !== undefined && providerSheetName !== undefined && orderSheetName !== undefined) {
     return 'success';
   }
-  if (customerSheetName === undefined && providerSheetName === undefined && orderSheetName === undefined) {
+  if (sheetNames.length < 1 && orderSheetNames.length < 1) {
     return 'dark';
+  }
+  if (sheetNames.length > 0 && (customerSheetName === undefined || providerSheetName === undefined)) {
+    return 'danger';
+  }
+  if (orderSheetNames.length > 0 && orderSheetName === undefined) {
+    return 'danger';
   }
   return 'warning';
 };
 
-export const extractIDStatus = (customerMap: Map<ID, any[]>, orderMap: Map<ID, any[]>): Status => {
-  if (customerMap.size < 1 && orderMap.size < 1) {
+export const extractCellStatus = (cells: string[], cell?: number): Status => {
+  if (cells.length < 1) {
     return 'dark';
   }
-  if (customerMap.size < 1 || orderMap.size < 1) {
+  if (cell === undefined) {
+    return 'danger';
+  }
+  return 'success';
+};
+
+export const extractCellAggregateStatus = (status1: Status, status2: Status): Status => {
+  if (status1 === 'danger' || status2 === 'danger') {
+    return 'danger';
+  }
+  if (status1 === 'dark' && status2 === 'dark') {
+    return 'dark';
+  }
+  if (status1 === 'dark' || status2 === 'dark') {
+    return 'warning';
+  }
+  return 'success';
+};
+
+export const extractIDStatus = (
+  itemMap: Map<ID, any[]>,
+  orderMap: Map<ID, any[]>,
+  cellStatus: Status
+): Status => {
+  if (cellStatus === 'danger') {
+    return 'danger';
+  }
+  if (itemMap.size < 1 && orderMap.size < 1) {
+    return 'dark';
+  }
+  if (itemMap.size < 1 || orderMap.size < 1) {
     return 'warning';
   }
 
-  const missing = difference(orderMap, customerMap);
+  const missing = difference(orderMap, itemMap);
   const percentage = diffPercentage(orderMap.size, missing.length);
 
   if (percentage < 50) {

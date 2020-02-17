@@ -10,7 +10,9 @@ import {
   extractFileStatus,
   extractSheetStatus,
   extractIDStatus,
-  extractOptionsStatus
+  extractOptionsStatus,
+  extractCellStatus,
+  extractCellAggregateStatus
 } from './extractors';
 
 const getDbWorkbook = (state: State) => state.dbWorkbook;
@@ -48,10 +50,21 @@ export const getOrderCustomerMap = createSelector([getOrderSheet, getOrderCustom
 export const getOrderProviderMap = createSelector([getOrderSheet, getOrderProviderIDCell], extractMap);
 
 export const getFileStatus = createSelector([getDbWorkbook, getOrderWorkbook], extractFileStatus);
-export const getSheetStatus = createSelector([getCustomerSheetName, getProviderSheetName, getOrderSheetName], extractSheetStatus);
+export const getSheetStatus = createSelector(
+  [getDbSheetNames, getOrderSheetNames, getCustomerSheetName, getProviderSheetName, getOrderSheetName],
+  extractSheetStatus
+);
 
-export const getCustomerIDStatus = createSelector([getCustomerMap, getOrderCustomerMap], extractIDStatus);
-export const getProviderIDStatus = createSelector([getProviderMap, getOrderCustomerMap], extractIDStatus);
+export const getCustomerIDCellStatus = createSelector([getCustomerCells, getCustomerIDCell], extractCellStatus);
+export const getProviderIDCellStatus = createSelector([getProviderCells, getProviderIDCell], extractCellStatus);
+export const getOrderCustomerIDCellStatus = createSelector([getOrderCells, getOrderCustomerIDCell], extractCellStatus);
+export const getOrderProviderIDCellStatus = createSelector([getOrderCells, getOrderProviderIDCell], extractCellStatus);
+
+export const getCustomerIDCellAggregateStatus = createSelector([getCustomerIDCellStatus, getOrderCustomerIDCellStatus], extractCellAggregateStatus);
+export const getProviderIDCellAggregateStatus = createSelector([getProviderIDCellStatus, getOrderProviderIDCellStatus], extractCellAggregateStatus);
+
+export const getCustomerIDStatus = createSelector([getCustomerMap, getOrderCustomerMap, getCustomerIDCellAggregateStatus], extractIDStatus);
+export const getProviderIDStatus = createSelector([getProviderMap, getOrderCustomerMap, getProviderIDCellAggregateStatus], extractIDStatus);
 
 export const getOptionsStatus = createSelector(
   [getCustomerMarkCell, getProviderMarkCell, getOrderTypeCell, getOrderShippingDateCell, getOrderDeliveryDateCell],

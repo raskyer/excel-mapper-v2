@@ -13,7 +13,7 @@ interface SelectProps {
 const Select: React.FC<SelectProps> = (props) => {
   const onChange = (e: React.FormEvent<HTMLSelectElement>): void => {
     if (!props.onChange) return;
-    props.onChange(e.currentTarget.value === '' ? undefined : e.currentTarget.value);
+    props.onChange(e.currentTarget.value);
   };
 
   return (
@@ -21,6 +21,7 @@ const Select: React.FC<SelectProps> = (props) => {
       <Form.Label>{props.title}</Form.Label>
       <Form.Control
         as="select"
+        defaultValue=""
         value={props.value !== undefined ? props.value + '' : undefined}
         onChange={onChange}
         isValid={props.value !== undefined}
@@ -28,7 +29,7 @@ const Select: React.FC<SelectProps> = (props) => {
         disabled={props.options.length < 1}
         required
       >
-        <option></option>
+        <option disabled value="">--- Choissir une option --</option>
         {props.options.map((option, index) => (
           <option key={index} value={props.byValue ? option : index + ''}>{option}</option>
         ))}
