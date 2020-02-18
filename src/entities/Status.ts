@@ -1,3 +1,3 @@
-type Status = 'success' | 'warning' | 'danger' | 'dark';
+type Status = 'success' | 'warning' | 'danger' | 'secondary' | 'dark';
 
 export default Status;

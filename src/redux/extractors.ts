@@ -1,9 +1,10 @@
-import { WorkBook } from "xlsx/types";
-import { parseSheet } from "../utils/excel";
-import { createMap, difference, diffPercentage } from "../utils/core";
-import Status from "../entities/Status";
+import { WorkBook } from 'xlsx/types';
 
-type ID = string | number;
+import Status from '../entities/Status';
+import CellMap from '../entities/CellMap';
+
+import { parseSheet } from '../utils/excel';
+import { createMap, difference, diffPercentage } from '../utils/core';
 
 export const extractSheetNames = (workbook?: WorkBook): string[] => {
   return workbook ? workbook.SheetNames : [];
@@ -19,7 +20,7 @@ export const extractCells = (sheet: any[][]): string[] => {
   return sheet[0];
 };
 
-export const extractMap = (sheet: any[][], idCell?: number): Map<ID, any[]> => {
+export const extractMap = (sheet: any[][], idCell?: number): CellMap => {
   if (sheet.length === 0 || idCell === undefined) return new Map();
   return createMap(sheet, idCell);
 };
@@ -29,12 +30,11 @@ export const extractFileStatus = (dbWorkbook?: WorkBook, orderWorkbook?: WorkBoo
     return 'success';
   }
   if (dbWorkbook === undefined && orderWorkbook === undefined) {
-    return 'dark';
+    return 'secondary';
   }
   return 'warning';
 };
 
-// Add cells ?
 export const extractSheetStatus = (
   sheetNames: string[],
   orderSheetNames: string[],
@@ -81,8 +81,8 @@ export const extractCellAggregateStatus = (status1: Status, status2: Status): St
 };
 
 export const extractIDStatus = (
-  itemMap: Map<ID, any[]>,
-  orderMap: Map<ID, any[]>,
+  itemMap: CellMap,
+  orderMap: CellMap,
   cellStatus: Status
 ): Status => {
   if (cellStatus === 'danger') {
@@ -120,4 +120,14 @@ export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell
     return 'success';
   }
   return 'warning';
+};
+
+export const extractProjectionStatus = (projection: Set<string>, orderCells: string[]): Status => {
+  if (orderCells.length < 1) {
+    return 'dark';
+  }
+  if (projection.size < 1) {
+    return 'danger';
+  }
+  return 'success';
 };

@@ -12,7 +12,7 @@ import { eventKeyToggledAction } from '../../redux/actions';
 interface StepProps extends StepState, StepDispatch {
   eventKey: string;
   title: string;
-  state?: Status;
+  status?: Status;
   children?: React.ReactNode
 }
 
@@ -26,7 +26,7 @@ interface StepDispatch {
 
 const Step: React.FC<StepProps> = (props: StepProps) => {
   let wording;
-  switch (props.state) {
+  switch (props.status) {
     case 'success':
       wording = 'Valide';
       break;
@@ -36,15 +36,23 @@ const Step: React.FC<StepProps> = (props: StepProps) => {
     case 'danger':
       wording = 'Erreur';
       break;
-    default:
+    case 'secondary':
       wording = 'Non renseigné';
+      break;
+    case 'dark':
+      wording = 'Inaccessible';
       break;
   }
 
+  const onClick = () => {
+    if (props.status === 'dark') return;
+    props.onEventKeyToggle(props.eventKey);
+  };
+
   return (
     <Card>
-      <Accordion.Toggle as={Card.Header} eventKey={props.eventKey} onClick={() => props.onEventKeyToggle(props.eventKey)}>
-        {props.title} <Badge pill variant={props.state}>{wording}</Badge>
+      <Accordion.Toggle as={Card.Header} eventKey={props.eventKey} onClick={onClick}>
+        {props.eventKey}. {props.title} <Badge pill variant={props.status}>{wording}</Badge>
       </Accordion.Toggle>
       <Accordion.Collapse eventKey={props.activeKeys.has(props.eventKey) ? '0' : props.eventKey}>
         <Card.Body>
@@ -56,7 +64,7 @@ const Step: React.FC<StepProps> = (props: StepProps) => {
 };
 
 Step.defaultProps = {
-  state: 'dark'
+  status: 'dark'
 };
 
 const mapStateToProps = (state: State): StepState => ({

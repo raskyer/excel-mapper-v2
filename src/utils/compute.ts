@@ -1,13 +1,22 @@
-import FinalState from "../entities/FinalState";
-
-type CellMap = Map<string | number, any[]>;
+import CellMap from '../entities/CellMap'
+import FinalState from '../entities/FinalState';
 
 class Compute {
-  constructor(private customerMap: CellMap, private providerMap: CellMap, private $: FinalState) {}
+  private readonly errors: string[] = [];
+
+  constructor(
+    private readonly customerMap: CellMap,
+    private readonly providerMap: CellMap,
+    private readonly $: FinalState
+  ) {}
 
   compute(orderSheet: any[][]) {
     const orders = this.computeRanking(orderSheet);
     return this.sortOrders(orders);
+  }
+
+  getErrors(): string[] {
+    return this.errors;
   }
 
   private computeRanking(orderSheet: any[][]) {
@@ -27,6 +36,27 @@ class Compute {
       });
     }
     return orders;
+  }
+
+  private createProjection(orders: any[], headers: string[], projection: any) {
+    const newHeaders = Object
+      .keys(projection)
+      .map(key => ({
+        index: headers.indexOf(key),
+        name: projection[key]
+      }));
+  
+    const mapped = orders
+      .map(({ order }) => 
+        newHeaders
+          .map(({ index }) => index !== -1 ? order[index] : '')
+          .map(value => value !== undefined && value !== null ? value : '')
+      );
+  
+    // insert headers at first line
+    mapped.unshift(newHeaders.map(({ name }) => name));
+  
+    return mapped;
   }
 
   private sortOrders(orders: {order: any[], ranking: number}[]) {
@@ -88,19 +118,19 @@ class Compute {
     const type = o[this.$.orderTypeCell];
   
     if (type === undefined || type === null || type === '') {
-      console.error('CHECK : type is empty', this.$.orderTypeCell);
+      this.errors.push('CHECK : type is empty ' + this.$.orderTypeCell);
       return 0;
     }
   
     if (typeof type !== 'string') {
-      console.error('CHECK : type is not a string', typeof type);
+      this.errors.push('CHECK : type is not a string ' + typeof type);
       return 0;
     }
   
     const trimType = type.trim().toLowerCase();
   
     if (trimType !== 'chargement' && trimType !== 'livraison') {
-      console.error('CHECK : type is not one of "chargement" or "livraison"', trimType);
+      this.errors.push('CHECK : type is not one of "chargement" or "livraison" ' + trimType);
       return 0;
     }
   
@@ -108,7 +138,7 @@ class Compute {
       o[this.$.orderShippingDateCell] : o[this.$.orderDeliveryDateCell];
   
     if (date === undefined || typeof date !== 'object') {
-      console.log('CHECK : date undefined or invalid', date);
+      this.errors.push('CHECK : date undefined or invalid ' + date);
       return 0;
     }
   
@@ -124,12 +154,12 @@ class Compute {
 
   private isValid(key: string | number | undefined, map: CellMap, markCell: number): boolean {
     if (key === undefined || key === null || key === '') {
-      console.error('CHECK : key is empty', key);
+      this.errors.push('CHECK : key is empty ' + key);
       return false;
     }
   
     if (typeof key !== 'string' && typeof key !== 'number') {
-      console.error('CHECK : key is of invalid type', typeof key);
+      this.errors.push('CHECK : key is of invalid type ' + typeof key);
       return false;
     }
   
@@ -140,43 +170,22 @@ class Compute {
     const object = map.get(key);
   
     if (object === undefined) {
-      console.warn('CHECK : unknown key in map', key, map);
+      this.errors.push('CHECK : unknown key in map ' + key + ' ' + map);
       return false;
     }
 
     if (markCell === undefined) {
-      console.error('CHECK : undefined mark cell');
+      this.errors.push('CHECK : undefined mark cell');
       return false;
     }
   
     if (typeof object[markCell] !== 'number' && typeof object[markCell] !== 'string') {
-      console.warn('CHECK : mark is of invalid type', typeof object[markCell]);
+      this.errors.push('CHECK : mark is of invalid type ' + typeof object[markCell]);
       return false;
     }
 
     return false;
   }
-}
-
-function createProjection(orders: any[], headers: string[], projection: any) {
-  const newHeaders = Object
-    .keys(projection)
-    .map(key => ({
-      index: headers.indexOf(key),
-      name: projection[key]
-    }));
-
-  const mapped = orders
-    .map(({ order }) => 
-      newHeaders
-        .map(({ index }) => index !== -1 ? order[index] : '')
-        .map(value => value !== undefined && value !== null ? value : '')
-    );
-
-  // insert headers at first line
-  mapped.unshift(newHeaders.map(({ name }) => name));
-
-  return mapped;
 }
 
 export default Compute;

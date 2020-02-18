@@ -7,14 +7,16 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Step from './common/Step';
 
 import State from '../entities/State';
-import { getOrderCells } from '../redux/selectors';
+import Status from '../entities/Status';
+import { getOrderCells, getProjectionStatus } from '../redux/selectors';
 import { projectionCellToggledAction } from '../redux/actions';
 
 interface ProjectionProps extends ProjectionState, ProjectionDispatch {}
 
 interface ProjectionState {
-  chunks: string[][],
-  projection: Set<String>
+  projectionStatus: Status;
+  chunks: string[][];
+  projection: Set<String>;
 }
 
 interface ProjectionDispatch {
@@ -23,7 +25,7 @@ interface ProjectionDispatch {
 
 const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
   return (
-    <Step eventKey="7" title="Projection" state="dark">
+    <Step eventKey="7" title="Projection" status={props.projectionStatus}>
       {props.chunks.map((chunk, index) => (
         <ListGroup key={index} as="ul" horizontal>
           {chunk.map((cell, index) => (
@@ -44,6 +46,7 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
 };
 
 const mapStateToProps = (state: State): ProjectionState => ({
+  projectionStatus: getProjectionStatus(state),
   chunks: chunk(getOrderCells(state), 4),
   projection: state.projection
 });

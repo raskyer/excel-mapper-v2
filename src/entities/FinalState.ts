@@ -22,6 +22,8 @@ interface FinalState {
   customerMarkRate: number;
   providerMarkRate: number;
   dateMarkRate: number;
+
+  projection: Set<string>;
 }
 
 export default FinalState;

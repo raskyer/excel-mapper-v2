@@ -24,7 +24,7 @@ interface RatesDispatch {
 
 const Rates: React.FC<RatesProps> = (props: RatesProps) => {
   return (
-    <Step eventKey="6" title="Ajustement" state="success">
+    <Step eventKey="6" title="Ajustement" status="success">
       <Form.Group>
         <Form.Label>Coéfficient Client</Form.Label>
         <Form.Control

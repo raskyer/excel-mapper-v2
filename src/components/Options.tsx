@@ -43,7 +43,7 @@ interface OptionsDispatch {
 
 const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
   return (
-    <Step eventKey="5" title="Options" state={props.optionsStatus}>
+    <Step eventKey="5" title="Options" status={props.optionsStatus}>
       <Row>
         <Col>
           <Select

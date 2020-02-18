@@ -28,7 +28,7 @@ interface IDCustomerDispatch {
 
 const IDCustomer: React.FC<IDCustomerProps> = (props: IDCustomerProps) => {
   return (
-    <Step eventKey="3" title="Cellule d'ID Client" state={props.customerIDStatus}>
+    <Step eventKey="3" title="Cellule d'ID Client" status={props.customerIDStatus}>
       <IDLink
         header={"Cellules ID Client"}
         cells={props.customerCells}

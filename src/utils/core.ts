@@ -1,5 +1,7 @@
-import State from "../entities/State";
-import FinalState from "../entities/FinalState";
+import CellMap from '../entities/CellMap';
+import State from '../entities/State';
+import FinalState from '../entities/FinalState';
+
 import { getCustomerSheet, getProviderSheet, getOrderSheet } from '../redux/selectors';
 
 const DEFAULT_PROJECTION = {
@@ -16,8 +18,6 @@ const DEFAULT_PROJECTION = {
   'Dossier': 'Dossier',
   'Commentaires': 'Commentaires'
 };
-
-type CellMap = Map<string | number, any[]>;
 
 export function createMap(sheet: any[][], idCell: number): CellMap {
   const map = new Map();
@@ -71,7 +71,8 @@ export function fromState(state: State): FinalState {
     orderDeliveryDateCell,
     customerMarkRate,
     providerMarkRate,
-    dateMarkRate
+    dateMarkRate,
+    projection
   } = state;
 
   if (dbWorkbook === undefined || orderWorkbook === undefined) {
@@ -139,6 +140,8 @@ export function fromState(state: State): FinalState {
 
     customerMarkRate, // check
     providerMarkRate, // check
-    dateMarkRate // check
+    dateMarkRate, // check
+
+    projection
   };
 }

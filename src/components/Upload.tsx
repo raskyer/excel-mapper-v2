@@ -38,7 +38,7 @@ const Upload: React.FC<UploadProps> = (props: UploadProps) => {
   };
 
   return (
-    <Step eventKey="1" title="Fichiers" state={props.fileStatus}>
+    <Step eventKey="1" title="Fichiers" status={props.fileStatus}>
       <Row>
         <Col>
           <Form.Group>

@@ -31,7 +31,7 @@ interface SheetsDispatch {
 
 const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
   return (
-    <Step eventKey="2" title="Feuilles" state={props.sheetStatus}>
+    <Step eventKey="2" title="Feuilles" status={props.sheetStatus}>
       <Row>
         <Col>
           <Select

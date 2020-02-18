@@ -12,7 +12,8 @@ import {
   extractIDStatus,
   extractOptionsStatus,
   extractCellStatus,
-  extractCellAggregateStatus
+  extractCellAggregateStatus,
+  extractProjectionStatus
 } from './extractors';
 
 const getDbWorkbook = (state: State) => state.dbWorkbook;
@@ -32,6 +33,8 @@ const getProviderMarkCell = (state: State) => state.providerMarkCell;
 const getOrderTypeCell = (state: State) => state.orderTypeCell;
 const getOrderShippingDateCell = (state: State) => state.orderShippingDateCell;
 const getOrderDeliveryDateCell = (state: State) => state.orderDeliveryDateCell;
+
+const getProjection = (state: State) => state.projection;
 
 export const getDbSheetNames = createSelector(getDbWorkbook, extractSheetNames);
 export const getOrderSheetNames = createSelector(getOrderWorkbook, extractSheetNames);
@@ -71,4 +74,4 @@ export const getOptionsStatus = createSelector(
   extractOptionsStatus
 );
 
-export const getProjectionStatus = createSelector([], () => {});
+export const getProjectionStatus = createSelector([getProjection, getOrderCells], extractProjectionStatus);

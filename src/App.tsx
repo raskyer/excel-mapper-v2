@@ -16,6 +16,7 @@ import Rates from './components/Rates';
 import Projection from './components/Projection';
 
 import { submit } from './redux/actions';
+import Result from './components/Result/Result';
 
 interface AppProps extends AppState, AppDispatch {}
 
@@ -55,6 +56,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             <Button type="submit">Valider</Button>
           </Form.Group>
         </Form>
+
+        <Result />
       </Container>
     </>
   );
