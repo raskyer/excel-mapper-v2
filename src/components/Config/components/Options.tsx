@@ -7,16 +7,16 @@ import Col from 'react-bootstrap/Col';
 import Step from './common/Step';
 import Select from './common/Select';
 
-import State from '../entities/State';
-import Status from '../entities/Status';
-import { getCustomerCells, getProviderCells, getOrderCells, getOptionsStatus } from '../redux/selectors';
+import State from '../../../entities/State';
+import Status from '../../../entities/Status';
+import { getCustomerCells, getProviderCells, getOrderCells, getOptionsStatus } from '../../../redux/selectors';
 import {
   customerMarkCellChangedAction,
   providerMarkCellChangedAction,
   orderTypeCellChangedAction,
   orderShippingDateCellChangedAction,
   orderDeliveryDateCellChangedAction
-} from '../redux/actions';
+} from '../../../redux/actions';
 
 interface OptionsProps extends OptionsState, OptionsDispatch {}
 

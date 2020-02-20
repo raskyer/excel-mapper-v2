@@ -5,9 +5,9 @@ import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge';
 
-import State from '../../entities/State';
-import Status from '../../entities/Status';
-import { eventKeyToggledAction } from '../../redux/actions';
+import State from '../../../../entities/State';
+import Status from '../../../../entities/Status';
+import { eventKeyToggledAction } from '../../../../redux/actions';
 
 interface StepProps extends StepState, StepDispatch {
   eventKey: string;

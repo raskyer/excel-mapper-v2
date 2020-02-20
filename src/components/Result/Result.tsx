@@ -1,20 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import State from '../../entities/State';
 
-const popover = (
-  <Popover id="popover-basic">
-    <Popover.Title as="h3">Popover right</Popover.Title>
-    <Popover.Content>
-      And here's some <strong>amazing</strong> content. It's very engaging.
-      right?
-    </Popover.Content>
-  </Popover>
-);
+interface ResultProps extends ResultState {}
 
-interface ResultProps {
+interface ResultState {
   result: any[][];
 }
 
@@ -29,28 +23,35 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
         </tr>
       </thead>
       <tbody>
-        <OverlayTrigger trigger="hover" placement="top" overlay={popover}>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-        </OverlayTrigger>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td colSpan={2}>Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
+        {props.result.slice(1, props.result.length).map((result, index) => (
+          <OverlayTrigger
+            key={index}
+            trigger="hover"
+            placement="top"
+            overlay={
+              <Popover id="popover-basic">
+                <Popover.Title as="h3">Popover right</Popover.Title>
+                <Popover.Content>
+                  And here's some <strong>amazing</strong> content. It's very engaging.
+                  right?
+                </Popover.Content>
+              </Popover>
+            }>
+            <tr>
+              <td>1</td>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+          </OverlayTrigger>
+        ))}
       </tbody>
     </Table>
   );
 };
 
-export default Result;
+const mapStateToProps = (state: State): ResultState => ({
+  result: [[], []]
+});
+
+export default connect(mapStateToProps)(Result);

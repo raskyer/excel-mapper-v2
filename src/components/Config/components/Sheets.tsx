@@ -7,10 +7,10 @@ import Col from 'react-bootstrap/Col';
 import Step from './common/Step';
 
 import Select from './common/Select';
-import State from '../entities/State';
-import Status from '../entities/Status';
-import { getDbSheetNames, getOrderSheetNames, getSheetStatus } from '../redux/selectors';
-import { customerSheetChangedAction, providerSheetChangedAction, orderSheetChangedAction } from '../redux/actions';
+import State from '../../../entities/State';
+import Status from '../../../entities/Status';
+import { getDbSheetNames, getOrderSheetNames, getSheetStatus } from '../../../redux/selectors';
+import { customerSheetChangedAction, providerSheetChangedAction, orderSheetChangedAction } from '../../../redux/actions';
 
 interface SheetsProps extends SheetsState, SheetsDispatch {}
 

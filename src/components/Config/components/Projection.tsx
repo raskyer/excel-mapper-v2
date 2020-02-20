@@ -6,10 +6,10 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 import Step from './common/Step';
 
-import State from '../entities/State';
-import Status from '../entities/Status';
-import { getOrderCells, getProjectionStatus } from '../redux/selectors';
-import { projectionCellToggledAction } from '../redux/actions';
+import State from '../../../entities/State';
+import Status from '../../../entities/Status';
+import { getOrderCells, getProjectionStatus } from '../../../redux/selectors';
+import { projectionCellToggledAction } from '../../../redux/actions';
 
 interface ProjectionProps extends ProjectionState, ProjectionDispatch {}
 

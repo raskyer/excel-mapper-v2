@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import Step from './common/Step';
 import IDLink from './common/IDLink';
 
-import State from '../entities/State';
-import Status from '../entities/Status';
-import { getCustomerCells, getOrderCells, getCustomerMap, getOrderCustomerMap, getCustomerIDStatus } from '../redux/selectors';
-import { customerIDCellChangedAction, orderCustomerIDCellChangedAction } from '../redux/actions';
+import State from '../../../entities/State';
+import Status from '../../../entities/Status';
+import { getCustomerCells, getOrderCells, getCustomerMap, getOrderCustomerMap, getCustomerIDStatus } from '../../../redux/selectors';
+import { customerIDCellChangedAction, orderCustomerIDCellChangedAction } from '../../../redux/actions';
 
 interface IDCustomerProps extends IDCustomerState, IDCustomerDispatch {}
 

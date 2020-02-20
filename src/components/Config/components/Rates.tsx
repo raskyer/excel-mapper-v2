@@ -5,8 +5,8 @@ import Form from 'react-bootstrap/Form';
 
 import Step from './common/Step';
 
-import State from '../entities/State';
-import { customerMarkRateChangedAction, providerMarkRateChangedAction, dateMarkRateChangedAction } from '../redux/actions';
+import State from '../../../entities/State';
+import { customerMarkRateChangedAction, providerMarkRateChangedAction, dateMarkRateChangedAction } from '../../../redux/actions';
 
 interface RatesProps extends RatesState, RatesDispatch {}
 

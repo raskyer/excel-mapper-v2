@@ -9,7 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 import Select from './Select';
 
-import { difference, diffPercentage } from '../../utils/core';
+import { difference, diffPercentage } from '../../../../utils/core';
 
 interface IDLink {
   header: string;
