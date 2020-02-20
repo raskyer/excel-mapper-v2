@@ -20,13 +20,14 @@ interface State {
   orderShippingDateCell?: number;
   orderDeliveryDateCell?: number;
 
-  customerMarkRate: number;
+  customerMarkRate: number; // TODO : Fetch from Locator
   providerMarkRate: number;
   dateMarkRate: number;
 
   activeKeys: Set<string>;
   projection: Set<string>;
 
+  headers?: string[]; // TODO : ADD in Locator
   results?: RankedOrder[];
 }
 

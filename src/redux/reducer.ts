@@ -21,6 +21,7 @@ import {
   DATE_MARK_RATE_CHANGE,
   EVENT_KEY_TOGGLE,
   PROJECTION_CELL_TOGGLE,
+  ADD_HEADER,
   RESULTS_COMPUTED
 } from './constants';
 
@@ -116,6 +117,11 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
       return {
         ...state,
         results: action.payload
+      };
+    case ADD_HEADER:
+      return {
+        ...state,
+        headers: [...state.headers, action.payload]
       };
     default:
       return state;

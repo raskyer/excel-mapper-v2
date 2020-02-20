@@ -35,18 +35,20 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
   const onClickID = () => {
     const data: any[] = [];
     props.map.forEach((_, key) => data.push(key));
-    setDisplay(data);
+    setDisplay(data.sort());
   };
 
   const onClickOrder = () => {
     const data: any[] = [];
     props.orderMap.forEach((_, key) => data.push(key));
-    setDisplay(data);
+    setDisplay(data.sort());
   };
 
-  /*const onClickMissing = () => {
-    setDisplay(missing.map(m => m[props.orderCustomerIDCell ? props.orderCustomerIDCell : 0]));
-  };*/
+  const onClickMissing = () => {
+    setDisplay(
+      missing.map(m => props.orderIDCell ? m[props.orderIDCell] : 0).sort()
+    );
+  };
 
   const percentage = diffPercentage(props.orderMap.size, missing.length);
 
@@ -60,17 +62,13 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
   return (
     <>
       <Row>
-        <Col style={{textAlign: 'center'}}>
+        <Col>
           <Select
             title={props.header}
             value={props.IDCell}
             onChange={props.onIDCellChange}
             options={props.cells}
           />
-
-          <Button onClick={onClickID} disabled={props.map.size === 0}>
-            {props.map.size} {props.header}
-          </Button>
         </Col>
         <Col xs={12} md={2} style={{textAlign: 'center'}}>
           <CircularProgressbar
@@ -93,14 +91,28 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
             }}
           />
         </Col>
-        <Col style={{textAlign: 'center'}}>
+        <Col>
           <Select
             title={props.header}
             value={props.orderIDCell}
             onChange={props.onOrderIDCellChange}
             options={props.orderCells}
           />
+        </Col>
+      </Row>
 
+      <Row style={{textAlign: 'center'}}>
+        <Col>
+          <Button onClick={onClickID} disabled={props.map.size === 0}>
+            {props.map.size} {props.header}
+          </Button>
+        </Col>
+        <Col>
+          <Button onClick={onClickMissing}>
+            {missing.length} absents
+          </Button>
+        </Col>
+        <Col>
           <Button onClick={onClickOrder} disabled={props.orderMap.size === 0}>
             {props.orderMap.size} {props.header}
           </Button>
@@ -117,7 +129,6 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
               <ListGroup.Item key={m}>{m}</ListGroup.Item>
             ))}
           </ListGroup>
-          
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={() => setDisplay([])}>

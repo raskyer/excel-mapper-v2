@@ -22,6 +22,7 @@ import {
   DATE_MARK_RATE_CHANGE,
   EVENT_KEY_TOGGLE,
   PROJECTION_CELL_TOGGLE,
+  ADD_HEADER,
   RESULTS_COMPUTED
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
@@ -131,6 +132,11 @@ export const eventKeyToggledAction = (eventKey: string) => ({
 export const projectionCellToggledAction = (cell: string) => ({
   type: PROJECTION_CELL_TOGGLE,
   payload: cell
+});
+
+export const addHeaderAction = (header: string) => ({
+  type: ADD_HEADER,
+  payload: header
 });
 
 export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void => {

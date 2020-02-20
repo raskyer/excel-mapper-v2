@@ -110,6 +110,7 @@ class StateBuilder {
     this.state.orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
     this.state.orderDeliveryDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_DELIVERY);
     this.state.projection = new Set<string>(orderCells);
+    this.state.headers = orderCells;
     this.hasToCompute = true;
 
     return this;

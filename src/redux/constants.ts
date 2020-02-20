@@ -22,5 +22,6 @@ export const DATE_MARK_RATE_CHANGE = 'change::rate::mark::date';
 
 export const EVENT_KEY_TOGGLE = 'toggle::key::event';
 export const PROJECTION_CELL_TOGGLE = 'toggle::cell::projection';
+export const ADD_HEADER = 'add::header';
 
 export const RESULTS_COMPUTED = 'computed::results';
