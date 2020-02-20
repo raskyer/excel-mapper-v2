@@ -4,44 +4,50 @@ import { connect } from 'react-redux';
 import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+
 import State from '../../entities/State';
+import RankedOrder from '../../entities/RankedOrder';
 
 interface ResultProps extends ResultState {}
 
 interface ResultState {
-  result: any[][];
+  headers: string[];
+  results?: RankedOrder[];
 }
 
 const Result: React.FC<ResultProps> = (props: ResultProps) => {
+  if (props.results === undefined) {
+    return null;
+  }
+
   return (
     <Table striped bordered hover>
       <thead>
         <tr>
-          {props.result[0].map((header, index) => (
+          {props.headers.map((header, index) => (
             <th key={index}>{header}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {props.result.slice(1, props.result.length).map((result, index) => (
+        {props.results.slice(1, props.results.length).map((result, index) => (
           <OverlayTrigger
             key={index}
             trigger="hover"
             placement="top"
             overlay={
               <Popover id="popover-basic">
-                <Popover.Title as="h3">Popover right</Popover.Title>
+                <Popover.Title as="h3">Info</Popover.Title>
                 <Popover.Content>
-                  And here's some <strong>amazing</strong> content. It's very engaging.
-                  right?
+                  Note client : {result.customerMark},<br/>
+                  Note transporteur : {result.providerMark}
                 </Popover.Content>
               </Popover>
             }>
             <tr>
-              <td>1</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
+              {result.order.map((o, oIndex) => (
+                <td key={oIndex}>{o}</td>
+              ))}
             </tr>
           </OverlayTrigger>
         ))}
@@ -51,7 +57,8 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
 };
 
 const mapStateToProps = (state: State): ResultState => ({
-  result: [[], []]
+  headers: [...state.projection],
+  results: state.results
 });
 
 export default connect(mapStateToProps)(Result);

@@ -21,7 +21,8 @@ import {
   PROVIDER_MARK_RATE_CHANGE,
   DATE_MARK_RATE_CHANGE,
   EVENT_KEY_TOGGLE,
-  PROJECTION_CELL_TOGGLE
+  PROJECTION_CELL_TOGGLE,
+  RESULTS_COMPUTED
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
@@ -142,5 +143,8 @@ export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void 
   const compute = new Compute(customerMap, providerMap, fromState(state));
   const rankedOrder = compute.compute(orderSheet);
 
-  console.log(rankedOrder);
+  dispatch({
+    type: RESULTS_COMPUTED,
+    payload: rankedOrder
+  });
 };

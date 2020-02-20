@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import chunk from 'lodash/chunk';
 
 import ListGroup from 'react-bootstrap/ListGroup';
+import Button from 'react-bootstrap/Button';
 
 import Step from './common/Step';
 
@@ -41,6 +42,8 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
           ))}
         </ListGroup>
       ))}
+      
+      <Button variant="outline-success">Ajouter une colonne</Button>
     </Step>
   );
 };

@@ -20,7 +20,8 @@ import {
   PROVIDER_MARK_RATE_CHANGE,
   DATE_MARK_RATE_CHANGE,
   EVENT_KEY_TOGGLE,
-  PROJECTION_CELL_TOGGLE
+  PROJECTION_CELL_TOGGLE,
+  RESULTS_COMPUTED
 } from './constants';
 
 import StateBuilder from './StateBuilder';
@@ -111,6 +112,11 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
       return new StateBuilder(state)
         .toggleProjectionCell(action.payload)
         .build();
+    case RESULTS_COMPUTED:
+      return {
+        ...state,
+        results: action.payload
+      };
     default:
       return state;
   }

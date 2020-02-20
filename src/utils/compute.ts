@@ -1,5 +1,6 @@
 import CellMap from '../entities/CellMap'
 import FinalState from '../entities/FinalState';
+import RankedOrder from '../entities/RankedOrder';
 
 class Compute {
   private readonly errors: string[] = [];
@@ -10,56 +11,83 @@ class Compute {
     private readonly $: FinalState
   ) {}
 
-  compute(orderSheet: any[][]) {
+  compute(orderSheet: any[][]): RankedOrder[] {
     const orders = this.computeRanking(orderSheet);
-    return this.sortOrders(orders);
+    const sorted = this.sortOrders(orders);
+
+    return this.createProjection(sorted, orderSheet[0], this.$.projection);
   }
 
   getErrors(): string[] {
     return this.errors;
   }
 
-  private computeRanking(orderSheet: any[][]) {
-    const orders = [];
+  private computeRanking(orderSheet: any[][]): RankedOrder[] {
+    const orders: RankedOrder[] = [];
+
     for (let i = 1; i < orderSheet.length; i++) {
       const order = orderSheet[i];
-      const customerRanking = this.getCustomerRanking(order[this.$.orderCustomerIDCell]);
-      const providerRanking = this.getProviderRanking(order[this.$.orderProviderIDCell]);
-      const dateRanking     = this.getDateRanking(order);
+
+      const customerID = order[this.$.orderCustomerIDCell];
+      const customerMark = this.getCustomerMark(customerID);
+      const customerRanking = this.computeCustomerRank(customerMark, this.$.customerMarkRate);
+
+      const providerID = order[this.$.orderProviderIDCell];
+      const providerMark = this.getProviderMark(providerID);
+      const providerRanking = this.computeProviderRank(providerMark, this.$.providerMarkRate);
+
+      const dateRanking = this.getDateRanking(order);
       
       orders.push({
         order,
+        customerID,
+        customerMark,
         customerRanking,
+        providerID,
+        providerMark,
         providerRanking,
         dateRanking,
         ranking: customerRanking + providerRanking + dateRanking
       });
     }
+
     return orders;
   }
 
-  private createProjection(orders: any[], headers: string[], projection: any) {
-    const newHeaders = Object
-      .keys(projection)
-      .map(key => ({
-        index: headers.indexOf(key),
-        name: projection[key]
-      }));
+  private createProjection(orders: RankedOrder[], orderHeaders: string[], projection: Set<string>): RankedOrder[] {
+    const newHeaders = [...projection].map(header => ({
+      index: orderHeaders.indexOf(header),
+      name: header
+    }));
   
-    const mapped = orders
-      .map(({ order }) => 
-        newHeaders
-          .map(({ index }) => index !== -1 ? order[index] : '')
-          .map(value => value !== undefined && value !== null ? value : '')
-      );
+    const mapped = orders.map(rankedOrder => {
+      const order = rankedOrder.order;
+
+      const projectedOrder = newHeaders
+        .map(({ index }) => index !== -1 ? order[index] : '')
+        .map(value => {
+          if (value === undefined || value === null) {
+            return '';
+          }
+          if (typeof value === 'object') {
+            return value.toString();
+          }
+          return value;
+        });
+
+      return {
+        ...rankedOrder,
+        order: projectedOrder
+      };
+    });
   
     // insert headers at first line
-    mapped.unshift(newHeaders.map(({ name }) => name));
-  
+    // mapped.unshift(newHeaders.map(({ name }) => name));
+
     return mapped;
   }
 
-  private sortOrders(orders: {order: any[], ranking: number}[]) {
+  private sortOrders(orders: RankedOrder[]): RankedOrder[] {
     return orders.sort((a, b) => {
       if (a.order[this.$.orderTypeCell] !== b.order[this.$.orderTypeCell]) {
         return a.order[this.$.orderTypeCell].localeCompare(b.order[this.$.orderTypeCell]);
@@ -68,16 +96,15 @@ class Compute {
     });
   }
 
-  private getCustomerRanking(customerKey: string | number): number {
+  private getCustomerMark(customerKey: string | number): string {
     if (this.isValid(customerKey, this.customerMap, this.$.customerMarkCell)) {
-      return 0;
+      return 'unknown';
     }
     const customer = this.customerMap.get(customerKey);
     if (customer === undefined) {
-      return 0;
+      return 'unknow';
     }
-    const mark = customer[this.$.customerMarkCell];
-    return this.computeCustomerRank(mark, this.$.customerMarkRate);
+    return customer[this.$.customerMarkCell];
   }
 
   private computeCustomerRank(customerMark: string, customerRate: number): number {
@@ -96,19 +123,18 @@ class Compute {
         return 1 * customerRate;
     }
   }
-  
-  private getProviderRanking(providerKey: string | number): number {
+
+  private getProviderMark(providerKey: string | number): number {
     if (!this.isValid(providerKey, this.providerMap, this.$.providerMarkCell)) {
-      return 0;
+      return 6;
     }
     const provider = this.providerMap.get(providerKey);
     if (provider === undefined) {
-      return 0;
+      return 6;
     }
-    const mark = provider[this.$.providerMarkCell];
-    return this.computeProviderRank(mark, this.$.providerMarkRate);
+    return provider[this.$.providerMarkCell];
   }
-
+  
   private computeProviderRank(providerMark: number, providerRate: number): number {
     const mark = 6 - providerMark;
     return mark * providerRate;

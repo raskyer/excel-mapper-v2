@@ -1,4 +1,5 @@
 import XLSX from 'xlsx';
+import RankedOrder from './RankedOrder';
 
 interface State {
   dbWorkbook?: XLSX.WorkBook;
@@ -25,6 +26,8 @@ interface State {
 
   activeKeys: Set<string>;
   projection: Set<string>;
+
+  results?: RankedOrder[];
 }
 
 export default State;
