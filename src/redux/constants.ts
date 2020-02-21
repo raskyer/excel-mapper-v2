@@ -23,5 +23,7 @@ export const DATE_MARK_RATE_CHANGE = 'change::rate::mark::date';
 export const EVENT_KEY_TOGGLE = 'toggle::key::event';
 export const PROJECTION_ADD = 'add::projection';
 export const PROJECTION_REMOVE = 'remove::projection';
+export const PROJECTION_UP = 'up::projection';
+export const PROJECTION_DOWN = 'down::projection';
 
 export const RESULTS_COMPUTED = 'computed::results';

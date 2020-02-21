@@ -3,7 +3,7 @@ interface LocatorEntity {
   index: number;
 }
 
-enum LocatorKey {
+export enum LocatorKey {
   CUSTOMER_SHEET = 'sheet::customer',
   CUSTOMER_ID = 'cell::id::customer',
   CUSTOMER_MARK = 'cell::mark::customer',
@@ -14,33 +14,16 @@ enum LocatorKey {
   ORDER_TYPE = 'cell::type::order',
   ORDER_CUSTOMER_ID = 'cell::id::customer::order',
   ORDER_PROVIDER_ID = 'cell::id::provider::order',
-  ORDER_DATE_LOADING = 'cell::date::loading::order',
-  ORDER_DATE_SHIPPING = 'cell::date::shipping::order',
+  ORDER_LOADING_DATE = 'cell::date::loading::order',
+  ORDER_SHIPPING_DATE = 'cell::date::shipping::order',
   CUSTOMER_RATE = 'rate::customer',
   PROVIDER_RATE = 'rate::provider',
   DATE_RATE = 'rate::date',
+  PROJECTION = 'projection'
 }
 
 class Locator {
-  public readonly CUSTOMER_SHEET = LocatorKey.CUSTOMER_SHEET;
-  public readonly CUSTOMER_ID = LocatorKey.CUSTOMER_ID;
-  public readonly CUSTOMER_MARK = LocatorKey.CUSTOMER_MARK;
-  public readonly PROVIDER_SHEET = LocatorKey.PROVIDER_SHEET;
-  public readonly PROVIDER_ID = LocatorKey.PROVIDER_ID;
-  public readonly PROVIDER_MARK = LocatorKey.PROVIDER_MARK;
-  public readonly ORDER_SHEET = LocatorKey.ORDER_SHEET;
-  public readonly ORDER_TYPE = LocatorKey.ORDER_TYPE;
-  public readonly ORDER_CUSTOMER_ID = LocatorKey.ORDER_CUSTOMER_ID;
-  public readonly ORDER_PROVIDER_ID = LocatorKey.ORDER_PROVIDER_ID;
-  public readonly ORDER_DATE_LOADING = LocatorKey.ORDER_DATE_LOADING;
-  public readonly ORDER_DATE_SHIPPING = LocatorKey.ORDER_DATE_SHIPPING;
-
-  public readonly CUSTOMER_RATE = LocatorKey.CUSTOMER_RATE;
-  public readonly PROVIDER_RATE = LocatorKey.PROVIDER_RATE;
-  public readonly DATE_RATE = LocatorKey.DATE_RATE;
-
   private readonly defaultKeys: Map<LocatorKey, string> = new Map();
-  private readonly defaultRates: Map<LocatorKey, number> = new Map();
   
   constructor() {
     this.defaultKeys.set(LocatorKey.CUSTOMER_SHEET, 'Client');
@@ -53,12 +36,12 @@ class Locator {
     this.defaultKeys.set(LocatorKey.ORDER_TYPE, 'Type');
     this.defaultKeys.set(LocatorKey.ORDER_CUSTOMER_ID, 'N° Client');
     this.defaultKeys.set(LocatorKey.ORDER_PROVIDER_ID, 'N° Four');
-    this.defaultKeys.set(LocatorKey.ORDER_DATE_LOADING, 'Date Charg.');
-    this.defaultKeys.set(LocatorKey.ORDER_DATE_SHIPPING, 'Date Livr.');
-
-    this.defaultRates.set(LocatorKey.CUSTOMER_RATE, 1);
-    this.defaultRates.set(LocatorKey.PROVIDER_RATE, 1);
-    this.defaultRates.set(LocatorKey.DATE_RATE, 1);
+    this.defaultKeys.set(LocatorKey.ORDER_LOADING_DATE, 'Date Charg.');
+    this.defaultKeys.set(LocatorKey.ORDER_SHIPPING_DATE, 'Date Livr.');
+    this.defaultKeys.set(LocatorKey.CUSTOMER_RATE, '1');
+    this.defaultKeys.set(LocatorKey.PROVIDER_RATE, '1');
+    this.defaultKeys.set(LocatorKey.DATE_RATE, '1');
+    this.defaultKeys.set(LocatorKey.PROJECTION, '[]');
   }
 
   findSheet(arr: string[], key: LocatorKey): string | undefined {
@@ -70,24 +53,20 @@ class Locator {
   }
 
   findRate(key: LocatorKey): number {
-    return this._getNumber(key);
+    return parseInt(this._getString(key), 10);
   }
 
-  save(key: string, value: string): void {
-    localStorage.setItem(key, value);
+  findArray(key: LocatorKey): string[] {
+    const token = this._getString(key);
+    return JSON.parse(token);
   }
 
-  private _getNumber(key: LocatorKey): number {
-    const token = localStorage.getItem(key.toString());
-    if (token !== null) {
-      return parseInt(token, 10);
-    }
-    const value = this.defaultRates.get(key);
-    if (value === undefined) {
-      throw new Error('No default rate for key ' + key);
-    }
-    this.save(key, value.toString());
-    return value;
+  save(key: LocatorKey, value: string): void {
+    localStorage.setItem(key.toString(), value);
+  }
+
+  saveArray(key: LocatorKey, value: string[]): void {
+    this.save(key, JSON.stringify(value));
   }
 
   private _getString(key: LocatorKey): string {

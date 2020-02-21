@@ -6,11 +6,14 @@ import Form from 'react-bootstrap/Form';
 import Step from './common/Step';
 
 import State from '../../../entities/State';
+import Status from '../../../entities/Status';
 import { customerMarkRateChangedAction, providerMarkRateChangedAction, dateMarkRateChangedAction } from '../../../redux/actions';
+import { getRateStatus } from '../../../redux/selectors';
 
 interface RatesProps extends RatesState, RatesDispatch {}
 
 interface RatesState {
+  rateStatus: Status;
   customerMarkRate: number;
   providerMarkRate: number;
   dateMarkRate: number;
@@ -24,7 +27,7 @@ interface RatesDispatch {
 
 const Rates: React.FC<RatesProps> = (props: RatesProps) => {
   return (
-    <Step eventKey="6" title="Ajustement" status="success">
+    <Step eventKey="6" title="Ajustement" status={props.rateStatus}>
       <Form.Group>
         <Form.Label>Coéfficient Client</Form.Label>
         <Form.Control
@@ -33,6 +36,7 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
           onChange={(e: React.FormEvent<HTMLInputElement>) => props.onCustomerRateChange(e.currentTarget.value)}
           isValid={props.customerMarkRate > -1}
           isInvalid={props.customerMarkRate < 0}
+          min={0}
           required
         />
       </Form.Group>
@@ -44,6 +48,7 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
           onChange={(e: React.FormEvent<HTMLInputElement>) => props.onProviderRateChange(e.currentTarget.value)}
           isValid={props.providerMarkRate > -1}
           isInvalid={props.providerMarkRate < 0}
+          min={0}
           required
         />
       </Form.Group>
@@ -55,6 +60,7 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
           onChange={(e: React.FormEvent<HTMLInputElement>) => props.onDateRateChange(e.currentTarget.value)}
           isValid={props.dateMarkRate > -1}
           isInvalid={props.dateMarkRate < 0}
+          min={0}
           required
         />
       </Form.Group>
@@ -63,6 +69,7 @@ const Rates: React.FC<RatesProps> = (props: RatesProps) => {
 };
 
 const mapStateToProps = (state: State): RatesState => ({
+  rateStatus: getRateStatus(state),
   customerMarkRate: state.customerMarkRate,
   providerMarkRate: state.providerMarkRate,
   dateMarkRate: state.dateMarkRate

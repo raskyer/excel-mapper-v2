@@ -13,6 +13,7 @@ import {
   extractOptionsStatus,
   extractCellStatus,
   extractCellAggregateStatus,
+  extractRateStatus,
   extractProjectionStatus
 } from './extractors';
 
@@ -33,6 +34,10 @@ const getProviderMarkCell = (state: State) => state.providerMarkCell;
 const getOrderTypeCell = (state: State) => state.orderTypeCell;
 const getOrderLoadingDateCell = (state: State) => state.orderLoadingDateCell;
 const getOrderShippingDateCell = (state: State) => state.orderShippingDateCell;
+
+const getCustomerMarkRate = (state: State) => state.customerMarkRate;
+const getProviderMarkRate = (state: State) => state.providerMarkRate;
+const getDateMarkRate = (state: State) => state.dateMarkRate;
 
 const getProjection = (state: State) => state.projection;
 
@@ -73,5 +78,7 @@ export const getOptionsStatus = createSelector(
   [getCustomerMarkCell, getProviderMarkCell, getOrderTypeCell, getOrderLoadingDateCell, getOrderShippingDateCell],
   extractOptionsStatus
 );
+
+export const getRateStatus = createSelector([getCustomerMarkRate, getProviderMarkRate, getDateMarkRate], extractRateStatus);
 
 export const getProjectionStatus = createSelector([getProjection, getOrderCells], extractProjectionStatus);

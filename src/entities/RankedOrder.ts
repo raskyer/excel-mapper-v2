@@ -1,10 +1,10 @@
 interface RankedOrder {
   order: any[];
   customerID: string | number;
-  customerMark: string;
+  customerMark?: string;
   customerRanking: number;
   providerID: string | number;
-  providerMark: number;
+  providerMark?: number;
   providerRanking: number;
   dateRanking: number;
   ranking: number;

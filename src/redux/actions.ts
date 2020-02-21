@@ -23,6 +23,8 @@ import {
   EVENT_KEY_TOGGLE,
   PROJECTION_ADD,
   PROJECTION_REMOVE,
+  PROJECTION_UP,
+  PROJECTION_DOWN,
   RESULTS_COMPUTED,
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
@@ -136,6 +138,16 @@ export const projectionAddedAction = (cell: string) => ({
 
 export const projectionRemovedAction = (index: number) => ({
   type: PROJECTION_REMOVE,
+  payload: index
+});
+
+export const projectionUppedAction = (index: number) => ({
+  type: PROJECTION_UP,
+  payload: index
+});
+
+export const projectionDownedAction = (index: number) => ({
+  type: PROJECTION_DOWN,
   payload: index
 });
 

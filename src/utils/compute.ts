@@ -37,7 +37,7 @@ class Compute {
       const providerRanking = this.computeProviderRank(providerMark, this.$.providerMarkRate);
 
       const dateRanking = this.getDateRanking(order);
-      
+
       orders.push({
         order,
         customerID,
@@ -96,19 +96,16 @@ class Compute {
     });
   }
 
-  private getCustomerMark(customerKey: string | number): string {
+  private getCustomerMark(customerKey: string | number): string | undefined {
     if (this.isValid(customerKey, this.customerMap, this.$.customerMarkCell)) {
-      return 'unknown';
+      return undefined;
     }
-    const customer = this.customerMap.get(customerKey);
-    if (customer === undefined) {
-      return 'unknow';
-    }
-    return customer[this.$.customerMarkCell];
+    const customer = this.getInMap(customerKey, this.customerMap);
+    return customer ? customer[this.$.customerMarkCell] : undefined;
   }
 
-  private computeCustomerRank(customerMark: string, customerRate: number): number {
-    const mark = customerMark.toLowerCase().trim();
+  private computeCustomerRank(customerMark: string | undefined, customerRate: number): number {
+    const mark = customerMark ? customerMark.toLowerCase().trim() : undefined;
     
     switch (mark) {
       case 'sensible':
@@ -124,19 +121,16 @@ class Compute {
     }
   }
 
-  private getProviderMark(providerKey: string | number): number {
+  private getProviderMark(providerKey: string | number): number | undefined {
     if (!this.isValid(providerKey, this.providerMap, this.$.providerMarkCell)) {
-      return 6;
+      return undefined;
     }
-    const provider = this.providerMap.get(providerKey);
-    if (provider === undefined) {
-      return 6;
-    }
-    return provider[this.$.providerMarkCell];
+    const provider = this.getInMap(providerKey, this.providerMap);
+    return provider ? provider[this.$.providerMarkCell] : undefined;
   }
   
-  private computeProviderRank(providerMark: number, providerRate: number): number {
-    const mark = 6 - providerMark;
+  private computeProviderRank(providerMark: number | undefined, providerRate: number): number {
+    const mark = 6 - (providerMark ? providerMark : 6);
     return mark * providerRate;
   }
   
@@ -189,11 +183,7 @@ class Compute {
       return false;
     }
   
-    if (typeof key === 'string') {
-      key = key.trim().toLowerCase();
-    }
-  
-    const object = map.get(key);
+    const object = this.getInMap(key, map);
   
     if (object === undefined) {
       this.errors.push('CHECK : unknown key in map ' + key + ' ' + map);
@@ -211,6 +201,13 @@ class Compute {
     }
 
     return false;
+  }
+
+  private getInMap(key: string | number, map: CellMap): any[] | undefined {
+    if (typeof key === 'string') {
+      key = key.trim().toLowerCase();
+    }
+    return map.get(key);
   }
 }
 

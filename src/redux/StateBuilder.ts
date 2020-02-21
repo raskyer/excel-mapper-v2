@@ -1,7 +1,7 @@
 import { WorkBook } from 'xlsx';
 
-import State from '../entities/State';
-import Locator from '../utils/Locator';
+import State, { StateCell, StateRate } from '../entities/State';
+import Locator, { LocatorKey } from '../utils/Locator';
 
 import {
   getDbSheetNames,
@@ -15,6 +15,14 @@ import {
   getProviderIDStatus,
   getProjectionStatus
 } from './selectors';
+
+export const INITIAL_STATE: State = {
+  customerMarkRate: Locator.findRate(LocatorKey.CUSTOMER_RATE),
+  providerMarkRate: Locator.findRate(LocatorKey.PROVIDER_RATE),
+  dateMarkRate: Locator.findRate(LocatorKey.DATE_RATE),
+  activeKeys: new Set<string>().add('1'),
+  projection: Locator.findArray(LocatorKey.PROJECTION)
+};
 
 class StateBuilder {
   private state: State;
@@ -35,8 +43,8 @@ class StateBuilder {
     }
     
     const sheetsNames = getDbSheetNames({ ...this.state });
-    const customerSheetName = Locator.findSheet(sheetsNames, Locator.CUSTOMER_SHEET);
-    const providerSheetName = Locator.findSheet(sheetsNames, Locator.PROVIDER_SHEET);
+    const customerSheetName = Locator.findSheet(sheetsNames, LocatorKey.CUSTOMER_SHEET);
+    const providerSheetName = Locator.findSheet(sheetsNames, LocatorKey.PROVIDER_SHEET);
 
     this.setCustomerSheetName(customerSheetName);
     this.setProviderSheetName(providerSheetName);
@@ -53,7 +61,7 @@ class StateBuilder {
     }
 
     const sheetsNames = getOrderSheetNames({ ...this.state });
-    const orderSheetName = Locator.findSheet(sheetsNames, Locator.ORDER_SHEET);
+    const orderSheetName = Locator.findSheet(sheetsNames, LocatorKey.ORDER_SHEET);
 
     this.setOrderSheetName(orderSheetName);
     this.hasToCompute = true;
@@ -68,11 +76,11 @@ class StateBuilder {
       return this.resetCustomerCells();
     }
 
-    Locator.save(Locator.CUSTOMER_SHEET, customerSheetName);
+    Locator.save(LocatorKey.CUSTOMER_SHEET, customerSheetName);
     const customerCells = getCustomerCells({ ...this.state });
 
-    this.state.customerIDCell = Locator.findCell(customerCells, Locator.CUSTOMER_ID);
-    this.state.customerMarkCell = Locator.findCell(customerCells, Locator.CUSTOMER_MARK);
+    this.state.customerIDCell = Locator.findCell(customerCells, LocatorKey.CUSTOMER_ID);
+    this.state.customerMarkCell = Locator.findCell(customerCells, LocatorKey.CUSTOMER_MARK);
     this.hasToCompute = true;
 
     return this;
@@ -85,11 +93,11 @@ class StateBuilder {
       return this.resetProviderCells();
     }
 
-    Locator.save(Locator.PROVIDER_SHEET, providerSheetName);
+    Locator.save(LocatorKey.PROVIDER_SHEET, providerSheetName);
     const providerCells = getProviderCells({ ...this.state });
 
-    this.state.providerIDCell = Locator.findCell(providerCells, Locator.PROVIDER_ID);
-    this.state.providerMarkCell = Locator.findCell(providerCells, Locator.PROVIDER_MARK);
+    this.state.providerIDCell = Locator.findCell(providerCells, LocatorKey.PROVIDER_ID);
+    this.state.providerMarkCell = Locator.findCell(providerCells, LocatorKey.PROVIDER_MARK);
     this.hasToCompute = true;
 
     return this;
@@ -102,147 +110,66 @@ class StateBuilder {
       return this.resetOrderCells();
     }
 
-    Locator.save(Locator.ORDER_SHEET, orderSheetName);
+    Locator.save(LocatorKey.ORDER_SHEET, orderSheetName);
     const orderCells = getOrderCells({ ...this.state });
 
-    this.state.orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
-    this.state.orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
-    this.state.orderTypeCell = Locator.findCell(orderCells, Locator.ORDER_TYPE);
-    this.state.orderLoadingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_LOADING);
-    this.state.orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
-    this.state.projection = []; // orderCells
+    this.state.orderCustomerIDCell = Locator.findCell(orderCells, LocatorKey.ORDER_CUSTOMER_ID);
+    this.state.orderProviderIDCell = Locator.findCell(orderCells, LocatorKey.ORDER_PROVIDER_ID);
+    this.state.orderTypeCell = Locator.findCell(orderCells, LocatorKey.ORDER_TYPE);
+    this.state.orderLoadingDateCell = Locator.findCell(orderCells, LocatorKey.ORDER_LOADING_DATE);
+    this.state.orderShippingDateCell = Locator.findCell(orderCells, LocatorKey.ORDER_SHIPPING_DATE);
+    this.state.projection = this.state.projection.length > 0 ? this.state.projection : [...orderCells];
     this.hasToCompute = true;
 
     return this;
   }
 
   setCustomerIDCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.customerIDCell = undefined;
-      return this;
-    }
-    this.state.customerIDCell = parseInt(str, 10);
-    const cells = getCustomerCells(this.state);
-    Locator.save(Locator.CUSTOMER_ID, cells[this.state.customerIDCell]);
-    return this;
+    return this.setCell('customerIDCell', LocatorKey.CUSTOMER_ID, getCustomerCells(this.state), str);
   }
 
   setProviderIDCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.providerIDCell = undefined;
-      return this;
-    }
-    this.state.providerIDCell = parseInt(str, 10);
-    const cells = getProviderCells(this.state);
-    Locator.save(Locator.PROVIDER_ID, cells[this.state.providerIDCell]);
-    return this;
+    return this.setCell('providerIDCell', LocatorKey.PROVIDER_ID, getProviderCells(this.state), str);
   }
 
   setOrderCustomerIDCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.orderCustomerIDCell = undefined;
-      return this;
-    }
-    this.state.orderCustomerIDCell = parseInt(str, 10);
-    const cells = getOrderCells(this.state);
-    Locator.save(Locator.ORDER_CUSTOMER_ID, cells[this.state.orderCustomerIDCell]);
-    return this;
+    return this.setCell('orderCustomerIDCell', LocatorKey.ORDER_CUSTOMER_ID, getOrderCells(this.state), str);
   }
 
   setOrderProviderIDCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.orderProviderIDCell = undefined;
-      return this;
-    }
-    this.state.orderProviderIDCell = parseInt(str, 10);
-    const cells = getOrderCells(this.state);
-    Locator.save(Locator.ORDER_PROVIDER_ID, cells[this.state.orderProviderIDCell]);
-    return this;
+    return this.setCell('orderProviderIDCell', LocatorKey.ORDER_PROVIDER_ID, getOrderCells(this.state), str);
   }
 
   setOrderTypeCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.orderTypeCell = undefined;
-      return this;
-    }
-    this.state.orderTypeCell = parseInt(str, 10);
-    const cells = getOrderCells(this.state);
-    Locator.save(Locator.ORDER_TYPE, cells[this.state.orderTypeCell]);
-    return this;
+    return this.setCell('orderTypeCell', LocatorKey.ORDER_TYPE, getOrderCells(this.state), str);
   }
 
   setOrderLoadingDateCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.orderLoadingDateCell = undefined;
-      return this;
-    }
-    this.state.orderLoadingDateCell = parseInt(str, 10);
-    const cells = getOrderCells(this.state);
-    Locator.save(Locator.CUSTOMER_ID, cells[this.state.orderLoadingDateCell]);
-    return this;
+    return this.setCell('orderLoadingDateCell', LocatorKey.ORDER_LOADING_DATE, getOrderCells(this.state), str);
   }
 
   setOrderShippingDateCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.orderShippingDateCell = undefined;
-      return this;
-    }
-    this.state.orderShippingDateCell = parseInt(str, 10);
-    const cells = getOrderCells(this.state);
-    Locator.save(Locator.CUSTOMER_ID, cells[this.state.orderShippingDateCell]);
-    return this;
+    return this.setCell('orderShippingDateCell', LocatorKey.ORDER_SHIPPING_DATE, getOrderCells(this.state), str);
   }
 
   setCustomerMarkCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.customerMarkCell = undefined;
-      return this;
-    }
-    this.state.customerMarkCell = parseInt(str, 10);
-    const cells = getCustomerCells(this.state);
-    Locator.save(Locator.CUSTOMER_ID, cells[this.state.customerMarkCell]);
-    return this;
+    return this.setCell('customerMarkCell', LocatorKey.CUSTOMER_MARK, getCustomerCells(this.state), str);
   }
 
   setProviderMarkCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.providerMarkCell = undefined;
-      return this;
-    }
-    this.state.providerMarkCell = parseInt(str, 10);
-    const cells = getProviderCells(this.state);
-    Locator.save(Locator.CUSTOMER_ID, cells[this.state.providerMarkCell]);
-    return this;
+    return this.setCell('providerMarkCell', LocatorKey.PROVIDER_MARK, getProviderCells(this.state), str);
   }
 
   setCustomerMarkRate(str: string): StateBuilder {
-    let rate = parseInt(str, 10);
-    if (isNaN(rate)) {
-      rate = 0;
-    }
-    this.state.customerMarkRate = rate;
-    Locator.save(Locator.CUSTOMER_RATE, rate.toString());
-    return this;
+    return this.setRate('customerMarkRate', LocatorKey.CUSTOMER_RATE, str);
   }
 
   setProviderMarkRate(str: string): StateBuilder {
-    let rate = parseInt(str, 10);
-    if (isNaN(rate)) {
-      rate = 0;
-    }
-    this.state.providerMarkRate = rate;
-    Locator.save(Locator.PROVIDER_RATE, rate.toString());
-    return this;
+    return this.setRate('providerMarkRate', LocatorKey.PROVIDER_RATE, str);
   }
 
   setDateMarkRate(str: string): StateBuilder {
-    let rate = parseInt(str, 10);
-    if (isNaN(rate)) {
-      rate = 0;
-    }
-    this.state.dateMarkRate = rate;
-    Locator.save(Locator.DATE_RATE, rate.toString());
-    return this;
+    return this.setRate('dateMarkRate', LocatorKey.DATE_RATE, str);
   }
 
   toggleEventKey(eventKey: string): StateBuilder {
@@ -258,11 +185,35 @@ class StateBuilder {
 
   addProjection(projection: string): StateBuilder {
     this.state.projection = [...this.state.projection, projection];
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }
 
   removeProjection(index: number): StateBuilder {
     this.state.projection = this.state.projection.filter((_, i) => i !== index);
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    return this;
+  }
+
+  upProjection(index: number): StateBuilder {
+    if (index === 0) return this;
+    const copy = [...this.state.projection];
+    const tmp = copy[index - 1];
+    copy[index - 1] = copy[index];
+    copy[index] = tmp;
+    this.state.projection = copy;
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    return this;
+  }
+
+  downProjection(index: number): StateBuilder {
+    if (index >= this.state.projection.length - 1) return this;
+    const copy = [...this.state.projection];
+    const tmp = copy[index + 1];
+    copy[index + 1] = copy[index];
+    copy[index] = tmp;
+    this.state.projection = copy;
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }
 
@@ -271,6 +222,31 @@ class StateBuilder {
       this.computeActiveKeys();
     }
     return this.state;
+  }
+
+  private setCell(key: keyof StateCell, locatorKey: LocatorKey, cells: string[], str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state[key] = undefined;
+      return this;
+    }
+
+    const index = parseInt(str, 10);
+    this.state[key] = index;
+    Locator.save(locatorKey, cells[index]);
+    
+    return this;
+  }
+
+  private setRate(key: keyof StateRate, locatorKey: LocatorKey, str: string): StateBuilder {
+    let rate = parseInt(str, 10);
+    if (isNaN(rate)) {
+      rate = 0;
+    }
+
+    this.state[key] = rate;
+    Locator.save(locatorKey, rate.toString());
+    
+    return this;
   }
 
   private resetDb(): StateBuilder {

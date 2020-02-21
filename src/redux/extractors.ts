@@ -122,6 +122,13 @@ export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell
   return 'warning';
 };
 
+export const extractRateStatus = (customerMarkRate: number, providerMarkRate: number, dateMarkRate: number): Status => {
+  if (customerMarkRate < 0 || providerMarkRate < 0 || dateMarkRate < 0) {
+    return 'danger';
+  }
+  return 'success';
+};
+
 export const extractProjectionStatus = (projection: string[], orderCells: string[]): Status => {
   if (orderCells.length < 1) {
     return 'dark';

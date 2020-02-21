@@ -70,7 +70,7 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
             options={props.cells}
           />
         </Col>
-        <Col xs={12} md={2} style={{textAlign: 'center'}}>
+        <Col xs={12} md={2} className="text-center">
           <CircularProgressbar
             value={percentage}
             text={`${percentage} %`}
@@ -101,14 +101,17 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
         </Col>
       </Row>
 
-      <Row style={{textAlign: 'center'}}>
+      <Row className="text-center mt-4">
         <Col>
           <Button onClick={onClickID} disabled={props.map.size === 0}>
             {props.map.size} {props.header}
           </Button>
         </Col>
         <Col>
-          <Button onClick={onClickMissing}>
+          <Button variant="success">
+            {props.orderMap.size - missing.length} presents
+          </Button>
+          <Button variant="danger" onClick={onClickMissing}>
             {missing.length} absents
           </Button>
         </Col>

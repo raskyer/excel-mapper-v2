@@ -22,19 +22,12 @@ import {
   EVENT_KEY_TOGGLE,
   PROJECTION_ADD,
   PROJECTION_REMOVE,
+  PROJECTION_UP,
+  PROJECTION_DOWN,
   RESULTS_COMPUTED
 } from './constants';
 
-import StateBuilder from './StateBuilder';
-import Locator from '../utils/Locator';
-
-const INITIAL_STATE: State = {
-  customerMarkRate: Locator.findRate(Locator.CUSTOMER_RATE),
-  providerMarkRate: Locator.findRate(Locator.PROVIDER_RATE),
-  dateMarkRate: Locator.findRate(Locator.DATE_RATE),
-  activeKeys: new Set<string>().add('1'),
-  projection: []
-};
+import StateBuilder, { INITIAL_STATE } from './StateBuilder';
 
 const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
   switch (action.type) {
@@ -117,6 +110,14 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
     case PROJECTION_REMOVE:
       return new StateBuilder(state)
         .removeProjection(action.payload)
+        .build();
+    case PROJECTION_UP:
+      return new StateBuilder(state)
+        .upProjection(action.payload)
+        .build();
+    case PROJECTION_DOWN:
+      return new StateBuilder(state)
+        .downProjection(action.payload)
         .build();
     case RESULTS_COMPUTED:
       return {
