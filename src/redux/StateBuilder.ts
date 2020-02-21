@@ -13,6 +13,7 @@ import {
   getSheetStatus,
   getCustomerIDStatus,
   getProviderIDStatus,
+  getOptionsStatus,
   getProjectionStatus
 } from './selectors';
 
@@ -312,6 +313,10 @@ class StateBuilder {
 
     if (getProviderIDStatus(state) === 'danger') {
       set.add('4');
+    }
+
+    if (getOptionsStatus(state) === 'danger') {
+      set.add('5');
     }
 
     if (getProjectionStatus(state) === 'danger') {

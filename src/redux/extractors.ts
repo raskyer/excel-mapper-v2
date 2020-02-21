@@ -106,18 +106,26 @@ export const extractIDStatus = (
 };
 
 export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell?: number, orderTypeCell?: number, orderLoadingDateCell?: number, orderShippingDateCell?: number): Status => {
-  const arr = [customerMarkCell, providerMarkCell, orderTypeCell, orderLoadingDateCell, orderShippingDateCell];
-  const sum = arr.reduce((p, n) => {
+  const sum = [customerMarkCell, providerMarkCell].reduce((p, n) => {
     if (p === undefined) return 1;
     if (n !== undefined) return p + 1;
     return p + 0;
   }, 0);
 
-  if (sum === 0) {
+  const orderSum = [orderTypeCell, orderLoadingDateCell, orderShippingDateCell].reduce((p, n) => {
+    if (p === undefined) return 1;
+    if (n !== undefined) return p + 1;
+    return p + 0;
+  }, 0);
+
+  if (sum === 0 && orderSum === 0) {
     return 'dark';
   }
-  if (sum === 5) {
+  if (sum === 2 && orderSum === 3) {
     return 'success';
+  }
+  if (sum === 1 || orderSum === 1 || orderSum === 2) {
+    return 'danger';
   }
   return 'warning';
 };
