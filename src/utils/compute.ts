@@ -54,37 +54,34 @@ class Compute {
     return orders;
   }
 
-  private createProjection(orders: RankedOrder[], orderHeaders: string[], projection: string[]): RankedOrder[] {
-    const newHeaders = projection.map(header => ({
-      index: orderHeaders.indexOf(header),
-      name: header
-    }));
+  private createProjection(rankedOrders: RankedOrder[], orderHeaders: string[], projection: string[]): RankedOrder[] {
+    const projectionIndexes = projection.map(projection => orderHeaders.indexOf(projection));
   
-    const mapped = orders.map(rankedOrder => {
+    return rankedOrders.map(rankedOrder => {
       const order = rankedOrder.order;
 
-      const projectedOrder = newHeaders
-        .map(({ index }) => index !== -1 ? order[index] : '')
-        .map(value => {
-          if (value === undefined || value === null) {
-            return '';
-          }
-          if (typeof value === 'object') {
-            return value.toString();
-          }
-          return value;
-        });
+      const projectedOrder = projectionIndexes.map(index => {
+        if (index === -1) {
+          // this projection is a new cell
+          return '';
+        }
+
+        const value = order[index];
+        if (value === undefined || value === null) {
+          return '';
+        }
+        if (index === this.$.orderLoadingDateCell || index === this.$.orderShippingDateCell) {
+          const date = value as Date;
+          return date.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit' });
+        }
+        return value;
+      });
 
       return {
         ...rankedOrder,
         order: projectedOrder
       };
     });
-  
-    // insert headers at first line
-    // mapped.unshift(newHeaders.map(({ name }) => name));
-
-    return mapped;
   }
 
   private sortOrders(orders: RankedOrder[]): RankedOrder[] {

@@ -3,11 +3,11 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
 
 import Select from './Select';
+import DisplayModal from './DisplayModal';
+import EyeAddon from './EyeAddon';
 
 import { difference, diffPercentage } from '../../../../utils/core';
 
@@ -68,6 +68,7 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
             value={props.IDCell}
             onChange={props.onIDCellChange}
             options={props.cells}
+            addon={<EyeAddon onClick={onClickID} disabled={props.map.size === 0} />}
           />
         </Col>
         <Col xs={12} md={2} className="text-center">
@@ -97,16 +98,12 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
             value={props.orderIDCell}
             onChange={props.onOrderIDCellChange}
             options={props.orderCells}
+            addon={<EyeAddon onClick={onClickOrder} disabled={props.orderMap.size === 0} />}
           />
         </Col>
       </Row>
 
       <Row className="text-center mt-4">
-        <Col>
-          <Button onClick={onClickID} disabled={props.map.size === 0}>
-            {props.map.size} {props.header}
-          </Button>
-        </Col>
         <Col>
           <Button variant="success">
             {props.orderMap.size - missing.length} presents
@@ -115,30 +112,9 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
             {missing.length} absents
           </Button>
         </Col>
-        <Col>
-          <Button onClick={onClickOrder} disabled={props.orderMap.size === 0}>
-            {props.orderMap.size} {props.header}
-          </Button>
-        </Col>
       </Row>
 
-      <Modal show={display.length > 0} onHide={() => setDisplay([])}>
-        <Modal.Header closeButton>
-          <Modal.Title>Liste des cellules</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ListGroup>
-            {display.map(m => (
-              <ListGroup.Item key={m}>{m}</ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={() => setDisplay([])}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DisplayModal display={display} onHide={() => setDisplay([])} />
     </>
   );
 };

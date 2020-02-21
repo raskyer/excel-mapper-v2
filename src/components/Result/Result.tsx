@@ -56,9 +56,9 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
                 <Popover id="popover-basic">
                   <Popover.Title as="h3" className="bg-danger text-white">Info</Popover.Title>
                   <Popover.Content>
-                    <b>Note client</b> : {result.customerMark},<br/>
-                    <b>Note transporteur</b> : {result.providerMark},<br/>
-                    <b>Date</b> : {result.dateRanking}
+                    <b>Note client</b> : {result.customerMark} ({result.customerRanking}/5),<br/>
+                    <b>Note transporteur</b> : {result.providerMark} ({result.providerRanking}/5),<br/>
+                    <b>Note Date</b> : {result.dateRanking}/5
                   </Popover.Content>
                 </Popover>
               }>

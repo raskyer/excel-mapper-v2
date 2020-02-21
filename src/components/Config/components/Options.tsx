@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import Row from 'react-bootstrap/Row';
@@ -6,10 +6,21 @@ import Col from 'react-bootstrap/Col';
 
 import Step from './common/Step';
 import Select from './common/Select';
+import DisplayModal from './common/DisplayModal';
 
 import State from '../../../entities/State';
 import Status from '../../../entities/Status';
-import { getCustomerCells, getProviderCells, getOrderCells, getOptionsStatus } from '../../../redux/selectors';
+
+import {
+  getOptionsStatus,
+  getCustomerCells,
+  getProviderCells,
+  getOrderCells,
+  getCustomerSheet,
+  getProviderSheet,
+  getOrderSheet
+} from '../../../redux/selectors';
+
 import {
   customerMarkCellChangedAction,
   providerMarkCellChangedAction,
@@ -17,6 +28,7 @@ import {
   orderLoadingDateCellChangedAction,
   orderShippingDateCellChangedAction
 } from '../../../redux/actions';
+import EyeAddon from './common/EyeAddon';
 
 interface OptionsProps extends OptionsState, OptionsDispatch {}
 
@@ -31,6 +43,10 @@ interface OptionsState {
   orderTypeCell?: number;
   orderLoadingDateCell?: number;
   orderShippingDateCell?: number;
+
+  customerSheet: any[][];
+  providerSheet: any[][];
+  orderSheet: any[][];
 }
 
 interface OptionsDispatch {
@@ -42,6 +58,15 @@ interface OptionsDispatch {
 }
 
 const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
+  const [display, setDisplay] = useState<any[]>([]);
+  const onClickEye = (index: number | undefined, sheet: any[]) => {
+    if (index === undefined) return;
+    const data = sheet
+      .filter(values => values[index])
+      .map(values => values[index].toString());
+    setDisplay(data);
+  };
+
   return (
     <Step eventKey="5" title="Options" status={props.optionsStatus}>
       <Row>
@@ -51,12 +76,20 @@ const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
             value={props.customerMarkCell}
             onChange={props.onCustomerMarkCellChange}
             options={props.customerCells}
+            addon={<EyeAddon
+              onClick={() => onClickEye(props.customerMarkCell, props.customerSheet)}
+              disabled={props.customerMarkCell === undefined}
+            />}
           />
           <Select
             title="Cellule de note transporteur"
             value={props.providerMarkCell}
             onChange={props.onProviderMarkCellChange}
             options={props.providerCells}
+            addon={<EyeAddon
+              onClick={() => onClickEye(props.providerMarkCell, props.providerSheet)}
+              disabled={props.providerMarkCell === undefined}
+            />}
           />
         </Col>
         <Col>
@@ -65,21 +98,35 @@ const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
             value={props.orderTypeCell}
             onChange={props.onOrderTypeCellChange}
             options={props.orderCells}
+            addon={<EyeAddon
+              onClick={() => onClickEye(props.orderTypeCell, props.orderSheet)}
+              disabled={props.orderTypeCell === undefined}
+            />}
           />
           <Select
             title="Cellule de date chargement"
             value={props.orderLoadingDateCell}
             onChange={props.onOrderLoadingDateCellChange}
             options={props.orderCells}
+            addon={<EyeAddon
+              onClick={() => onClickEye(props.orderLoadingDateCell, props.orderSheet)}
+              disabled={props.orderLoadingDateCell === undefined}
+            />}
           />
           <Select
             title="Cellule de date livraison"
             value={props.orderShippingDateCell}
             onChange={props.onOrderShippingDateCellChange}
             options={props.orderCells}
+            addon={<EyeAddon
+              onClick={() => onClickEye(props.orderShippingDateCell, props.orderSheet)}
+              disabled={props.orderShippingDateCell === undefined}
+            />}
           />
         </Col>
       </Row>
+
+      <DisplayModal display={display} onHide={() => setDisplay([])} />
     </Step>
   );
 };
@@ -94,7 +141,11 @@ const mapStateToProps = (state: State): OptionsState => ({
 
   orderTypeCell: state.orderTypeCell,
   orderLoadingDateCell: state.orderLoadingDateCell,
-  orderShippingDateCell: state.orderShippingDateCell
+  orderShippingDateCell: state.orderShippingDateCell,
+
+  customerSheet: getCustomerSheet(state),
+  providerSheet: getProviderSheet(state),
+  orderSheet: getOrderSheet(state)
 });
 
 const mapDispatchToProps = (dispatch: Function): OptionsDispatch => ({
