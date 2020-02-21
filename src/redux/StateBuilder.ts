@@ -1,7 +1,7 @@
 import { WorkBook } from 'xlsx';
 
 import State from '../entities/State';
-import Locator from '../utils/locator';
+import Locator from '../utils/Locator';
 
 import {
   getDbSheetNames,
@@ -12,7 +12,8 @@ import {
   getFileStatus,
   getSheetStatus,
   getCustomerIDStatus,
-  getProviderIDStatus
+  getProviderIDStatus,
+  getProjectionStatus
 } from './selectors';
 
 class StateBuilder {
@@ -107,10 +108,9 @@ class StateBuilder {
     this.state.orderCustomerIDCell = Locator.findCell(orderCells, Locator.ORDER_CUSTOMER_ID);
     this.state.orderProviderIDCell = Locator.findCell(orderCells, Locator.ORDER_PROVIDER_ID);
     this.state.orderTypeCell = Locator.findCell(orderCells, Locator.ORDER_TYPE);
+    this.state.orderLoadingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_LOADING);
     this.state.orderShippingDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_SHIPPING);
-    this.state.orderDeliveryDateCell = Locator.findCell(orderCells, Locator.ORDER_DATE_DELIVERY);
-    this.state.projection = new Set<string>(orderCells);
-    this.state.headers = orderCells;
+    this.state.projection = []; // orderCells
     this.hasToCompute = true;
 
     return this;
@@ -171,6 +171,17 @@ class StateBuilder {
     return this;
   }
 
+  setOrderLoadingDateCell(str?: string): StateBuilder {
+    if (str === undefined) {
+      this.state.orderLoadingDateCell = undefined;
+      return this;
+    }
+    this.state.orderLoadingDateCell = parseInt(str, 10);
+    const cells = getOrderCells(this.state);
+    Locator.save(Locator.CUSTOMER_ID, cells[this.state.orderLoadingDateCell]);
+    return this;
+  }
+
   setOrderShippingDateCell(str?: string): StateBuilder {
     if (str === undefined) {
       this.state.orderShippingDateCell = undefined;
@@ -179,17 +190,6 @@ class StateBuilder {
     this.state.orderShippingDateCell = parseInt(str, 10);
     const cells = getOrderCells(this.state);
     Locator.save(Locator.CUSTOMER_ID, cells[this.state.orderShippingDateCell]);
-    return this;
-  }
-
-  setOrderDeliveryDateCell(str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state.orderDeliveryDateCell = undefined;
-      return this;
-    }
-    this.state.orderDeliveryDateCell = parseInt(str, 10);
-    const cells = getOrderCells(this.state);
-    Locator.save(Locator.CUSTOMER_ID, cells[this.state.orderDeliveryDateCell]);
     return this;
   }
 
@@ -256,14 +256,13 @@ class StateBuilder {
     return this;
   }
 
-  toggleProjectionCell(cell: string): StateBuilder {
-    const projection = new Set(this.state.projection);
-    if (projection.has(cell)) {
-      projection.delete(cell);
-    } else {
-      projection.add(cell);
-    }
-    this.state.projection = projection;
+  addProjection(projection: string): StateBuilder {
+    this.state.projection = [...this.state.projection, projection];
+    return this;
+  }
+
+  removeProjection(index: number): StateBuilder {
+    this.state.projection = this.state.projection.filter((_, i) => i !== index);
     return this;
   }
 
@@ -314,28 +313,33 @@ class StateBuilder {
     this.state.orderCustomerIDCell = undefined;
     this.state.orderProviderIDCell = undefined;
     this.state.orderTypeCell = undefined;
+    this.state.orderLoadingDateCell = undefined;
     this.state.orderShippingDateCell = undefined;
-    this.state.orderDeliveryDateCell = undefined;
     return this;
   }
 
   private computeActiveKeys(): StateBuilder {
     const set = new Set<string>();
+    const state = { ...this.state };
 
-    if (getFileStatus({ ...this.state }) !== 'success') {
+    if (getFileStatus(state) !== 'success') {
       set.add('1');
     }
   
-    if (getSheetStatus({ ...this.state }) === 'danger') {
+    if (getSheetStatus(state) === 'danger') {
       set.add('2');
     }
 
-    if (getCustomerIDStatus(this.state) === 'danger') {
+    if (getCustomerIDStatus(state) === 'danger') {
       set.add('3');
     }
 
-    if (getProviderIDStatus(this.state) === 'danger') {
+    if (getProviderIDStatus(state) === 'danger') {
       set.add('4');
+    }
+
+    if (getProjectionStatus(state) === 'danger') {
+      set.add('7');
     }
 
     this.state.activeKeys = set;

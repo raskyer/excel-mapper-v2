@@ -31,8 +31,8 @@ const getOrderProviderIDCell = (state: State) => state.orderProviderIDCell;
 const getCustomerMarkCell = (state: State) => state.customerMarkCell;
 const getProviderMarkCell = (state: State) => state.providerMarkCell;
 const getOrderTypeCell = (state: State) => state.orderTypeCell;
+const getOrderLoadingDateCell = (state: State) => state.orderLoadingDateCell;
 const getOrderShippingDateCell = (state: State) => state.orderShippingDateCell;
-const getOrderDeliveryDateCell = (state: State) => state.orderDeliveryDateCell;
 
 const getProjection = (state: State) => state.projection;
 
@@ -70,7 +70,7 @@ export const getCustomerIDStatus = createSelector([getCustomerMap, getOrderCusto
 export const getProviderIDStatus = createSelector([getProviderMap, getOrderCustomerMap, getProviderIDCellAggregateStatus], extractIDStatus);
 
 export const getOptionsStatus = createSelector(
-  [getCustomerMarkCell, getProviderMarkCell, getOrderTypeCell, getOrderShippingDateCell, getOrderDeliveryDateCell],
+  [getCustomerMarkCell, getProviderMarkCell, getOrderTypeCell, getOrderLoadingDateCell, getOrderShippingDateCell],
   extractOptionsStatus
 );
 

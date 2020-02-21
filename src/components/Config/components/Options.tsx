@@ -14,8 +14,8 @@ import {
   customerMarkCellChangedAction,
   providerMarkCellChangedAction,
   orderTypeCellChangedAction,
-  orderShippingDateCellChangedAction,
-  orderDeliveryDateCellChangedAction
+  orderLoadingDateCellChangedAction,
+  orderShippingDateCellChangedAction
 } from '../../../redux/actions';
 
 interface OptionsProps extends OptionsState, OptionsDispatch {}
@@ -29,16 +29,16 @@ interface OptionsState {
   orderCells: string[];
 
   orderTypeCell?: number;
+  orderLoadingDateCell?: number;
   orderShippingDateCell?: number;
-  orderDeliveryDateCell?: number;
 }
 
 interface OptionsDispatch {
   onCustomerMarkCellChange: (s?: string) => void;
   onProviderMarkCellChange: (s?: string) => void;
   onOrderTypeCellChange: (s?: string) => void;
+  onOrderLoadingDateCellChange: (s?: string) => void;
   onOrderShippingDateCellChange: (s?: string) => void;
-  onOrderDeliveryDateCellChange: (s?: string) => void;
 }
 
 const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
@@ -68,14 +68,14 @@ const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
           />
           <Select
             title="Cellule de date chargement"
-            value={props.orderShippingDateCell}
-            onChange={props.onOrderShippingDateCellChange}
+            value={props.orderLoadingDateCell}
+            onChange={props.onOrderLoadingDateCellChange}
             options={props.orderCells}
           />
           <Select
             title="Cellule de date livraison"
-            value={props.orderDeliveryDateCell}
-            onChange={props.onOrderDeliveryDateCellChange}
+            value={props.orderShippingDateCell}
+            onChange={props.onOrderShippingDateCellChange}
             options={props.orderCells}
           />
         </Col>
@@ -93,16 +93,16 @@ const mapStateToProps = (state: State): OptionsState => ({
   orderCells: getOrderCells(state),
 
   orderTypeCell: state.orderTypeCell,
-  orderShippingDateCell: state.orderShippingDateCell,
-  orderDeliveryDateCell: state.orderDeliveryDateCell
+  orderLoadingDateCell: state.orderLoadingDateCell,
+  orderShippingDateCell: state.orderShippingDateCell
 });
 
 const mapDispatchToProps = (dispatch: Function): OptionsDispatch => ({
   onCustomerMarkCellChange: (s?: string) => dispatch(customerMarkCellChangedAction(s)),
   onProviderMarkCellChange: (s?: string) => dispatch(providerMarkCellChangedAction(s)),
   onOrderTypeCellChange: (s?: string) => dispatch(orderTypeCellChangedAction(s)),
-  onOrderShippingDateCellChange: (s?: string) => dispatch(orderShippingDateCellChangedAction(s)),
-  onOrderDeliveryDateCellChange: (s?: string) => dispatch(orderDeliveryDateCellChangedAction(s))
+  onOrderLoadingDateCellChange: (s?: string) => dispatch(orderLoadingDateCellChangedAction(s)),
+  onOrderShippingDateCellChange: (s?: string) => dispatch(orderShippingDateCellChangedAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Options);

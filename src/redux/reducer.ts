@@ -12,27 +12,28 @@ import {
   ORDER_CUSTOMER_ID_CELL_CHANGE,
   ORDER_PROVIDER_ID_CELL_CHANGE,
   ORDER_TYPE_CELL_CHANGE,
+  ORDER_LOADING_DATE_CELL_CHANGE,
   ORDER_SHIPPING_DATE_CELL_CHANGE,
-  ORDER_DELIVERY_DATE_CELL_CHANGE,
   CUSTOMER_MARK_CELL_CHANGE,
   PROVIDER_MARK_CELL_CHANGE,
   CUSTOMER_MARK_RATE_CHANGE,
   PROVIDER_MARK_RATE_CHANGE,
   DATE_MARK_RATE_CHANGE,
   EVENT_KEY_TOGGLE,
-  PROJECTION_CELL_TOGGLE,
-  ADD_HEADER,
+  PROJECTION_ADD,
+  PROJECTION_REMOVE,
   RESULTS_COMPUTED
 } from './constants';
 
 import StateBuilder from './StateBuilder';
+import Locator from '../utils/Locator';
 
 const INITIAL_STATE: State = {
-  customerMarkRate: 1,
-  providerMarkRate: 1,
-  dateMarkRate: 1,
+  customerMarkRate: Locator.findRate(Locator.CUSTOMER_RATE),
+  providerMarkRate: Locator.findRate(Locator.PROVIDER_RATE),
+  dateMarkRate: Locator.findRate(Locator.DATE_RATE),
   activeKeys: new Set<string>().add('1'),
-  projection: new Set<string>()
+  projection: []
 };
 
 const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
@@ -77,13 +78,13 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
       return new StateBuilder(state)
         .setOrderTypeCell(action.payload)
         .build();
+    case ORDER_LOADING_DATE_CELL_CHANGE:
+      return new StateBuilder(state)
+        .setOrderLoadingDateCell(action.payload)
+        .build();
     case ORDER_SHIPPING_DATE_CELL_CHANGE:
       return new StateBuilder(state)
         .setOrderShippingDateCell(action.payload)
-        .build();
-    case ORDER_DELIVERY_DATE_CELL_CHANGE:
-      return new StateBuilder(state)
-        .setOrderDeliveryDateCell(action.payload)
         .build();
     case CUSTOMER_MARK_CELL_CHANGE:
       return new StateBuilder(state)
@@ -109,19 +110,18 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
       return new StateBuilder(state)
         .toggleEventKey(action.payload)
         .build();
-    case PROJECTION_CELL_TOGGLE:
+    case PROJECTION_ADD:
       return new StateBuilder(state)
-        .toggleProjectionCell(action.payload)
+        .addProjection(action.payload)
+        .build();
+    case PROJECTION_REMOVE:
+      return new StateBuilder(state)
+        .removeProjection(action.payload)
         .build();
     case RESULTS_COMPUTED:
       return {
         ...state,
         results: action.payload
-      };
-    case ADD_HEADER:
-      return {
-        ...state,
-        headers: [...state.headers, action.payload]
       };
     default:
       return state;

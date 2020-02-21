@@ -13,17 +13,17 @@ import {
   PROVIDER_ID_CELL_CHANGE,
   ORDER_PROVIDER_ID_CELL_CHANGE,
   ORDER_TYPE_CELL_CHANGE,
+  ORDER_LOADING_DATE_CELL_CHANGE,
   ORDER_SHIPPING_DATE_CELL_CHANGE,
-  ORDER_DELIVERY_DATE_CELL_CHANGE,
   CUSTOMER_MARK_CELL_CHANGE,
   PROVIDER_MARK_CELL_CHANGE,
   CUSTOMER_MARK_RATE_CHANGE,
   PROVIDER_MARK_RATE_CHANGE,
   DATE_MARK_RATE_CHANGE,
   EVENT_KEY_TOGGLE,
-  PROJECTION_CELL_TOGGLE,
-  ADD_HEADER,
-  RESULTS_COMPUTED
+  PROJECTION_ADD,
+  PROJECTION_REMOVE,
+  RESULTS_COMPUTED,
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
@@ -89,14 +89,14 @@ export const orderTypeCellChangedAction = (orderTypeCell?: string): Action => ({
   payload: orderTypeCell
 });
 
+export const orderLoadingDateCellChangedAction = (orderLoadingDateCell?: string): Action => ({
+  type: ORDER_LOADING_DATE_CELL_CHANGE,
+  payload: orderLoadingDateCell
+});
+
 export const orderShippingDateCellChangedAction = (orderShippingDateCell?: string): Action => ({
   type: ORDER_SHIPPING_DATE_CELL_CHANGE,
   payload: orderShippingDateCell
-});
-
-export const orderDeliveryDateCellChangedAction = (orderDeliveryDateCell?: string): Action => ({
-  type: ORDER_DELIVERY_DATE_CELL_CHANGE,
-  payload: orderDeliveryDateCell
 });
 
 export const customerMarkCellChangedAction = (customerMarkCell?: string): Action => ({
@@ -129,14 +129,14 @@ export const eventKeyToggledAction = (eventKey: string) => ({
   payload: eventKey
 });
 
-export const projectionCellToggledAction = (cell: string) => ({
-  type: PROJECTION_CELL_TOGGLE,
+export const projectionAddedAction = (cell: string) => ({
+  type: PROJECTION_ADD,
   payload: cell
 });
 
-export const addHeaderAction = (header: string) => ({
-  type: ADD_HEADER,
-  payload: header
+export const projectionRemovedAction = (index: number) => ({
+  type: PROJECTION_REMOVE,
+  payload: index
 });
 
 export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void => {

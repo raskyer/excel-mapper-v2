@@ -16,14 +16,14 @@ interface FinalState {
   providerMarkCell: number;
 
   orderTypeCell: number;
+  orderLoadingDateCell: number;
   orderShippingDateCell: number;
-  orderDeliveryDateCell: number;
 
   customerMarkRate: number;
   providerMarkRate: number;
   dateMarkRate: number;
 
-  projection: Set<string>;
+  projection: string[];
 }
 
 export default FinalState;

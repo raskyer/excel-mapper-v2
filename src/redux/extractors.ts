@@ -105,8 +105,8 @@ export const extractIDStatus = (
   return 'success';
 };
 
-export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell?: number, orderTypeCell?: number, orderShippingDateCell?: number, orderDeliveryDateCell?: number): Status => {
-  const arr = [customerMarkCell, providerMarkCell, orderTypeCell, orderShippingDateCell, orderDeliveryDateCell];
+export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell?: number, orderTypeCell?: number, orderLoadingDateCell?: number, orderShippingDateCell?: number): Status => {
+  const arr = [customerMarkCell, providerMarkCell, orderTypeCell, orderLoadingDateCell, orderShippingDateCell];
   const sum = arr.reduce((p, n) => {
     if (p === undefined) return 1;
     if (n !== undefined) return p + 1;
@@ -122,11 +122,11 @@ export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell
   return 'warning';
 };
 
-export const extractProjectionStatus = (projection: Set<string>, orderCells: string[]): Status => {
+export const extractProjectionStatus = (projection: string[], orderCells: string[]): Status => {
   if (orderCells.length < 1) {
     return 'dark';
   }
-  if (projection.size < 1) {
+  if (projection.length < 1) {
     return 'danger';
   }
   return 'success';

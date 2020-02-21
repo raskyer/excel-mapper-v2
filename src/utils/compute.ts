@@ -54,8 +54,8 @@ class Compute {
     return orders;
   }
 
-  private createProjection(orders: RankedOrder[], orderHeaders: string[], projection: Set<string>): RankedOrder[] {
-    const newHeaders = [...projection].map(header => ({
+  private createProjection(orders: RankedOrder[], orderHeaders: string[], projection: string[]): RankedOrder[] {
+    const newHeaders = projection.map(header => ({
       index: orderHeaders.indexOf(header),
       name: header
     }));
@@ -161,7 +161,7 @@ class Compute {
     }
   
     const date = trimType === 'chargement' ?
-      o[this.$.orderShippingDateCell] : o[this.$.orderDeliveryDateCell];
+      o[this.$.orderLoadingDateCell] : o[this.$.orderShippingDateCell];
   
     if (date === undefined || typeof date !== 'object') {
       this.errors.push('CHECK : date undefined or invalid ' + date);

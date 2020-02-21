@@ -121,7 +121,7 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
 
       <Modal show={display.length > 0} onHide={() => setDisplay([])}>
         <Modal.Header closeButton>
-          <Modal.Title>Missing</Modal.Title>
+          <Modal.Title>Liste des cellules</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ListGroup>

@@ -4,21 +4,6 @@ import FinalState from '../entities/FinalState';
 
 import { getCustomerSheet, getProviderSheet, getOrderSheet } from '../redux/selectors';
 
-const DEFAULT_PROJECTION = {
-  'Type': 'Type',
-  'Nom Client': 'Nom Client',
-  'Nom Fourn.': 'Nom Transporteur',
-  'Date Charg.': 'Date Chargement',
-  'Date Livr.': 'Date Livraison',
-  'CP Charg.': 'CP Chargement',
-  'Ville Charg.': 'Ville Chargement',
-  'CP Livr.': 'CP Livraison',
-  'Ville Livr.': 'Ville Livraison',
-  'État': 'Etat',
-  'Dossier': 'Dossier',
-  'Commentaires': 'Commentaires'
-};
-
 export function createMap(sheet: any[][], idCell: number): CellMap {
   const map = new Map();
   for (let i = 1; i < sheet.length; i++) {
@@ -68,7 +53,7 @@ export function fromState(state: State): FinalState {
     providerMarkCell,
     orderTypeCell,
     orderShippingDateCell,
-    orderDeliveryDateCell,
+    orderLoadingDateCell,
     customerMarkRate,
     providerMarkRate,
     dateMarkRate,
@@ -91,7 +76,7 @@ export function fromState(state: State): FinalState {
     throw new Error('undefined mark cell');
   }
 
-  if (orderTypeCell === undefined || orderShippingDateCell === undefined || orderDeliveryDateCell === undefined) {
+  if (orderTypeCell === undefined || orderShippingDateCell === undefined || orderLoadingDateCell === undefined) {
     throw new Error('undefined order cell');
   }
 
@@ -136,7 +121,7 @@ export function fromState(state: State): FinalState {
 
     orderTypeCell,
     orderShippingDateCell,
-    orderDeliveryDateCell,
+    orderLoadingDateCell,
 
     customerMarkRate, // check
     providerMarkRate, // check

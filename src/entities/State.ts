@@ -17,17 +17,16 @@ interface State {
   providerMarkCell?: number;
 
   orderTypeCell?: number;
+  orderLoadingDateCell?: number;
   orderShippingDateCell?: number;
-  orderDeliveryDateCell?: number;
 
-  customerMarkRate: number; // TODO : Fetch from Locator
+  customerMarkRate: number;
   providerMarkRate: number;
   dateMarkRate: number;
 
   activeKeys: Set<string>;
-  projection: Set<string>;
+  projection: string[]; // TODO : Add in locator
 
-  headers?: string[]; // TODO : ADD in Locator
   results?: RankedOrder[];
 }
 
