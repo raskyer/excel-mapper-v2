@@ -25,5 +25,7 @@ export const PROJECTION_ADD = 'add::projection';
 export const PROJECTION_REMOVE = 'remove::projection';
 export const PROJECTION_UP = 'up::projection';
 export const PROJECTION_DOWN = 'down::projection';
+export const PROJECTION_ADD_ALL = 'add::all::projection';
+export const PROJECTION_REMOVE_ALL = 'remove::all::projection';
 
 export const RESULTS_COMPUTED = 'computed::results';

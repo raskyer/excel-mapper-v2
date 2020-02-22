@@ -30,7 +30,7 @@ const IDProvider: React.FC<IDProviderProps> = (props: IDProviderProps) => {
   return (
     <Step eventKey="4" title="Cellule d'ID Transporteur" status={props.providerIDStatus}>
       <IDLink
-        header={"Cellules ID Transporteur"}
+        header={"Cellule d'ID Transporteur"}
         cells={props.providerCells}
         orderCells={props.orderCells}
         IDCell={props.providerIDCell}

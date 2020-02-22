@@ -218,6 +218,18 @@ class StateBuilder {
     return this;
   }
 
+  addAllProjection(): StateBuilder {
+    this.state.projection = [...getOrderCells(this.state)];
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    return this;
+  }
+
+  removeAllProjection(): StateBuilder {
+    this.state.projection = [];
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    return this;
+  }
+
   build(): State {
     if (this.hasToCompute) {
       this.computeActiveKeys();

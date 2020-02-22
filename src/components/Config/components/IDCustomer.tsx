@@ -30,7 +30,7 @@ const IDCustomer: React.FC<IDCustomerProps> = (props: IDCustomerProps) => {
   return (
     <Step eventKey="3" title="Cellule d'ID Client" status={props.customerIDStatus}>
       <IDLink
-        header={"Cellules ID Client"}
+        header={"Cellule d'ID Client"}
         cells={props.customerCells}
         orderCells={props.orderCells}
         IDCell={props.customerIDCell}

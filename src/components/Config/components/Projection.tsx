@@ -20,7 +20,14 @@ import Step from './common/Step';
 import State from '../../../entities/State';
 import Status from '../../../entities/Status';
 import { getProjectionStatus, getOrderCells } from '../../../redux/selectors';
-import { projectionAddedAction, projectionRemovedAction, projectionUppedAction, projectionDownedAction } from '../../../redux/actions';
+import {
+  projectionAddedAction,
+  projectionRemovedAction,
+  projectionUppedAction,
+  projectionDownedAction,
+  projectionAddedAllAction,
+  projectionRemovedAllAction
+} from '../../../redux/actions';
 
 interface ProjectionProps extends ProjectionState, ProjectionDispatch {}
 
@@ -35,6 +42,8 @@ interface ProjectionDispatch {
   onProjectionRemove: (s: number) => void;
   onProjectionUp: (s: number) => void;
   onProjectionDown: (s: number) => void;
+  onProjectionAddAll: () => void;
+  onProjectionRemoveAll: () => void;
 }
 
 const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
@@ -50,12 +59,25 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
     setNewHeader('');
   };
 
+  const onAddAll = () => {
+    props.onProjectionAddAll();
+  };
+
+  const onRemoveAll = () => {
+    props.onProjectionRemoveAll();
+  };
+
   return (
     <Step eventKey="7" title="Projection" status={props.projectionStatus}>
       <Row>
         <Col>
-          <p>Cellules</p>
-          <ListGroup as="ul">
+          <div className="d-flex align-items-center justify-content-around mb-2">
+            Cellules
+            <Button variant="success" title="Ajouter tout" onClick={onAddAll}>
+              <FontAwesomeIcon icon={faArrowRight} size="xs" />
+            </Button>
+          </div>
+          <ListGroup as="ul" style={{ height: '400px', overflowY: 'scroll' }}>
             {props.orderCells.map((cell, index) => (
               <ListGroup.Item
                 key={index}
@@ -82,8 +104,13 @@ const Projection: React.FC<ProjectionProps> = (props: ProjectionProps) => {
         </Col>
 
         <Col>
-          <p>Projection</p>
-          <ListGroup as="ul">
+          <div className="d-flex align-items-center justify-content-around mb-2">
+            Projection
+            <Button variant="danger" title="Enlever tout" onClick={onRemoveAll}>
+              <FontAwesomeIcon icon={faTrash} size="xs" />
+            </Button>
+          </div>
+          <ListGroup as="ul" style={{ height: '400px', overflowY: 'scroll' }}>
             {props.projection.map((projection, index) => (
               <ListGroup.Item
                 key={index}
@@ -129,7 +156,9 @@ const mapDispatchToProps = (dispatch: Function): ProjectionDispatch => ({
   onProjectionAdd: (s: string) => dispatch(projectionAddedAction(s)),
   onProjectionRemove: (i: number) => dispatch(projectionRemovedAction(i)),
   onProjectionUp: (i: number) => dispatch(projectionUppedAction(i)),
-  onProjectionDown: (i: number) => dispatch(projectionDownedAction(i))
+  onProjectionDown: (i: number) => dispatch(projectionDownedAction(i)),
+  onProjectionAddAll: () => dispatch(projectionAddedAllAction()),
+  onProjectionRemoveAll: () => dispatch(projectionRemovedAllAction())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Projection);

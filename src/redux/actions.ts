@@ -25,12 +25,14 @@ import {
   PROJECTION_REMOVE,
   PROJECTION_UP,
   PROJECTION_DOWN,
-  RESULTS_COMPUTED,
+  PROJECTION_ADD_ALL,
+  PROJECTION_REMOVE_ALL,
+  RESULTS_COMPUTED
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
 import { parseFile } from '../utils/excel';
-import Compute from '../utils/compute';
+import Compute from '../utils/Compute';
 import { fromState } from '../utils/core';
 
 export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher): void => {
@@ -126,29 +128,39 @@ export const dateMarkRateChangedAction = (dateMarkRate: string): Action => ({
   payload: dateMarkRate
 });
 
-export const eventKeyToggledAction = (eventKey: string) => ({
+export const eventKeyToggledAction = (eventKey: string): Action => ({
   type: EVENT_KEY_TOGGLE,
   payload: eventKey
 });
 
-export const projectionAddedAction = (cell: string) => ({
+export const projectionAddedAction = (cell: string): Action => ({
   type: PROJECTION_ADD,
   payload: cell
 });
 
-export const projectionRemovedAction = (index: number) => ({
+export const projectionRemovedAction = (index: number): Action => ({
   type: PROJECTION_REMOVE,
   payload: index
 });
 
-export const projectionUppedAction = (index: number) => ({
+export const projectionUppedAction = (index: number): Action => ({
   type: PROJECTION_UP,
   payload: index
 });
 
-export const projectionDownedAction = (index: number) => ({
+export const projectionDownedAction = (index: number): Action => ({
   type: PROJECTION_DOWN,
   payload: index
+});
+
+export const projectionAddedAllAction = (): Action => ({
+  type: PROJECTION_ADD_ALL,
+  payload: undefined
+});
+
+export const projectionRemovedAllAction = (): Action => ({
+  type: PROJECTION_REMOVE_ALL,
+  payload: undefined
 });
 
 export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void => {

@@ -35,7 +35,7 @@ const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
       <Row>
         <Col>
           <Select
-            title="Feuille Clients"
+            title="Feuille Client"
             value={props.customerSheetName}
             onChange={props.onCustomerSheetChange}
             options={props.dbSheetsNames}
@@ -43,7 +43,7 @@ const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
           />
 
           <Select
-            title="Feuille Transporteurs"
+            title="Feuille Transporteur"
             value={props.providerSheetName}
             onChange={props.onProviderSheetChange}
             options={props.dbSheetsNames}
@@ -52,7 +52,7 @@ const Sheets: React.FC<SheetsProps> = (props: SheetsProps) => {
         </Col>
         <Col>
           <Select
-            title="Feuille Commandes"
+            title="Feuille Commande"
             value={props.orderSheetName}
             onChange={props.onOrderSheetChange}
             options={props.orderSheetsNames}

@@ -24,6 +24,8 @@ import {
   PROJECTION_REMOVE,
   PROJECTION_UP,
   PROJECTION_DOWN,
+  PROJECTION_ADD_ALL,
+  PROJECTION_REMOVE_ALL,
   RESULTS_COMPUTED
 } from './constants';
 
@@ -118,6 +120,14 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
     case PROJECTION_DOWN:
       return new StateBuilder(state)
         .downProjection(action.payload)
+        .build();
+    case PROJECTION_ADD_ALL:
+      return new StateBuilder(state)
+        .addAllProjection()
+        .build();
+    case PROJECTION_REMOVE_ALL:
+      return new StateBuilder(state)
+        .removeAllProjection()
         .build();
     case RESULTS_COMPUTED:
       return {
