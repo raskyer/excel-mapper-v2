@@ -8,13 +8,17 @@ import Popover from 'react-bootstrap/Popover';
 
 import State from '../../entities/State';
 import RankedOrder from '../../entities/RankedOrder';
-import { createWorkbook, downloadWorkbook } from '../../utils/excel';
+import { download } from '../../redux/actions';
 
-interface ResultProps extends ResultState {}
+interface ResultProps extends ResultState, ResultDispatch {}
 
 interface ResultState {
   headers: string[];
   results?: RankedOrder[];
+}
+
+interface ResultDispatch {
+  download: () => void;
 }
 
 const Result: React.FC<ResultProps> = (props: ResultProps) => {
@@ -24,11 +28,7 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
 
   const onDownloadExcel = () => {
     if (!props.results) return;
-    const data = props.results.map(result => result.order);
-    data.unshift(props.headers);
-
-    const workbook = createWorkbook(data);
-    downloadWorkbook(workbook);
+    props.download();
   };
 
   return (
@@ -80,4 +80,8 @@ const mapStateToProps = (state: State): ResultState => ({
   results: state.results
 });
 
-export default connect(mapStateToProps)(Result);
+const mapDispatchToProps = (dispatch: Function): ResultDispatch => ({
+  download: () => dispatch(download())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Result);

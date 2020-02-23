@@ -1,11 +1,11 @@
-import XLSX from 'xlsx';
+import WorkBookAdaptor from './WorkbookAdaptor';
 import RankedOrder from './RankedOrder';
 
 interface State extends StateWorkbook, StateSheet, StateCell, StateRate, StateUI {}
 
 export interface StateWorkbook {
-  dbWorkbook?: XLSX.WorkBook;
-  orderWorkbook?: XLSX.WorkBook;
+  dbWorkbook?: WorkBookAdaptor;
+  orderWorkbook?: WorkBookAdaptor;
 }
 
 export interface StateSheet {

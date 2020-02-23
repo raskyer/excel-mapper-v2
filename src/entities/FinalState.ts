@@ -1,8 +1,8 @@
-import XLSX from 'xlsx';
+import WorkBookAdaptor from './WorkbookAdaptor';
 
 interface FinalState {
-  dbWorkbook: XLSX.WorkBook;
-  orderWorkbook: XLSX.WorkBook;
+  dbWorkbook: WorkBookAdaptor;
+  orderWorkbook: WorkBookAdaptor;
 
   customerSheetName: string;
   providerSheetName: string;

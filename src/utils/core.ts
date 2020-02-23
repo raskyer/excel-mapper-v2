@@ -84,11 +84,11 @@ export function fromState(state: State): FinalState {
     throw new Error('undefined rate cell');
   }
 
-  if (dbWorkbook.Sheets[customerSheetName] === undefined || dbWorkbook.Sheets[providerSheetName] === undefined) {
+  if (dbWorkbook.getSheet(customerSheetName) === undefined || dbWorkbook.getSheet(providerSheetName) === undefined) {
     throw new Error('sheet name does not exist in workbook');
   }
 
-  if (orderWorkbook.Sheets[orderSheetName] === undefined) {
+  if (orderWorkbook.getSheet(orderSheetName) === undefined) {
     throw new Error('sheet name does not exist in workbook');
   }
 

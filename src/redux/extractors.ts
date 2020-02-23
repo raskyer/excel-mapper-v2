@@ -1,18 +1,16 @@
-import { WorkBook } from 'xlsx/types';
-
+import WorkBookAdaptor from '../entities/WorkbookAdaptor';
 import Status from '../entities/Status';
 import CellMap from '../entities/CellMap';
 
-import { parseSheet } from '../utils/excel';
 import { createMap, difference, diffPercentage } from '../utils/core';
 
-export const extractSheetNames = (workbook?: WorkBook): string[] => {
-  return workbook ? workbook.SheetNames : [];
+export const extractSheetNames = (workbook?: WorkBookAdaptor): string[] => {
+  return workbook ? workbook.getSheetNames() : [];
 };
 
-export const extractSheet = (sheetName?: string, workbook?: WorkBook): any[][] => {
-  if (workbook === undefined || sheetName === undefined || workbook.Sheets[sheetName] === undefined) return [];
-  return parseSheet(workbook.Sheets[sheetName]);
+export const extractSheet = (sheetName?: string, workbook?: WorkBookAdaptor): any[][] => {
+  if (workbook === undefined || sheetName === undefined) return [];
+  return workbook.getSheet(sheetName);
 };
 
 export const extractCells = (sheet: any[][]): string[] => {
@@ -25,7 +23,7 @@ export const extractMap = (sheet: any[][], idCell?: number): CellMap => {
   return createMap(sheet, idCell);
 };
 
-export const extractFileStatus = (dbWorkbook?: WorkBook, orderWorkbook?: WorkBook): Status => {
+export const extractFileStatus = (dbWorkbook?: WorkBookAdaptor, orderWorkbook?: WorkBookAdaptor): Status => {
   if (dbWorkbook !== undefined && orderWorkbook !== undefined) {
     return 'success';
   }

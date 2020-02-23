@@ -1,6 +1,6 @@
-import { WorkBook } from 'xlsx';
-
+import WorkBookAdaptor from '../entities/WorkbookAdaptor';
 import State, { StateCell, StateRate } from '../entities/State';
+
 import Locator, { LocatorKey } from '../utils/Locator';
 
 import {
@@ -36,7 +36,7 @@ class StateBuilder {
     this.hasToCompute = false;
   }
 
-  setWorkbook(workbook?: WorkBook): StateBuilder {
+  setWorkbook(workbook?: WorkBookAdaptor): StateBuilder {
     this.state.dbWorkbook = workbook;
 
     if (workbook === undefined) {
@@ -54,7 +54,7 @@ class StateBuilder {
     return this;
   }
 
-  setOrderWorkbook(workbook?: WorkBook): StateBuilder {
+  setOrderWorkbook(workbook?: WorkBookAdaptor): StateBuilder {
     this.state.orderWorkbook = workbook;
 
     if (workbook === undefined) {

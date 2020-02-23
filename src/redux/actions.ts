@@ -31,12 +31,12 @@ import {
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
-import { parseFile } from '../utils/excel';
+import { DefaultLibraryAdaptor } from '../services/LibraryAdaptorFactory'; 
 import Compute from '../utils/Compute';
 import { fromState } from '../utils/core';
 
 export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher): void => {
-  parseFile(dbFile).then(workbook => {
+  DefaultLibraryAdaptor.parseFile(dbFile).then(workbook => {
     dispatch({
       type: DB_FILE_CHANGE,
       payload: workbook
@@ -45,7 +45,7 @@ export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher): voi
 };
 
 export const orderFileChangedAction = (orderFile: File) => (dispatch: Dispatcher): void => {
-  parseFile(orderFile).then(workbook => {
+  DefaultLibraryAdaptor.parseFile(orderFile).then(workbook => {
     dispatch({
       type: ORDER_FILE_CHANGE,
       payload: workbook
@@ -171,10 +171,14 @@ export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void 
   const orderSheet = getOrderSheet(state);
 
   const compute = new Compute(customerMap, providerMap, fromState(state));
-  const rankedOrder = compute.compute(orderSheet);
+  const rankedOrders = compute.compute(orderSheet);
 
   dispatch({
     type: RESULTS_COMPUTED,
-    payload: rankedOrder
+    payload: rankedOrders
   });
+};
+
+export const download = () => (dispatch: Dispatcher, getState: StateGetter): void => {
+
 };
