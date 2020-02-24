@@ -4,10 +4,21 @@ import { connect } from 'react-redux';
 import Step from './common/Step';
 import IDLink from './common/IDLink';
 
-import State from '../../../entities/State';
-import Status from '../../../entities/Status';
-import { getProviderCells, getOrderCells, getProviderMap, getOrderProviderMap, getProviderIDStatus } from '../../../redux/selectors';
-import { providerIDCellChangedAction, orderProviderIDCellChangedAction } from '../../../redux/actions';
+import State from 'src/entities/State';
+import Status from 'src/entities/Status';
+import CellMap from 'src/entities/CellMap';
+
+import {
+  getProviderCells,
+  getOrderCells,
+  getProviderMap,
+  getOrderProviderMap,
+  getProviderIDStatus
+} from 'src/redux/selectors';
+import {
+  providerIDCellChangedAction,
+  orderProviderIDCellChangedAction
+} from 'src/redux/actions';
 
 interface IDProviderProps extends IDProviderState, IDProviderDispatch {}
 
@@ -17,8 +28,8 @@ interface IDProviderState {
   orderCells: string[];
   providerIDCell?: number;
   orderProviderIDCell?: number;
-  providerMap: Map<string | number, any[]>;
-  orderProviderMap: Map<string | number, any[]>;
+  providerMap: CellMap;
+  orderProviderMap: CellMap;
 }
 
 interface IDProviderDispatch {
@@ -30,7 +41,7 @@ const IDProvider: React.FC<IDProviderProps> = (props: IDProviderProps) => {
   return (
     <Step eventKey="4" title="Cellule d'ID Transporteur" status={props.providerIDStatus}>
       <IDLink
-        header={"Cellule d'ID Transporteur"}
+        header="Cellule d'ID Transporteur"
         cells={props.providerCells}
         orderCells={props.orderCells}
         IDCell={props.providerIDCell}

@@ -1,8 +1,8 @@
-import CellMap from '../entities/CellMap';
-import State from '../entities/State';
-import FinalState from '../entities/FinalState';
+import CellMap from 'src/entities/CellMap';
+import State from 'src/entities/State';
+import FinalState from 'src/entities/FinalState';
 
-import { getCustomerSheet, getProviderSheet, getOrderSheet } from '../redux/selectors';
+import { getCustomerSheet, getProviderSheet, getOrderSheet } from 'src/redux/selectors';
 
 export function createMap(sheet: any[][], idCell: number): CellMap {
   const map = new Map();

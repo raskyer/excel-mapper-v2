@@ -7,11 +7,11 @@ import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 
-import State from '../../entities/State';
-import RankedOrder from '../../entities/RankedOrder';
+import State from 'src/entities/State';
+import RankedOrder from 'src/entities/RankedOrder';
 
-import { download } from '../../redux/actions';
-import { formatDate } from '../../utils/core';
+import { download } from 'src/redux/actions';
+import { formatDate } from 'src/utils/core';
 
 interface ResultProps extends ResultState, ResultDispatch {}
 

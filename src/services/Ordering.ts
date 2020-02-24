@@ -1,8 +1,8 @@
-import CellMap from '../entities/CellMap'
-import FinalState from '../entities/FinalState';
-import RankedOrder from '../entities/RankedOrder';
+import CellMap from 'src/entities/CellMap'
+import FinalState from 'src/entities/FinalState';
+import RankedOrder from 'src/entities/RankedOrder';
 
-import { formatValue } from '../utils/core';
+import { formatValue } from 'src/utils/core';
 
 class Compute {
   private readonly errors: string[] = [];

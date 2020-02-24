@@ -1,5 +1,5 @@
-import State from '../entities/State';
-import Action from '../entities/Action';
+import State from 'src/entities/State';
+import Action from 'src/entities/Action';
 
 import {
   DB_FILE_CHANGE,

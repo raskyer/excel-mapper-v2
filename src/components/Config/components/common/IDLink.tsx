@@ -9,7 +9,9 @@ import Select from './Select';
 import DisplayModal from './DisplayModal';
 import EyeAddon from './EyeAddon';
 
-import { difference, diffPercentage } from '../../../../utils/core';
+import CellMap from 'src/entities/CellMap';
+
+import { difference, diffPercentage } from 'src/utils/core';
 
 interface IDLink {
   header: string;
@@ -17,8 +19,8 @@ interface IDLink {
   orderCells: string[];
   IDCell?: number;
   orderIDCell?: number;
-  map: Map<string | number, any[]>;
-  orderMap: Map<string | number, any[]>;
+  map: CellMap;
+  orderMap: CellMap;
 
   onIDCellChange: (s?: string) => void;
   onOrderIDCellChange: (s?: string) => void;

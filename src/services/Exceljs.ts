@@ -1,9 +1,9 @@
 import Excel from 'exceljs';
 import FileSaver from 'file-saver';
 
-import LibraryAdaptor from "../entities/LibraryAdaptor";
-import WorkBookAdaptor from "../entities/WorkbookAdaptor";
-import RankedOrder from '../entities/RankedOrder';
+import LibraryAdaptor from 'src/entities/LibraryAdaptor';
+import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
+import RankedOrder from 'src/entities/RankedOrder';
 
 const TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 

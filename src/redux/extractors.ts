@@ -1,8 +1,8 @@
-import WorkBookAdaptor from '../entities/WorkbookAdaptor';
-import Status from '../entities/Status';
-import CellMap from '../entities/CellMap';
+import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
+import Status from 'src/entities/Status';
+import CellMap from 'src/entities/CellMap';
 
-import { createMap, difference, diffPercentage } from '../utils/core';
+import { createMap, difference, diffPercentage } from 'src/utils/core';
 
 export const extractSheetNames = () => (workbook?: WorkBookAdaptor): string[] => {
   return workbook ? workbook.getSheetNames() : [];

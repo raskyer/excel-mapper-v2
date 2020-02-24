@@ -1,7 +1,7 @@
-import Dispatcher from '../entities/Dispatcher';
-import StateGetter from '../entities/StateGetter';
-import Action from '../entities/Action';
-import RankedOrder from '../entities/RankedOrder';
+import Dispatcher from 'src/entities/Dispatcher';
+import StateGetter from 'src/entities/StateGetter';
+import Action from 'src/entities/Action';
+import RankedOrder from 'src/entities/RankedOrder';
 
 import {
   DB_FILE_CHANGE,
@@ -32,9 +32,9 @@ import {
 } from './constants';
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
-import { DefaultLibraryAdaptor } from '../services/LibraryAdaptorFactory'; 
-import Compute from '../services/Ordering';
-import { fromState } from '../utils/core';
+import { DefaultLibraryAdaptor } from 'src/services/LibraryAdaptorFactory'; 
+import Compute from 'src/services/Ordering';
+import { fromState } from 'src/utils/core';
 
 export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher): void => {
   DefaultLibraryAdaptor.parseFile(dbFile).then(workbook => {

@@ -5,10 +5,15 @@ import Form from 'react-bootstrap/Form';
 
 import Step from './common/Step';
 
-import State from '../../../entities/State';
-import Status from '../../../entities/Status';
-import { customerMarkRateChangedAction, providerMarkRateChangedAction, dateMarkRateChangedAction } from '../../../redux/actions';
-import { getRateStatus } from '../../../redux/selectors';
+import State from 'src/entities/State';
+import Status from 'src/entities/Status';
+
+import { getRateStatus } from 'src/redux/selectors';
+import {
+  customerMarkRateChangedAction,
+  providerMarkRateChangedAction,
+  dateMarkRateChangedAction
+} from 'src/redux/actions';
 
 interface RatesProps extends RatesState, RatesDispatch {}
 

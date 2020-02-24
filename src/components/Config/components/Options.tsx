@@ -9,8 +9,8 @@ import Select from './common/Select';
 import DisplayModal from './common/DisplayModal';
 import EyeAddon from './common/EyeAddon';
 
-import State from '../../../entities/State';
-import Status from '../../../entities/Status';
+import State from 'src/entities/State';
+import Status from 'src/entities/Status';
 
 import {
   getOptionsStatus,
@@ -20,17 +20,16 @@ import {
   getCustomerSheet,
   getProviderSheet,
   getOrderSheet
-} from '../../../redux/selectors';
-
+} from 'src/redux/selectors';
 import {
   customerMarkCellChangedAction,
   providerMarkCellChangedAction,
   orderTypeCellChangedAction,
   orderLoadingDateCellChangedAction,
   orderShippingDateCellChangedAction
-} from '../../../redux/actions';
+} from 'src/redux/actions';
 
-import { formatValue } from '../../../utils/core';
+import { formatValue } from 'src/utils/core';
 
 interface OptionsProps extends OptionsState, OptionsDispatch {}
 

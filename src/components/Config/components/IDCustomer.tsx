@@ -4,10 +4,21 @@ import { connect } from 'react-redux';
 import Step from './common/Step';
 import IDLink from './common/IDLink';
 
-import State from '../../../entities/State';
-import Status from '../../../entities/Status';
-import { getCustomerCells, getOrderCells, getCustomerMap, getOrderCustomerMap, getCustomerIDStatus } from '../../../redux/selectors';
-import { customerIDCellChangedAction, orderCustomerIDCellChangedAction } from '../../../redux/actions';
+import State from 'src/entities/State';
+import Status from 'src/entities/Status';
+import CellMap from 'src/entities/CellMap';
+
+import {
+  getCustomerCells,
+  getOrderCells,
+  getCustomerMap,
+  getOrderCustomerMap,
+  getCustomerIDStatus
+} from 'src/redux/selectors';
+import {
+  customerIDCellChangedAction,
+  orderCustomerIDCellChangedAction
+} from 'src/redux/actions';
 
 interface IDCustomerProps extends IDCustomerState, IDCustomerDispatch {}
 
@@ -17,8 +28,8 @@ interface IDCustomerState {
   orderCells: string[];
   customerIDCell?: number;
   orderCustomerIDCell?: number;
-  customerMap: Map<string | number, any[]>;
-  orderCustomerMap: Map<string | number, any[]>;
+  customerMap: CellMap;
+  orderCustomerMap: CellMap;
 }
 
 interface IDCustomerDispatch {
@@ -30,7 +41,7 @@ const IDCustomer: React.FC<IDCustomerProps> = (props: IDCustomerProps) => {
   return (
     <Step eventKey="3" title="Cellule d'ID Client" status={props.customerIDStatus}>
       <IDLink
-        header={"Cellule d'ID Client"}
+        header="Cellule d'ID Client"
         cells={props.customerCells}
         orderCells={props.orderCells}
         IDCell={props.customerIDCell}

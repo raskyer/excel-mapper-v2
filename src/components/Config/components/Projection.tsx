@@ -17,9 +17,10 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 
 import Step from './common/Step';
 
-import State from '../../../entities/State';
-import Status from '../../../entities/Status';
-import { getProjectionStatus, getOrderCells } from '../../../redux/selectors';
+import State from 'src/entities/State';
+import Status from 'src/entities/Status';
+
+import { getProjectionStatus, getOrderCells } from 'src/redux/selectors';
 import {
   projectionAddedAction,
   projectionRemovedAction,
@@ -27,7 +28,7 @@ import {
   projectionDownedAction,
   projectionAddedAllAction,
   projectionRemovedAllAction
-} from '../../../redux/actions';
+} from 'src/redux/actions';
 
 interface ProjectionProps extends ProjectionState, ProjectionDispatch {}
 

@@ -8,10 +8,11 @@ import Form from 'react-bootstrap/Form';
 import Step from './common/Step';
 import Dropzone from './common/Dropzone';
 
-import State from '../../../entities/State';
-import Status from '../../../entities/Status';
-import { dbFileChangedAction, orderFileChangedAction } from '../../../redux/actions';
-import { getFileStatus } from '../../../redux/selectors';
+import State from 'src/entities/State';
+import Status from 'src/entities/Status';
+
+import { getFileStatus } from 'src/redux/selectors';
+import { dbFileChangedAction, orderFileChangedAction } from 'src/redux/actions';
 
 interface UploadProps extends UploadState, UploadDispatch {}
 

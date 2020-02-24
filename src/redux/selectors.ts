@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import State from '../entities/State';
+import State from 'src/entities/State';
 
 import {
   extractSheetNames,

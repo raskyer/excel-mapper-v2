@@ -13,7 +13,7 @@ import Options from './components/Options';
 import Rates from './components/Rates';
 import Projection from './components/Projection';
 
-import { submit } from '../../redux/actions';
+import { submit } from 'src/redux/actions';
 
 interface ConfigProps extends ConfigState, ConfigDispatch {}
 

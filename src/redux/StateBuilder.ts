@@ -1,7 +1,5 @@
-import WorkBookAdaptor from '../entities/WorkbookAdaptor';
-import State, { StateCell, StateRate } from '../entities/State';
-
-import Locator, { LocatorKey } from '../services/Locator';
+import State, { StateCell, StateRate } from 'src/entities/State';
+import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
 
 import {
   getDbSheetNames,
@@ -16,6 +14,8 @@ import {
   getOptionsStatus,
   getProjectionStatus
 } from './selectors';
+
+import Locator, { LocatorKey } from 'src/services/Locator';
 
 export const INITIAL_STATE: State = {
   customerMarkRate: Locator.findRate(LocatorKey.CUSTOMER_RATE),

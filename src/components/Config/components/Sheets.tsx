@@ -5,12 +5,17 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import Step from './common/Step';
-
 import Select from './common/Select';
-import State from '../../../entities/State';
-import Status from '../../../entities/Status';
-import { getDbSheetNames, getOrderSheetNames, getSheetStatus } from '../../../redux/selectors';
-import { customerSheetChangedAction, providerSheetChangedAction, orderSheetChangedAction } from '../../../redux/actions';
+
+import State from 'src/entities/State';
+import Status from 'src/entities/Status';
+
+import { getDbSheetNames, getOrderSheetNames, getSheetStatus } from 'src/redux/selectors';
+import {
+  customerSheetChangedAction,
+  providerSheetChangedAction,
+  orderSheetChangedAction
+} from 'src/redux/actions';
 
 interface SheetsProps extends SheetsState, SheetsDispatch {}
 

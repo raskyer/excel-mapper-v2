@@ -1,8 +1,8 @@
 import XLSX from 'xlsx';
 
-import LibraryAdaptor from "../entities/LibraryAdaptor";
-import WorkBookAdaptor from "../entities/WorkbookAdaptor";
-import RankedOrder from '../entities/RankedOrder';
+import LibraryAdaptor from 'src/entities/LibraryAdaptor';
+import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
+import RankedOrder from 'src/entities/RankedOrder';
 
 class SheetjsWorkBookAdaptor implements WorkBookAdaptor {
   constructor(private readonly workbook: XLSX.WorkBook) {}
