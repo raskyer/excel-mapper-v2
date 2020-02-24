@@ -96,8 +96,12 @@ export const extractIDStatus = () => (
   const { missing } = difference(orderMap, itemMap);
   const percentage = diffPercentage(orderMap.size, missing.length);
 
-  if (percentage < 50) {
+  if (percentage === 0) {
     return 'danger';
+  }
+
+  if (percentage < 50) {
+    return 'warning';
   }
 
   return 'success';

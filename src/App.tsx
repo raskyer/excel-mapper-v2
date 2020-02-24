@@ -17,6 +17,9 @@ const App: React.FC = () => {
 
       <Container style={{ marginTop: '70px' }}>
         <Config />
+      </Container>
+
+      <Container fluid>
         <Result />
       </Container>
     </>

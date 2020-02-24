@@ -115,7 +115,7 @@ class Compute {
       case 'ponctuel':
         return 2 * customerRate;
       default:
-        return 1 * customerRate;
+        return 0 * customerRate;
     }
   }
 

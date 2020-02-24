@@ -55,10 +55,10 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
         </Button>
       </div>
 
-      <Table striped bordered hover style={{ overflowY: 'hidden' }}>
+      <Table striped bordered hover style={{ overflowX: 'auto', display: 'block', whiteSpace: 'nowrap' }}>
         <thead>
           <tr>
-            {props.headers.slice(0, Math.min(5, props.headers.length)).map((header, index) => (
+            {props.headers.map((header, index) => (
               <th key={index}>{header}</th>
             ))}
             {props.headers.length > 5 && <th>...</th>}
@@ -68,7 +68,7 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
           {props.results.map((result, index) => (
             <OverlayTrigger
               key={index}
-              placement="top"
+              placement="bottom-start"
               overlay={
                 <Popover id="popover-basic" style={{ maxWidth: '100%' }}>
                   <Popover.Title as="h3" className="bg-info text-white">Info</Popover.Title>
@@ -80,10 +80,9 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
                 </Popover>
               }>
               <tr>
-                {result.projection && result.projection.slice(0, Math.min(5, result.projection.length)).map((o, oIndex) => (
+                {result.projection && result.projection.map((o, oIndex) => (
                   <td key={oIndex}>{o}</td>
                 ))}
-                {result.projection && result.projection.length > 5 && <td>...</td>}
               </tr>
             </OverlayTrigger>
           ))}
