@@ -17,6 +17,8 @@ import {
   extractProjectionStatus
 } from './extractors';
 
+import Compute from 'src/services/Ordering';
+
 const getDbWorkbook = (state: State) => state.dbWorkbook;
 const getOrderWorkbook = (state: State) => state.orderWorkbook;
 
@@ -40,6 +42,8 @@ const getProviderMarkRate = (state: State) => state.providerMarkRate;
 const getDateMarkRate = (state: State) => state.dateMarkRate;
 
 const getProjection = (state: State) => state.projection;
+
+const getState = (state: State) => state;
 
 export const getDbSheetNames = createSelector(getDbWorkbook, extractSheetNames());
 export const getOrderSheetNames = createSelector(getOrderWorkbook, extractSheetNames());
@@ -82,3 +86,16 @@ export const getOptionsStatus = createSelector(
 export const getRateStatus = createSelector([getCustomerMarkRate, getProviderMarkRate, getDateMarkRate], extractRateStatus());
 
 export const getProjectionStatus = createSelector([getProjection, getOrderCells], extractProjectionStatus());
+
+export const getResults = createSelector(getState, state => {
+  if (state === undefined) {
+    return [];
+  }
+
+  const customerMap = getCustomerMap(state);
+  const providerMap = getProviderMap(state);
+  const orderSheet = getOrderSheet(state);
+
+  const compute = new Compute(customerMap, providerMap, state);
+  return compute.compute(orderSheet);
+});

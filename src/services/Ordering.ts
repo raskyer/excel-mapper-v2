@@ -1,5 +1,5 @@
 import CellMap from 'src/entities/CellMap'
-import FinalState from 'src/entities/FinalState';
+import State from 'src/entities/State';
 import RankedOrder from 'src/entities/RankedOrder';
 
 import { formatValue } from 'src/utils/core';
@@ -10,10 +10,15 @@ class Compute {
   constructor(
     private readonly customerMap: CellMap,
     private readonly providerMap: CellMap,
-    private readonly $: FinalState
+    private readonly $: State
   ) {}
 
   compute(orderSheet: any[][]): RankedOrder[] {
+    console.log(orderSheet);
+    if (orderSheet === undefined || orderSheet.length === 0) {
+      return [];
+    }
+
     const orders = this.computeRanking(orderSheet);
     const sorted = this.sortOrders(orders);
 
@@ -26,15 +31,16 @@ class Compute {
 
   private computeRanking(orderSheet: any[][]): RankedOrder[] {
     const orders: RankedOrder[] = [];
+    const { orderCustomerIDCell, orderProviderIDCell } = this.$;
 
     for (let i = 1; i < orderSheet.length; i++) {
       const order = orderSheet[i];
 
-      const customerID = order[this.$.orderCustomerIDCell];
+      const customerID = orderCustomerIDCell !== undefined ? order[orderCustomerIDCell] : undefined;
       const customerMark = this.getCustomerMark(customerID);
       const customerRanking = this.computeCustomerRank(customerMark, this.$.customerMarkRate);
 
-      const providerID = order[this.$.orderProviderIDCell];
+      const providerID = orderProviderIDCell ? order[orderProviderIDCell] : undefined;
       const providerMark = this.getProviderMark(providerID);
       const providerRanking = this.computeProviderRank(providerMark, this.$.providerMarkRate);
 
@@ -86,20 +92,26 @@ class Compute {
   }
 
   private sortOrders(orders: RankedOrder[]): RankedOrder[] {
+    const { orderTypeCell } = this.$;
+
     return orders.sort((a, b) => {
-      if (a.order[this.$.orderTypeCell] !== b.order[this.$.orderTypeCell]) {
-        return a.order[this.$.orderTypeCell].localeCompare(b.order[this.$.orderTypeCell]);
+      if (orderTypeCell !== undefined && a.order[orderTypeCell] !== b.order[orderTypeCell]) {
+        return a.order[orderTypeCell].localeCompare(b.order[orderTypeCell]);
       }
       return b.ranking - a.ranking
     });
   }
 
   private getCustomerMark(customerKey: string | number): string | undefined {
-    if (this.isValid(customerKey, this.customerMap, this.$.customerMarkCell)) {
+    const { customerMarkCell } = this.$;
+    if (customerMarkCell === undefined) {
+      return undefined;
+    }
+    if (this.isValid(customerKey, this.customerMap, customerMarkCell)) {
       return undefined;
     }
     const customer = this.getInMap(customerKey, this.customerMap);
-    return customer ? customer[this.$.customerMarkCell] : undefined;
+    return customer ? customer[customerMarkCell] : undefined;
   }
 
   private computeCustomerRank(customerMark: string | undefined, customerRate: number): number {
@@ -120,11 +132,15 @@ class Compute {
   }
 
   private getProviderMark(providerKey: string | number): number | undefined {
-    if (!this.isValid(providerKey, this.providerMap, this.$.providerMarkCell)) {
+    const { providerMarkCell } = this.$;
+    if (providerMarkCell === undefined) {
+      return undefined;
+    }
+    if (!this.isValid(providerKey, this.providerMap, providerMarkCell)) {
       return undefined;
     }
     const provider = this.getInMap(providerKey, this.providerMap);
-    return provider ? provider[this.$.providerMarkCell] : undefined;
+    return provider ? provider[providerMarkCell] : undefined;
   }
   
   private computeProviderRank(providerMark: number | undefined, providerRate: number): number {
@@ -133,8 +149,12 @@ class Compute {
   }
   
   private getDate(o: any[]): Date | undefined {
-    const type = o[this.$.orderTypeCell];
-  
+    const { orderTypeCell, orderLoadingDateCell, orderShippingDateCell } = this.$;
+    if (orderTypeCell === undefined) {
+      return undefined;
+    }
+
+    const type = o[orderTypeCell]; 
     if (type === undefined || type === null || type === '') {
       this.errors.push('CHECK : type is empty ' + this.$.orderTypeCell);
       return undefined;
@@ -151,16 +171,26 @@ class Compute {
       this.errors.push('CHECK : type is not one of "chargement" or "livraison" ' + trimType);
       return undefined;
     }
-  
-    const date = trimType === 'chargement' ?
-      o[this.$.orderLoadingDateCell] : o[this.$.orderShippingDateCell];
-  
-    if (date === undefined || typeof date !== 'object' || !(date instanceof Date)) {
-      this.errors.push('CHECK : date undefined or invalid ' + date);
-      return undefined;
+
+    if (trimType === 'chargement' && orderLoadingDateCell !== undefined) {
+      const date = o[orderLoadingDateCell];
+      if (date === undefined || typeof date !== 'object' || !(date instanceof Date)) {
+        this.errors.push('CHECK : date undefined or invalid ' + date);
+        return undefined;
+      }
+      return date;
     }
 
-    return date;
+    if (trimType === 'livraison' && orderShippingDateCell !== undefined) {
+      const date = o[orderShippingDateCell];
+      if (date === undefined || typeof date !== 'object' || !(date instanceof Date)) {
+        this.errors.push('CHECK : date undefined or invalid ' + date);
+        return undefined;
+      }
+      return date;
+    }
+
+    return undefined;
   }
 
   private computeDateRank(date: Date | undefined, dateRate: number) {

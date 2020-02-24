@@ -171,7 +171,7 @@ export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void 
   const providerMap = getProviderMap(state);
   const orderSheet = getOrderSheet(state);
 
-  const compute = new Compute(customerMap, providerMap, fromState(state));
+  const compute = new Compute(customerMap, providerMap, state);
   const rankedOrders = compute.compute(orderSheet);
 
   dispatch({

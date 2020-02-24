@@ -10,6 +10,7 @@ import Popover from 'react-bootstrap/Popover';
 import State from 'src/entities/State';
 import RankedOrder from 'src/entities/RankedOrder';
 
+import { getResults } from 'src/redux/selectors';
 import { download } from 'src/redux/actions';
 import { formatDate } from 'src/utils/core';
 
@@ -31,11 +32,11 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
   useEffect(() => {
     if (props.results === undefined) return;
 
-    scroller.scrollTo('tab', {
+    /*scroller.scrollTo('tab', {
       duration: 1000,
       smooth: true,
       offset: -60
-    });
+    });*/
   }, [props.results]);
 
   if (props.results === undefined) {
@@ -61,7 +62,6 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
             {props.headers.map((header, index) => (
               <th key={index}>{header}</th>
             ))}
-            {props.headers.length > 5 && <th>...</th>}
           </tr>
         </thead>
         <tbody>
@@ -94,7 +94,7 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
 
 const mapStateToProps = (state: State): ResultState => ({
   headers: state.projection,
-  results: state.results,
+  results: getResults(state),
   customerMarkRate: state.customerMarkRate,
   providerMarkRate: state.providerMarkRate,
   dateMarkRate: state.dateMarkRate
