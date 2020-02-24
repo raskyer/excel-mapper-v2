@@ -2,6 +2,8 @@ import CellMap from '../entities/CellMap'
 import FinalState from '../entities/FinalState';
 import RankedOrder from '../entities/RankedOrder';
 
+import { formatValue } from '../utils/core';
+
 class Compute {
   private readonly errors: string[] = [];
 
@@ -36,17 +38,25 @@ class Compute {
       const providerMark = this.getProviderMark(providerID);
       const providerRanking = this.computeProviderRank(providerMark, this.$.providerMarkRate);
 
-      const dateRanking = this.getDateRanking(order);
+      const date = this.getDate(order);
+      const dateRanking = this.computeDateRank(date, this.$.dateMarkRate);
 
       orders.push({
         order,
-        customerID,
-        customerMark,
-        customerRanking,
-        providerID,
-        providerMark,
-        providerRanking,
-        dateRanking,
+        customer: {
+          id: customerID,
+          mark: customerMark,
+          ranking: customerRanking
+        },
+        provider: {
+          id: providerID,
+          mark: providerMark,
+          ranking: providerRanking
+        },
+        date: {
+          date,
+          ranking: dateRanking
+        },
         ranking: customerRanking + providerRanking + dateRanking
       });
     }
@@ -65,21 +75,12 @@ class Compute {
           // this projection is a new cell
           return '';
         }
-
-        const value = order[index];
-        if (value === undefined || value === null) {
-          return '';
-        }
-        if (index === this.$.orderLoadingDateCell || index === this.$.orderShippingDateCell) {
-          const date = value as Date;
-          return date.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit' });
-        }
-        return value;
+        return formatValue(order[index]);
       });
 
       return {
         ...rankedOrder,
-        order: projectedOrder
+        projection: projectedOrder
       };
     });
   }
@@ -131,41 +132,40 @@ class Compute {
     return mark * providerRate;
   }
   
-  private getDateRanking(o: any[]): number {
+  private getDate(o: any[]): Date | undefined {
     const type = o[this.$.orderTypeCell];
   
     if (type === undefined || type === null || type === '') {
       this.errors.push('CHECK : type is empty ' + this.$.orderTypeCell);
-      return 0;
+      return undefined;
     }
   
     if (typeof type !== 'string') {
       this.errors.push('CHECK : type is not a string ' + typeof type);
-      return 0;
+      return undefined;
     }
   
     const trimType = type.trim().toLowerCase();
   
     if (trimType !== 'chargement' && trimType !== 'livraison') {
       this.errors.push('CHECK : type is not one of "chargement" or "livraison" ' + trimType);
-      return 0;
+      return undefined;
     }
   
     const date = trimType === 'chargement' ?
       o[this.$.orderLoadingDateCell] : o[this.$.orderShippingDateCell];
   
-    if (date === undefined || typeof date !== 'object') {
+    if (date === undefined || typeof date !== 'object' || !(date instanceof Date)) {
       this.errors.push('CHECK : date undefined or invalid ' + date);
-      return 0;
+      return undefined;
     }
-  
-    return this.computeDateRank(date.getHours(), this.$.dateMarkRate);
+
+    return date;
   }
 
-  private computeDateRank(dateHours: number, dateRate: number) {
-    const rate = 24 - dateHours;
+  private computeDateRank(date: Date | undefined, dateRate: number) {
+    const rate = 24 - (date ? date.getUTCHours() : 24);
     const mark = (rate / 24) * 5
-  
     return mark * dateRate;
   }
 

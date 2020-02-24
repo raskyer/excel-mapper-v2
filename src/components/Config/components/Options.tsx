@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Step from './common/Step';
 import Select from './common/Select';
 import DisplayModal from './common/DisplayModal';
+import EyeAddon from './common/EyeAddon';
 
 import State from '../../../entities/State';
 import Status from '../../../entities/Status';
@@ -28,7 +29,8 @@ import {
   orderLoadingDateCellChangedAction,
   orderShippingDateCellChangedAction
 } from '../../../redux/actions';
-import EyeAddon from './common/EyeAddon';
+
+import { formatValue } from '../../../utils/core';
 
 interface OptionsProps extends OptionsState, OptionsDispatch {}
 
@@ -62,8 +64,10 @@ const Options: React.FC<OptionsProps> = (props: OptionsProps) => {
   const onClickEye = (index: number | undefined, sheet: any[]) => {
     if (index === undefined) return;
     const data = sheet
+      .slice(1, sheet.length)
       .filter(values => values[index])
-      .map(values => values[index].toString());
+      .map(values => formatValue(values[index]));
+
     setDisplay(data);
   };
 

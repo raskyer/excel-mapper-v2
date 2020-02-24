@@ -32,7 +32,7 @@ import {
 import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
 import { DefaultLibraryAdaptor } from '../services/LibraryAdaptorFactory'; 
-import Compute from '../utils/Compute';
+import Compute from '../services/Ordering';
 import { fromState } from '../utils/core';
 
 export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher): void => {

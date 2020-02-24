@@ -9,13 +9,13 @@ import Result from './components/Result/Result';
 const App: React.FC = () => {
   return (
     <>
-      <Navbar bg="dark" variant="dark">
+      <Navbar bg="dark" variant="dark" fixed="top">
         <Navbar.Brand href="#home">
           Excel Mapper
         </Navbar.Brand>
       </Navbar>
 
-      <Container className="mt-3">
+      <Container style={{ marginTop: '70px' }}>
         <Config />
         <Result />
       </Container>

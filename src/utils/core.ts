@@ -38,6 +38,29 @@ export function diffPercentage(size: number, missingSize: number): number {
   return percentage;
 }
 
+export function formatValue(value: any): any {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  if (value instanceof Date) {
+    return formatDate(value);
+  }
+  if (typeof value === 'object') {
+    return value;
+  }
+  return value;
+}
+
+export function formatDate(date?: Date): string {
+  if (date === undefined) {
+    return '';
+  }
+  return date.toLocaleDateString(
+    'fr-FR',
+    { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', timeZone: 'UTC' }
+  );
+}
+
 export function fromState(state: State): FinalState {
   const {
     dbWorkbook,

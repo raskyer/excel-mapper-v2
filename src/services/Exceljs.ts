@@ -19,10 +19,8 @@ class ExceljsWorkBookAdaptor implements WorkBookAdaptor {
     if (sheet === undefined) {
       throw new Error(`Sheet with name ${sheetName} does not exist`);
     }
-
     const values: any[] = [];
     sheet.eachRow(row => values.push(row.values));
-
     return values;
   }
 

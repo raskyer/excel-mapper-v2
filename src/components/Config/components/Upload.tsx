@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
 import Step from './common/Step';
+import Dropzone from './common/Dropzone';
+
 import State from '../../../entities/State';
 import Status from '../../../entities/Status';
 import { dbFileChangedAction, orderFileChangedAction } from '../../../redux/actions';
@@ -23,18 +25,14 @@ interface UploadDispatch {
 }
 
 const Upload: React.FC<UploadProps> = (props: UploadProps) => {
-  const onDbChange = (e: React.FormEvent<HTMLInputElement>) => {
-    if (!e.currentTarget.files) return;
-    if (e.currentTarget.files.length > 0) {
-      props.onDbChange(e.currentTarget.files[0]);
-    }
+  const onDbChange = (files: File[]) => {
+    if (files.length < 1) return;
+    props.onDbChange(files[0]);
   };
 
-  const onOrderChange = (e: React.FormEvent<HTMLInputElement>) => {
-    if (!e.currentTarget.files) return;
-    if (e.currentTarget.files.length > 0) {
-      props.onOrderChange(e.currentTarget.files[0]);
-    }
+  const onOrderChange = (files: File[]) => {
+    if (files.length < 1) return;
+    props.onOrderChange(files[0]);
   };
 
   return (
@@ -43,13 +41,13 @@ const Upload: React.FC<UploadProps> = (props: UploadProps) => {
         <Col>
           <Form.Group>
             <Form.Label>Fichier Clients / Transporteurs</Form.Label>
-            <Form.Control type="file" onChange={onDbChange} required />
+            <Dropzone onChange={onDbChange} />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group>
             <Form.Label>Fichier Commandes</Form.Label>
-            <Form.Control type="file" onChange={onOrderChange} required />
+            <Dropzone onChange={onOrderChange} />
           </Form.Group>
         </Col>
       </Row>

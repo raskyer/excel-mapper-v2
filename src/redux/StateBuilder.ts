@@ -1,7 +1,7 @@
 import WorkBookAdaptor from '../entities/WorkbookAdaptor';
 import State, { StateCell, StateRate } from '../entities/State';
 
-import Locator, { LocatorKey } from '../utils/Locator';
+import Locator, { LocatorKey } from '../services/Locator';
 
 import {
   getDbSheetNames,
