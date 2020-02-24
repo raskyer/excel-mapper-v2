@@ -8,7 +8,11 @@ import RankedOrder from 'src/entities/RankedOrder';
 const TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 
 class ExceljsWorkBookAdaptor implements WorkBookAdaptor {
-  constructor(private readonly workbook: Excel.Workbook) {}
+  constructor(private readonly workbook: Excel.Workbook) {
+    if (this.workbook === undefined) {
+      throw new Error('Workbook is required');
+    }
+  }
 
   getSheetNames(): string[] {
     return this.workbook.worksheets.map(sheet => sheet.name);
@@ -19,13 +23,14 @@ class ExceljsWorkBookAdaptor implements WorkBookAdaptor {
     if (sheet === undefined) {
       throw new Error(`Sheet with name ${sheetName} does not exist`);
     }
-    const values: any[] = [];
+    const data: any[][] = [];
     sheet.eachRow(row => {
-      if (row.values instanceof Array && row.values.length > 1) {
-        values.push(row.values.slice(1, row.values.length));
+      const values = row.values as Excel.CellValue[];
+      if (values.length > 1) {
+        data.push(values.slice(1, values.length));
       }
     });
-    return values;
+    return data;
   }
 
   download(): void {
@@ -44,7 +49,7 @@ class ExceljsLibraryAdaptor implements LibraryAdaptor {
       reader.onload = (e: any) => {
         const workbook = new Excel.Workbook();
         workbook.xlsx.load(e.target.result).then(() => {
-          resolve(new ExceljsWorkBookAdaptor(workbook)); // TODO : Handle dates
+          resolve(new ExceljsWorkBookAdaptor(workbook));
         });
       };
     
@@ -54,7 +59,7 @@ class ExceljsLibraryAdaptor implements LibraryAdaptor {
 
   createWorkbook(headers: string[], rankedOrders: RankedOrder[]): WorkBookAdaptor {
     const workbook = new Excel.Workbook();
-    const worksheet = workbook.addWorksheet('test');
+    const worksheet = workbook.addWorksheet('Suivi');
 
     worksheet.columns = headers.map(header => ({
       header,
@@ -65,8 +70,8 @@ class ExceljsLibraryAdaptor implements LibraryAdaptor {
     const headerRow = worksheet.getRow(1);
     for (let i = 1; i <= headers.length; i++) {
       const cell = headerRow.getCell(i);
-      const border: any = {
-        style: 'medium',
+      const border: Partial<Excel.Border> = {
+        style: 'thin',
         color: {
           argb: 'FF000000'
         }
