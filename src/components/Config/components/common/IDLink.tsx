@@ -118,10 +118,10 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
 
       <Row className="text-center mt-4">
         <Col>
-          <Button variant="success" onClick={onClickPresent}>
+          <Button variant="success" onClick={onClickPresent} disabled={diff.present.length === 0}>
             {diff.present.length} presents
           </Button>
-          <Button variant="danger" onClick={onClickMissing}>
+          <Button variant="danger" onClick={onClickMissing} disabled={diff.missing.length === 0}>
             {diff.missing.length} absents
           </Button>
         </Col>
