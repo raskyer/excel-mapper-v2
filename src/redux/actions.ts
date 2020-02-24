@@ -1,6 +1,7 @@
 import Dispatcher from '../entities/Dispatcher';
 import StateGetter from '../entities/StateGetter';
 import Action from '../entities/Action';
+import RankedOrder from '../entities/RankedOrder';
 
 import {
   DB_FILE_CHANGE,
@@ -179,6 +180,10 @@ export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void 
   });
 };
 
-export const download = () => (dispatch: Dispatcher, getState: StateGetter): void => {
+export const download = (headers: string[], rankedOrders: RankedOrder[]) => {
+  DefaultLibraryAdaptor.createWorkbook(headers, rankedOrders).download();
 
+  return {
+    type: ''
+  };
 };

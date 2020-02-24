@@ -186,12 +186,14 @@ class StateBuilder {
 
   addProjection(projection: string): StateBuilder {
     this.state.projection = [...this.state.projection, projection];
+    this.state.results = undefined;
     Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }
 
   removeProjection(index: number): StateBuilder {
     this.state.projection = this.state.projection.filter((_, i) => i !== index);
+    this.state.results = undefined;
     Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }
@@ -203,6 +205,7 @@ class StateBuilder {
     copy[index - 1] = copy[index];
     copy[index] = tmp;
     this.state.projection = copy;
+    this.state.results = undefined;
     Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }
@@ -214,18 +217,21 @@ class StateBuilder {
     copy[index + 1] = copy[index];
     copy[index] = tmp;
     this.state.projection = copy;
+    this.state.results = undefined;
     Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }
 
   addAllProjection(): StateBuilder {
     this.state.projection = [...getOrderCells(this.state)];
+    this.state.results = undefined;
     Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }
 
   removeAllProjection(): StateBuilder {
     this.state.projection = [];
+    this.state.results = undefined;
     Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
     return this;
   }

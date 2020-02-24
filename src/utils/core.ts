@@ -20,14 +20,19 @@ export function createMap(sheet: any[][], idCell: number): CellMap {
   return map;
 }
 
-export function difference(orderMap: CellMap, itemMap: CellMap): any[][] {
+export function difference(orderMap: CellMap, itemMap: CellMap): { present: any[][],  missing: any[][] } {
+  const present: any[][] = [];
   const missing: any[][] = [];
+
   for (const [key, value] of orderMap.entries()) {
     if (!itemMap.has(key)) {
       missing.push(value);
+    } else {
+      present.push(value);
     }
   }
-  return missing;
+
+  return { present, missing };
 }
 
 export function diffPercentage(size: number, missingSize: number): number {

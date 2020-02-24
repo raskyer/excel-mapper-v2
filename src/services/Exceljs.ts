@@ -20,7 +20,11 @@ class ExceljsWorkBookAdaptor implements WorkBookAdaptor {
       throw new Error(`Sheet with name ${sheetName} does not exist`);
     }
     const values: any[] = [];
-    sheet.eachRow(row => values.push(row.values));
+    sheet.eachRow(row => {
+      if (row.values instanceof Array && row.values.length > 1) {
+        values.push(row.values.slice(1, row.values.length));
+      }
+    });
     return values;
   }
 
@@ -58,49 +62,37 @@ class ExceljsLibraryAdaptor implements LibraryAdaptor {
       width: 30
     }));
 
-    // TODO : only take appropriate cell
     const headerRow = worksheet.getRow(1);
-    headerRow.font = {
-      color: {
-        argb: 'FFFFFFFF'
-      }
-    };
-    headerRow.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: {
-        argb: 'FFFF0000'
-      }
-    };
-    headerRow.border = {
-      top: {
-        style: 'double',
+    for (let i = 1; i <= headers.length; i++) {
+      const cell = headerRow.getCell(i);
+      const border: any = {
+        style: 'medium',
         color: {
           argb: 'FF000000'
         }
-      },
-      bottom: {
-        style: 'double',
+      };
+      cell.font = {
         color: {
-          argb: 'FF000000'
+          argb: 'FFFFFFFF'
         }
-      },
-      left: {
-        style: 'double',
-        color: {
-          argb: 'FF000000'
+      };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: {
+          argb: 'FFFF0000'
         }
-      },
-      right: {
-        style: 'double',
-        color: {
-          argb: 'FF000000'
-        }
-      }
-    };
+      };
+      cell.border = {
+        top: border,
+        bottom: border,
+        left: border,
+        right: border
+      };
+    }
 
     rankedOrders.forEach(rankedOrder => {
-      worksheet.addRow(rankedOrder.order);
+      worksheet.addRow(rankedOrder.projection);
     });
 
     return new ExceljsWorkBookAdaptor(workbook);

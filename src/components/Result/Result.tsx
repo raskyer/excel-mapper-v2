@@ -24,7 +24,7 @@ interface ResultState {
 }
 
 interface ResultDispatch {
-  download: () => void;
+  download: (headers: string[], rankedOrders: RankedOrder[]) => void;
 }
 
 const Result: React.FC<ResultProps> = (props: ResultProps) => {
@@ -44,14 +44,14 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
 
   const onDownloadExcel = () => {
     if (!props.results) return;
-    props.download();
+    props.download(props.headers, props.results);
   };
 
   return (
     <Element name="tab">
       <div className="text-right mb-2">
         <Button variant="success" onClick={onDownloadExcel}>
-          Télécharger en Excel
+          Télécharger
         </Button>
       </div>
 
@@ -100,7 +100,7 @@ const mapStateToProps = (state: State): ResultState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): ResultDispatch => ({
-  download: () => dispatch(download())
+  download: (headers, rankedOrders) => dispatch(download(headers, rankedOrders))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result);

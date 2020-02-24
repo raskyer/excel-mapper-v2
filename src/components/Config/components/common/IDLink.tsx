@@ -26,31 +26,44 @@ interface IDLink {
 
 const IDLink: React.FC<IDLink> = (props: IDLink) => {
   const [display, setDisplay] = useState<any[]>([]);
-  const [missing, setMissing] = useState<any[][]>([]);
+  const [diff, setDiff] = useState<{ present: any[][], missing: any[][] }>({ present: [], missing: [] });
 
   useEffect(() => {
-    setMissing(difference(props.orderMap, props.map));
+    const diff = difference(props.orderMap, props.map);
+    setDiff(diff);
   }, [props.map, props.orderMap]);
 
   const onClickID = () => {
     const data: any[] = [];
-    props.map.forEach((_, key) => data.push(key));
+    const id = props.IDCell;
+    if (id === undefined) return;
+    props.map.forEach(v => data.push(v[id]));
     setDisplay(data.sort());
   };
 
   const onClickOrder = () => {
     const data: any[] = [];
-    props.orderMap.forEach((_, key) => data.push(key));
+    const id = props.orderIDCell;
+    if (id === undefined) return;
+    props.orderMap.forEach((v) => data.push(v[id]));
     setDisplay(data.sort());
   };
 
+  const onClickPresent = () => {
+    const id = props.orderIDCell;
+    if (id === undefined) return;
+    const display = diff.present.map(m => m[id]).sort();
+    setDisplay(display);
+  }
+
   const onClickMissing = () => {
-    setDisplay(
-      missing.map(m => props.orderIDCell ? m[props.orderIDCell] : 0).sort()
-    );
+    const id = props.orderIDCell;
+    if (id === undefined) return;
+    const display = diff.missing.map(m => m[id]).sort();
+    setDisplay(display);
   };
 
-  const percentage = diffPercentage(props.orderMap.size, missing.length);
+  const percentage = diffPercentage(props.orderMap.size, diff.missing.length);
 
   let fillColor = 'red';
   if (percentage > 80) {
@@ -105,11 +118,11 @@ const IDLink: React.FC<IDLink> = (props: IDLink) => {
 
       <Row className="text-center mt-4">
         <Col>
-          <Button variant="success">
-            {props.orderMap.size - missing.length} presents
+          <Button variant="success" onClick={onClickPresent}>
+            {diff.present.length} presents
           </Button>
           <Button variant="danger" onClick={onClickMissing}>
-            {missing.length} absents
+            {diff.missing.length} absents
           </Button>
         </Col>
       </Row>

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 const baseStyle: any = {
@@ -42,7 +42,7 @@ const Dropzone: React.FC<DropzoneProps> = (props: DropzoneProps) => {
     isDragActive,
     isDragAccept,
     isDragReject
-  } = useDropzone({ accept: '.xlsx' });
+  } = useDropzone({ accept: '.xlsx', onDropAccepted: props.onChange });
 
   const style = useMemo(() => ({
     ...baseStyle,
@@ -56,12 +56,6 @@ const Dropzone: React.FC<DropzoneProps> = (props: DropzoneProps) => {
     acceptedFiles,
     rejectedFiles
   ]);
-
-  const { onChange } = props;
-
-  useEffect(() => {
-    onChange(acceptedFiles);
-  }, [onChange, acceptedFiles]);
 
   return (
     <div {...getRootProps({ style })}>

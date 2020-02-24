@@ -4,26 +4,26 @@ import CellMap from '../entities/CellMap';
 
 import { createMap, difference, diffPercentage } from '../utils/core';
 
-export const extractSheetNames = (workbook?: WorkBookAdaptor): string[] => {
+export const extractSheetNames = () => (workbook?: WorkBookAdaptor): string[] => {
   return workbook ? workbook.getSheetNames() : [];
 };
 
-export const extractSheet = (sheetName?: string, workbook?: WorkBookAdaptor): any[][] => {
+export const extractSheet = () => (sheetName?: string, workbook?: WorkBookAdaptor): any[][] => {
   if (workbook === undefined || sheetName === undefined) return [];
   return workbook.getSheet(sheetName);
 };
 
-export const extractCells = (sheet: any[][]): string[] => {
+export const extractCells = () => (sheet: any[][]): string[] => {
   if (sheet.length === 0) return [];
   return sheet[0];
 };
 
-export const extractMap = (sheet: any[][], idCell?: number): CellMap => {
+export const extractMap = () => (sheet: any[][], idCell?: number): CellMap => {
   if (sheet.length === 0 || idCell === undefined) return new Map();
   return createMap(sheet, idCell);
 };
 
-export const extractFileStatus = (dbWorkbook?: WorkBookAdaptor, orderWorkbook?: WorkBookAdaptor): Status => {
+export const extractFileStatus = () => (dbWorkbook?: WorkBookAdaptor, orderWorkbook?: WorkBookAdaptor): Status => {
   if (dbWorkbook !== undefined && orderWorkbook !== undefined) {
     return 'success';
   }
@@ -33,7 +33,7 @@ export const extractFileStatus = (dbWorkbook?: WorkBookAdaptor, orderWorkbook?: 
   return 'warning';
 };
 
-export const extractSheetStatus = (
+export const extractSheetStatus = () => (
   sheetNames: string[],
   orderSheetNames: string[],
   customerSheetName?: string,
@@ -55,7 +55,7 @@ export const extractSheetStatus = (
   return 'warning';
 };
 
-export const extractCellStatus = (cells: string[], cell?: number): Status => {
+export const extractCellStatus = () => (cells: string[], cell?: number): Status => {
   if (cells.length < 1) {
     return 'dark';
   }
@@ -65,7 +65,7 @@ export const extractCellStatus = (cells: string[], cell?: number): Status => {
   return 'success';
 };
 
-export const extractCellAggregateStatus = (status1: Status, status2: Status): Status => {
+export const extractCellAggregateStatus = () => (status1: Status, status2: Status): Status => {
   if (status1 === 'danger' || status2 === 'danger') {
     return 'danger';
   }
@@ -78,7 +78,7 @@ export const extractCellAggregateStatus = (status1: Status, status2: Status): St
   return 'success';
 };
 
-export const extractIDStatus = (
+export const extractIDStatus = () => (
   itemMap: CellMap,
   orderMap: CellMap,
   cellStatus: Status
@@ -93,7 +93,7 @@ export const extractIDStatus = (
     return 'warning';
   }
 
-  const missing = difference(orderMap, itemMap);
+  const { missing } = difference(orderMap, itemMap);
   const percentage = diffPercentage(orderMap.size, missing.length);
 
   if (percentage < 50) {
@@ -103,7 +103,7 @@ export const extractIDStatus = (
   return 'success';
 };
 
-export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell?: number, orderTypeCell?: number, orderLoadingDateCell?: number, orderShippingDateCell?: number): Status => {
+export const extractOptionsStatus = () => (customerMarkCell?: number, providerMarkCell?: number, orderTypeCell?: number, orderLoadingDateCell?: number, orderShippingDateCell?: number): Status => {
   const sum = [customerMarkCell, providerMarkCell].reduce((p, n) => {
     if (p === undefined) return 1;
     if (n !== undefined) return p + 1;
@@ -128,14 +128,14 @@ export const extractOptionsStatus = (customerMarkCell?: number, providerMarkCell
   return 'warning';
 };
 
-export const extractRateStatus = (customerMarkRate: number, providerMarkRate: number, dateMarkRate: number): Status => {
+export const extractRateStatus = () => (customerMarkRate: number, providerMarkRate: number, dateMarkRate: number): Status => {
   if (customerMarkRate < 0 || providerMarkRate < 0 || dateMarkRate < 0) {
     return 'danger';
   }
   return 'success';
 };
 
-export const extractProjectionStatus = (projection: string[], orderCells: string[]): Status => {
+export const extractProjectionStatus = () => (projection: string[], orderCells: string[]): Status => {
   if (orderCells.length < 1) {
     return 'dark';
   }
