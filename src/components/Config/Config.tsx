@@ -42,7 +42,7 @@ const Config: React.FC<ConfigProps> = (props: ConfigProps) => {
       </Accordion>
 
       <Form.Group className="mt-3">
-        <Button type="submit">Valider</Button>
+        <Button type="submit" variant="success">Valider</Button>
       </Form.Group>
     </Form>
   );

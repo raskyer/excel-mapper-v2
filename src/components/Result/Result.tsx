@@ -61,7 +61,6 @@ const Result: React.FC<ResultProps> = (props: ResultProps) => {
             {props.headers.map((header, index) => (
               <th key={index}>{header}</th>
             ))}
-            {props.headers.length > 5 && <th>...</th>}
           </tr>
         </thead>
         <tbody>
