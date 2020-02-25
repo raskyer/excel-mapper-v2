@@ -1,8 +1,12 @@
 import React from 'react';
+import { renderToString } from 'react-dom/server'
 
 import { HotTable } from '@handsontable/react';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.css';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 
 interface SpreadsheetProps {
   sheet: any[][]; // to be replaced by the projected sheet
@@ -68,7 +72,7 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
               Handsontable.renderers.TextRenderer.apply(this, arguments as any);
               td.style.fontWeight = 'bold';
               if (col === 1) {
-                td.innerHTML = '';
+                td.innerHTML = renderToString(<FontAwesomeIcon icon={faStar} style={{ color: 'yellow' }} />) + td.innerHTML;
               }
             }
           };
