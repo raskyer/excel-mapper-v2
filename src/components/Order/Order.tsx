@@ -20,8 +20,12 @@ interface OrderDispatch {
 }
 
 const Order: React.FC<OrderProps> = (props: OrderProps) => {
-  if (props.orderSheet.length < 1) return <Upload title="Commandes" onFileUpload={props.onOrderChange} />
-  return <Spreadsheet sheet={props.orderSheet} />;
+  if (props.orderSheet.length < 1) {
+    return (
+      <Upload title="Commandes" onFileUpload={props.onOrderChange} />
+    );
+  }
+  return (<Spreadsheet />);
 };
 
 const mapStateToProps = (state: State): OrderState => ({
