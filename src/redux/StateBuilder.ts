@@ -1,5 +1,6 @@
 import State, { StateCell, StateRate } from 'src/entities/State';
 import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
+import Projection from 'src/entities/Projection';
 
 import {
   getDbSheetNames,
@@ -22,7 +23,7 @@ export const INITIAL_STATE: State = {
   providerMarkRate: Locator.findRate(LocatorKey.PROVIDER_RATE),
   dateMarkRate: Locator.findRate(LocatorKey.DATE_RATE),
   activeKeys: new Set<string>().add('1'),
-  projection: Locator.findArray(LocatorKey.PROJECTION)
+  projections: Locator.findArray(LocatorKey.PROJECTION)
 };
 
 class StateBuilder {
@@ -119,7 +120,7 @@ class StateBuilder {
     this.state.orderTypeCell = Locator.findCell(orderCells, LocatorKey.ORDER_TYPE);
     this.state.orderLoadingDateCell = Locator.findCell(orderCells, LocatorKey.ORDER_LOADING_DATE);
     this.state.orderShippingDateCell = Locator.findCell(orderCells, LocatorKey.ORDER_SHIPPING_DATE);
-    this.state.projection = this.state.projection.length > 0 ? this.state.projection : [...orderCells];
+    this.state.projections = this.state.projections.length > 0 ? this.state.projections : this.orderCellsToProjections(orderCells); 
     this.hasToCompute = true;
 
     return this;
@@ -184,55 +185,49 @@ class StateBuilder {
     return this;
   }
 
-  addProjection(projection: string): StateBuilder {
-    this.state.projection = [...this.state.projection, projection];
-    this.state.results = undefined;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+  addProjection(projection: Projection): StateBuilder {
+    this.state.projections = [...this.state.projections, projection];
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
     return this;
   }
 
   removeProjection(index: number): StateBuilder {
-    this.state.projection = this.state.projection.filter((_, i) => i !== index);
-    this.state.results = undefined;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    this.state.projections = this.state.projections.filter((_, i) => i !== index);
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
     return this;
   }
 
   upProjection(index: number): StateBuilder {
     if (index === 0) return this;
-    const copy = [...this.state.projection];
+    const copy = [...this.state.projections];
     const tmp = copy[index - 1];
     copy[index - 1] = copy[index];
     copy[index] = tmp;
-    this.state.projection = copy;
-    this.state.results = undefined;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    this.state.projections = copy;
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
     return this;
   }
 
   downProjection(index: number): StateBuilder {
-    if (index >= this.state.projection.length - 1) return this;
-    const copy = [...this.state.projection];
+    if (index >= this.state.projections.length - 1) return this;
+    const copy = [...this.state.projections];
     const tmp = copy[index + 1];
     copy[index + 1] = copy[index];
     copy[index] = tmp;
-    this.state.projection = copy;
-    this.state.results = undefined;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    this.state.projections = copy;
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
     return this;
   }
 
   addAllProjection(): StateBuilder {
-    this.state.projection = [...getOrderCells(this.state)];
-    this.state.results = undefined;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    this.state.projections = this.orderCellsToProjections(getOrderCells(this.state));
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
     return this;
   }
 
   removeAllProjection(): StateBuilder {
-    this.state.projection = [];
-    this.state.results = undefined;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projection);
+    this.state.projections = [];
+    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
     return this;
   }
 
@@ -344,6 +339,14 @@ class StateBuilder {
     this.state.activeKeys = set;
   
     return this;
+  }
+
+  private orderCellsToProjections(cells: string[]): Projection[] {
+    return cells.map((name, index) => ({
+      name,
+      type: 'string',
+      index
+    }));
   }
 }
 

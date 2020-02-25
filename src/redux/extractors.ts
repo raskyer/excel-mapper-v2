@@ -1,6 +1,7 @@
 import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
 import Status from 'src/entities/Status';
 import CellMap from 'src/entities/CellMap';
+import Projection from 'src/entities/Projection';
 
 import { createMap, difference, diffPercentage } from 'src/utils/core';
 
@@ -139,7 +140,7 @@ export const extractRateStatus = () => (customerMarkRate: number, providerMarkRa
   return 'success';
 };
 
-export const extractProjectionStatus = () => (projection: string[], orderCells: string[]): Status => {
+export const extractProjectionStatus = () => (projection: Projection[], orderCells: string[]): Status => {
   if (orderCells.length < 1) {
     return 'dark';
   }

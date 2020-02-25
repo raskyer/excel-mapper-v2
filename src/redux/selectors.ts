@@ -39,7 +39,7 @@ const getCustomerMarkRate = (state: State) => state.customerMarkRate;
 const getProviderMarkRate = (state: State) => state.providerMarkRate;
 const getDateMarkRate = (state: State) => state.dateMarkRate;
 
-const getProjection = (state: State) => state.projection;
+const getProjections = (state: State) => state.projections;
 
 export const getDbSheetNames = createSelector(getDbWorkbook, extractSheetNames());
 export const getOrderSheetNames = createSelector(getOrderWorkbook, extractSheetNames());
@@ -81,4 +81,4 @@ export const getOptionsStatus = createSelector(
 
 export const getRateStatus = createSelector([getCustomerMarkRate, getProviderMarkRate, getDateMarkRate], extractRateStatus());
 
-export const getProjectionStatus = createSelector([getProjection, getOrderCells], extractProjectionStatus());
+export const getProjectionStatus = createSelector([getProjections, getOrderCells], extractProjectionStatus());

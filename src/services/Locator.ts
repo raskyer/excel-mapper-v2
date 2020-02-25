@@ -56,7 +56,7 @@ class Locator {
     return parseInt(this._getString(key), 10);
   }
 
-  findArray(key: LocatorKey): string[] {
+  findArray<T>(key: LocatorKey): T[] {
     const token = this._getString(key);
     return JSON.parse(token);
   }
@@ -65,7 +65,7 @@ class Locator {
     localStorage.setItem(key.toString(), value);
   }
 
-  saveArray(key: LocatorKey, value: string[]): void {
+  saveArray<T>(key: LocatorKey, value: T[]): void {
     this.save(key, JSON.stringify(value));
   }
 

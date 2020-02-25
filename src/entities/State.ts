@@ -1,5 +1,6 @@
 import WorkBookAdaptor from './WorkbookAdaptor';
 import RankedOrder from './RankedOrder';
+import Projection from './Projection';
 
 interface State extends StateWorkbook, StateSheet, StateCell, StateRate, StateUI {}
 
@@ -34,8 +35,8 @@ export interface StateRate {
 
 export interface StateUI {
   activeKeys: Set<string>;
-  projection: string[];
-  results?: RankedOrder[];
+  projections: Projection[];
+  rankedOrders?: RankedOrder[];
 }
 
 export default State;

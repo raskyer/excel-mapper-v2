@@ -132,7 +132,7 @@ const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
     case RESULTS_COMPUTED:
       return {
         ...state,
-        results: action.payload
+        rankedOrders: action.payload
       };
     default:
       return state;

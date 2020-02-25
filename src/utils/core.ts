@@ -84,8 +84,7 @@ export function fromState(state: State): FinalState {
     orderLoadingDateCell,
     customerMarkRate,
     providerMarkRate,
-    dateMarkRate,
-    projection
+    dateMarkRate
   } = state;
 
   if (dbWorkbook === undefined || orderWorkbook === undefined) {
@@ -155,6 +154,6 @@ export function fromState(state: State): FinalState {
     providerMarkRate, // check
     dateMarkRate, // check
 
-    projection
+    projection: []
   };
 }
