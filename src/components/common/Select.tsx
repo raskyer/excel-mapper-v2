@@ -1,6 +1,9 @@
 import React from 'react';
 
-import Form from 'react-bootstrap/Form';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import SelectUI from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 interface SelectProps {
   title: string;
@@ -12,34 +15,35 @@ interface SelectProps {
 }
 
 const Select: React.FC<SelectProps> = (props) => {
-  const onChange = (e: React.FormEvent<HTMLSelectElement>): void => {
+  const onChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
+    console.log(e);
     if (!props.onChange) return;
-    props.onChange(e.currentTarget.value);
+    //props.onChange(e.currentTarget.value);
   };
 
   return (
-    <Form.Group>
-      <Form.Label>{props.title}</Form.Label>
-
-      <div className="d-flex">
-        <Form.Control
-          as="select"
-          defaultValue=""
-          value={props.value !== undefined ? props.value + '' : undefined}
-          onChange={onChange}
-          isValid={props.value !== undefined}
-          isInvalid={props.value === undefined}
-          disabled={props.options.length < 1}
-          required
-        >
-          <option disabled value="">--- Choissir une option --</option>
-          {props.options.map((option, index) => (
-            <option key={index} value={props.byValue ? option : index + ''}>{option}</option>
-          ))}
-        </Form.Control>
-        {props.addon}
-      </div>
-    </Form.Group>
+    <FormControl
+      error={props.value === undefined}
+      disabled={props.options.length < 1}
+      required
+      margin="dense"
+      size="medium"
+      style={{ minWidth: '200px' }}
+    >
+      <InputLabel>{props.title}</InputLabel>
+      <SelectUI
+        defaultValue={-1}
+        value={props.value !== undefined ? props.value : -1}
+        onChange={onChange}
+        disabled={props.options.length < 1}
+        required
+      >
+        <MenuItem disabled value={-1}>--- Choissir une option --</MenuItem>
+        {props.options.map((option, index) => (
+          <MenuItem key={index} value={props.byValue ? option : index}>{option}</MenuItem>
+        ))}
+      </SelectUI>
+    </FormControl>
   );
 };
 
