@@ -1,8 +1,6 @@
 import CellMap from 'src/entities/CellMap';
-import State from 'src/entities/State';
-import FinalState from 'src/entities/FinalState';
-
-import { getCustomerSheet, getProviderSheet, getOrderSheet } from 'src/redux/selectors';
+import RankedOrder from "src/entities/RankedOrder";
+import Projection from "src/entities/Projection";
 
 export function createMap(sheet: any[][], idCell: number): CellMap {
   const map = new Map();
@@ -66,94 +64,23 @@ export function formatDate(date?: Date): string {
   );
 }
 
-export function fromState(state: State): FinalState {
-  const {
-    dbWorkbook,
-    orderWorkbook,
-    customerSheetName,
-    providerSheetName,
-    orderSheetName,
-    customerIDCell,
-    providerIDCell,
-    orderCustomerIDCell,
-    orderProviderIDCell,
-    customerMarkCell,
-    providerMarkCell,
-    orderTypeCell,
-    orderShippingDateCell,
-    orderLoadingDateCell,
-    customerMarkRate,
-    providerMarkRate,
-    dateMarkRate
-  } = state;
+export function project(rankedOrders: RankedOrder[], projections: Projection[]): RankedOrder[] {
+  const projectionIndexes = projections.map(projection => projection.index);
 
-  if (dbWorkbook === undefined || orderWorkbook === undefined) {
-    throw new Error('undefined workbook');
-  }
+  return rankedOrders.map(rankedOrder => {
+    const order = rankedOrder.order;
 
-  if (customerSheetName === undefined || providerSheetName === undefined || orderSheetName === undefined) {
-    throw new Error('undefined sheet name');
-  }
+    const projectedOrder = projectionIndexes.map(index => {
+      if (index === -1) {
+        // this projection is a new cell
+        return '';
+      }
+      return formatValue(order[index]);
+    });
 
-  if (customerIDCell === undefined || providerIDCell === undefined || orderCustomerIDCell === undefined || orderProviderIDCell === undefined) {
-    throw new Error('undefined id cell');
-  }
-
-  if (customerMarkCell === undefined || providerMarkCell === undefined) {
-    throw new Error('undefined mark cell');
-  }
-
-  if (orderTypeCell === undefined || orderShippingDateCell === undefined || orderLoadingDateCell === undefined) {
-    throw new Error('undefined order cell');
-  }
-
-  if (customerMarkRate === undefined || providerMarkRate === undefined || dateMarkRate === undefined) {
-    throw new Error('undefined rate cell');
-  }
-
-  if (dbWorkbook.getSheet(customerSheetName) === undefined || dbWorkbook.getSheet(providerSheetName) === undefined) {
-    throw new Error('sheet name does not exist in workbook');
-  }
-
-  if (orderWorkbook.getSheet(orderSheetName) === undefined) {
-    throw new Error('sheet name does not exist in workbook');
-  }
-
-  const customerSheet = getCustomerSheet(state);
-  const providerSheet = getProviderSheet(state);
-  const orderSheet = getOrderSheet(state);
-
-  if (customerSheet.length < 1 || providerSheet.length < 1 || orderSheet.length < 1) {
-    throw new Error('sheet is empty');
-  }
-
-  if (typeof customerMarkRate !== 'number' || typeof providerMarkRate !== 'number' || typeof dateMarkRate !== 'number') {
-    throw new Error('rate are not number');
-  }
-
-  return {
-    dbWorkbook, // check
-    orderWorkbook, // check
-
-    customerSheetName, // check
-    providerSheetName, // check
-    orderSheetName, // check
-
-    customerIDCell,
-    providerIDCell,
-    orderCustomerIDCell,
-    orderProviderIDCell,
-    customerMarkCell,
-    providerMarkCell,
-
-    orderTypeCell,
-    orderShippingDateCell,
-    orderLoadingDateCell,
-
-    customerMarkRate, // check
-    providerMarkRate, // check
-    dateMarkRate, // check
-
-    projection: []
-  };
+    return {
+      ...rankedOrder,
+      projection: projectedOrder
+    };
+  });
 }

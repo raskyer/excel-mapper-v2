@@ -344,7 +344,7 @@ class StateBuilder {
   private orderCellsToProjections(cells: string[]): Projection[] {
     return cells.map((name, index) => ({
       name,
-      type: 'string',
+      type: 'text',
       index
     }));
   }

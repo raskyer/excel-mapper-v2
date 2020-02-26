@@ -1,5 +1,5 @@
 interface Projection {
-  type: 'number' | 'string' | 'date';
+  type: 'number' | 'text' | 'date';
   name: string;
   index: number;
 }

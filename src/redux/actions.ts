@@ -27,14 +27,10 @@ import {
   PROJECTION_UP,
   PROJECTION_DOWN,
   PROJECTION_ADD_ALL,
-  PROJECTION_REMOVE_ALL,
-  RESULTS_COMPUTED
+  PROJECTION_REMOVE_ALL
 } from './constants';
-import { getCustomerMap, getProviderMap, getOrderSheet } from './selectors';
 
 import { DefaultLibraryAdaptor } from 'src/services/LibraryAdaptorFactory'; 
-import Compute from 'src/services/Ordering';
-import { fromState } from 'src/utils/core';
 
 export const dbFileChangedAction = (dbFile: File) => (dispatch: Dispatcher): void => {
   DefaultLibraryAdaptor.parseFile(dbFile).then(workbook => {
@@ -165,19 +161,6 @@ export const projectionRemovedAllAction = (): Action => ({
 });
 
 export const submit = () => (dispatch: Dispatcher, getState: StateGetter): void => {
-  const state = getState();
-
-  const customerMap = getCustomerMap(state);
-  const providerMap = getProviderMap(state);
-  const orderSheet = getOrderSheet(state);
-
-  const compute = new Compute(customerMap, providerMap, fromState(state));
-  const rankedOrders = compute.compute(orderSheet);
-
-  dispatch({
-    type: RESULTS_COMPUTED,
-    payload: rankedOrders
-  });
 };
 
 export const download = (headers: string[], rankedOrders: RankedOrder[]) => {

@@ -1,10 +1,10 @@
-interface RankedInfo {
-  id: string | number;
-  mark?: string | number;
+export interface RankedOrderInfo {
+  id: string | number | undefined;
+  mark: string | number | undefined;
   ranking: number;
 }
 
-interface DateInfo {
+export interface RankedOrderDate {
   date?: Date;
   ranking: number;
 }
@@ -12,9 +12,9 @@ interface DateInfo {
 interface RankedOrder {
   order: any[];
   projection?: any[];
-  customer: RankedInfo;
-  provider: RankedInfo;
-  date: DateInfo;
+  customer: RankedOrderInfo;
+  provider: RankedOrderInfo;
+  date: RankedOrderDate;
   ranking: number;
 }
 

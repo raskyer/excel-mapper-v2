@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +24,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 
 import Order from './components/Order/Order';
+import Import from './components/Import/Import';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,59 +89,72 @@ const App: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
+    <Router>
+      <div className={classes.root}>
+        <CssBaseline />
 
-      <AppBar position="fixed" className={clsx(classes.appBar, isOpen && classes.appBarShift)}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setIsOpen(true)}
-            className={clsx(classes.menuButton, isOpen && classes.hide)}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </IconButton>
+        <AppBar position="fixed" className={clsx(classes.appBar, isOpen && classes.appBarShift)}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={() => setIsOpen(true)}
+              className={clsx(classes.menuButton, isOpen && classes.hide)}
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </IconButton>
 
-          <Typography variant="h6" noWrap style={{ flexGrow: 1 }}>
-            Excel Mapper
-          </Typography>
+              <Typography variant="h6" noWrap style={{ flexGrow: 1 }}>
+                <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
+                  Excel Mapper
+                </Link>
+              </Typography>
 
-          <Button color="inherit">
-            Clients / Transporteurs
-          </Button>
-        </Toolbar>
-      </AppBar>
+              <Button color="inherit">
+                <Link to="/import" style={{ textDecoration: 'none', color: 'white' }}>
+                  Clients / Transporteurs
+                </Link>
+              </Button>
+          </Toolbar>
+        </AppBar>
 
-      <Drawer
-        variant="persistent"
-        anchor="left"
-        open={isOpen}
-        className={classes.drawer}
-        classes={{
-          paper: classes.drawerPaper
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={() => setIsOpen(false)}>
-            <FontAwesomeIcon icon={faBars} />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map(text => (
-            <ListItem button key={text}>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+        <Drawer
+          variant="persistent"
+          anchor="left"
+          open={isOpen}
+          className={classes.drawer}
+          classes={{
+            paper: classes.drawerPaper
+          }}
+        >
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={() => setIsOpen(false)}>
+              <FontAwesomeIcon icon={faBars} />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            {['Inbox', 'Starred', 'Send email', 'Drafts'].map(text => (
+              <ListItem button key={text}>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
 
-      <main className={clsx(classes.content, isOpen && classes.contentShift)}>
-        <Order />
-      </main>
-    </div>
+        <main className={clsx(classes.content, isOpen && classes.contentShift)}>
+          <Switch>
+            <Route path="/" exact>
+              <Order />
+            </Route>
+            <Route path="/import">
+              <Import />
+            </Route>
+          </Switch>
+        </main>
+      </div>
+    </Router>
   );
 };
 

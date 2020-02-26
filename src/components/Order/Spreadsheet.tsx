@@ -12,8 +12,17 @@ import { faTruck } from '@fortawesome/free-solid-svg-icons/faTruck';
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
 
+import Popper from '@material-ui/core/Popper';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+
 import State from 'src/entities/State';
-import { getOrderSheet } from 'src/redux/selectors';
+import RankedOrder from 'src/entities/RankedOrder';
+import Projection from 'src/entities/Projection';
+
+import { formatDate } from 'src/utils/core';
+
+import { getRankedOrders } from 'src/redux/selectors';
 import {
   orderCustomerIDCellChangedAction,
   orderProviderIDCellChangedAction,
@@ -81,12 +90,16 @@ const extractCell = (selections: Handsontable.contextMenu.Selection[]): number =
 interface SpreadsheetProps extends SpreadsheetState, SpreadsheetDispatch {}
 
 interface SpreadsheetState {
-  orderSheet: any[][]; // to be replaced by the projected sheet
+  rankedOrders: RankedOrder[];
+  projections: Projection[];
   orderCustomerIDCell?: number;
   orderProviderIDCell?: number;
   orderTypeCell?: number;
   orderLoadingDateCell?: number;
   orderShippingDateCell?: number;
+  customerMarkRate: number;
+  providerMarkRate: number;
+  dateMarkRate: number;
 }
 
 interface SpreadsheetDispatch {
@@ -118,6 +131,7 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
           props.onProviderIDCellChange(cell.toString());
         }
       },
+      'step2': { name: '---------' },
       typeCell: {
         name: 'Définir comme cellule de <strong>Type</strong>',
         callback: (_, selections) => {
@@ -142,34 +156,71 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
     }
   };
 
+  const data: any[][] = [];
+  props.rankedOrders.forEach(o => {
+    if (o.projection !== undefined) {
+      data.push(o.projection);
+    }
+  });
+  data.unshift(props.projections.map(p => p.name));
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLTableCellElement | null>(null);
+  const [ro, setRo] = React.useState<RankedOrder | undefined>(undefined);
+
   return (
-    <HotTable
-      colHeaders={false}
-      rowHeaders={false}
-      minSpareRows={1}
-      data={props.orderSheet}
-      colWidths="100"
-      width="100%"
-      height="100%"
-      licenseKey="non-commercial-and-evaluation"
-      contextMenu={contextMenu}
-      cells={(row, col) => {
-        if (row === 0) {
-          return { renderer: headerRender(props, col) };
-        }
-        return { renderer: columnRender(props, col) };
-      }}
-    />
+    <>
+      <HotTable
+        colHeaders={false}
+        rowHeaders={false}
+        minSpareRows={1}
+        data={data}
+        colWidths="100"
+        width="100%"
+        height="100%"
+        licenseKey="non-commercial-and-evaluation"
+        contextMenu={contextMenu}
+        selectionMode="single"
+        afterOnCellMouseUp={(event, coords, td) => {
+          const { row } = coords;
+          if (props.rankedOrders[row - 1] !== undefined) {
+            setRo(props.rankedOrders[row - 1]);
+            setAnchorEl(td);
+          }
+        }}
+        cells={(row, col) => {
+          if (row === 0) {
+            return { renderer: headerRender(props, col) };
+          }
+          return { renderer: columnRender(props, col) };
+        }}
+      />
+
+      <Popper id={'simple-popper'} open={Boolean(anchorEl)} anchorEl={anchorEl}>
+        <Paper>
+          {ro && (
+            <Typography>
+              <b>Client</b> : {ro.customer.id}, <b>Note</b> : {ro.customer.mark ? ro.customer.mark : 'Non trouvé'} ({ro.customer.ranking}/{5 * props.customerMarkRate}),<br/>
+              <b>Transporteur</b> : {ro.provider.id}, <b>Note</b> : {ro.provider.mark ? ro.provider.mark : 'Non trouvé'} ({ro.provider.ranking}/{5 * props.providerMarkRate}),<br/>
+              <b>Date</b> : {formatDate(ro.date.date)}, <b>Note</b> : {ro.date.ranking.toFixed(2)}/{5 * props.dateMarkRate}
+            </Typography>
+          )}
+        </Paper>
+      </Popper>
+    </>
   );
 };
 
 const mapStateToProps = (state: State): SpreadsheetState => ({
-  orderSheet: getOrderSheet(state),
+  rankedOrders: getRankedOrders(state),
+  projections: state.projections,
   orderCustomerIDCell: state.orderCustomerIDCell,
   orderProviderIDCell: state.orderProviderIDCell,
   orderTypeCell: state.orderTypeCell,
   orderLoadingDateCell: state.orderLoadingDateCell,
-  orderShippingDateCell: state.orderShippingDateCell
+  orderShippingDateCell: state.orderShippingDateCell,
+  customerMarkRate: state.customerMarkRate,
+  providerMarkRate: state.providerMarkRate,
+  dateMarkRate: state.dateMarkRate
 });
 
 const mapDispatchToProps = (dispatch: Function): SpreadsheetDispatch => ({

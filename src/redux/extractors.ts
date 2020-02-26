@@ -3,7 +3,8 @@ import Status from 'src/entities/Status';
 import CellMap from 'src/entities/CellMap';
 import Projection from 'src/entities/Projection';
 
-import { createMap, difference, diffPercentage } from 'src/utils/core';
+import RankedOrderService from 'src/services/RankedOrderService';
+import { createMap, difference, diffPercentage, project } from 'src/utils/core';
 
 export const extractSheetNames = () => (workbook?: WorkBookAdaptor): string[] => {
   return workbook ? workbook.getSheetNames() : [];
@@ -148,4 +149,52 @@ export const extractProjectionStatus = () => (projection: Projection[], orderCel
     return 'danger';
   }
   return 'success';
+};
+
+export const extractRankedOrders = () => (
+    customerMap: CellMap,
+    providerMap: CellMap,
+    cells: (number | undefined)[],
+    rates: number[],
+    orderSheet: any[][],
+    projections: Projection[]
+) => {
+  if (orderSheet === undefined || orderSheet.length < 1) {
+    return [];
+  }
+
+  const [
+    customerMarkCell,
+    providerMarkCell,
+    orderCustomerIDCell,
+    orderProviderIDCell,
+    orderTypeCell,
+    orderLoadingDateCell,
+    orderShippingDateCell
+  ] = cells;
+
+  const [
+    customerMarkRate,
+    providerMarkRate,
+    dateMarkRate
+  ] = rates;
+
+  const rankedOrderService = new RankedOrderService(
+    customerMap,
+    providerMap,
+    customerMarkCell,
+    providerMarkCell,
+    orderCustomerIDCell,
+    orderProviderIDCell,
+    orderTypeCell,
+    orderLoadingDateCell,
+    orderShippingDateCell,
+    customerMarkRate,
+    providerMarkRate,
+    dateMarkRate,
+    console.log
+  );
+
+  const rankedOrders = rankedOrderService.build(orderSheet);
+  return project(rankedOrders, projections);
 };
