@@ -19,7 +19,9 @@ export enum LocatorKey {
   CUSTOMER_RATE = 'rate::customer',
   PROVIDER_RATE = 'rate::provider',
   DATE_RATE = 'rate::date',
-  PROJECTION = 'projection'
+  PROJECTIONS = 'projections',
+  LOCAL_CUSTOMER_SHEET = 'local::sheet::customer',
+  LOCAL_PROVIDER_SHEET = 'local::sheet::provider'
 }
 
 class Locator {
@@ -41,7 +43,7 @@ class Locator {
     this.defaultKeys.set(LocatorKey.CUSTOMER_RATE, '1');
     this.defaultKeys.set(LocatorKey.PROVIDER_RATE, '1');
     this.defaultKeys.set(LocatorKey.DATE_RATE, '1');
-    this.defaultKeys.set(LocatorKey.PROJECTION, '[]');
+    this.defaultKeys.set(LocatorKey.PROJECTIONS, '[]');
   }
 
   findSheet(arr: string[], key: LocatorKey): string | undefined {

@@ -23,7 +23,9 @@ export const INITIAL_STATE: State = {
   providerMarkRate: Locator.findRate(LocatorKey.PROVIDER_RATE),
   dateMarkRate: Locator.findRate(LocatorKey.DATE_RATE),
   activeKeys: new Set<string>().add('1'),
-  projections: Locator.findArray(LocatorKey.PROJECTION)
+  projections: Locator.findArray(LocatorKey.PROJECTIONS),
+  localCustomerSheet: Locator.findArray(LocatorKey.LOCAL_CUSTOMER_SHEET),
+  localProviderSheet: Locator.findArray(LocatorKey.LOCAL_PROVIDER_SHEET)
 };
 
 class StateBuilder {
@@ -187,13 +189,13 @@ class StateBuilder {
 
   addProjection(projection: Projection): StateBuilder {
     this.state.projections = [...this.state.projections, projection];
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
+    Locator.saveArray(LocatorKey.PROJECTIONS, this.state.projections);
     return this;
   }
 
   removeProjection(index: number): StateBuilder {
     this.state.projections = this.state.projections.filter((_, i) => i !== index);
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
+    Locator.saveArray(LocatorKey.PROJECTIONS, this.state.projections);
     return this;
   }
 
@@ -204,7 +206,7 @@ class StateBuilder {
     copy[index - 1] = copy[index];
     copy[index] = tmp;
     this.state.projections = copy;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
+    Locator.saveArray(LocatorKey.PROJECTIONS, this.state.projections);
     return this;
   }
 
@@ -215,19 +217,19 @@ class StateBuilder {
     copy[index + 1] = copy[index];
     copy[index] = tmp;
     this.state.projections = copy;
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
+    Locator.saveArray(LocatorKey.PROJECTIONS, this.state.projections);
     return this;
   }
 
   addAllProjection(): StateBuilder {
     this.state.projections = this.orderCellsToProjections(getOrderCells(this.state));
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
+    Locator.saveArray(LocatorKey.PROJECTIONS, this.state.projections);
     return this;
   }
 
   removeAllProjection(): StateBuilder {
     this.state.projections = [];
-    Locator.saveArray(LocatorKey.PROJECTION, this.state.projections);
+    Locator.saveArray(LocatorKey.PROJECTIONS, this.state.projections);
     return this;
   }
 

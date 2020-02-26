@@ -37,6 +37,8 @@ export interface StateUI {
   activeKeys: Set<string>;
   projections: Projection[];
   rankedOrders?: RankedOrder[];
+  localCustomerSheet?: any[][];
+  localProviderSheet?: any[][];
 }
 
 export default State;
