@@ -24,11 +24,11 @@ import { formatDate } from 'src/utils/core';
 
 import { getRankedOrders } from 'src/redux/selectors';
 import {
-  orderCustomerIDCellChangedAction,
-  orderProviderIDCellChangedAction,
-  orderTypeCellChangedAction,
-  orderLoadingDateCellChangedAction,
-  orderShippingDateCellChangedAction
+  orderCustomerIDCellChangeAction,
+  orderProviderIDCellChangeAction,
+  orderTypeCellChangeAction,
+  orderLoadingDateCellChangeAction,
+  orderShippingDateCellChangeAction
 } from 'src/redux/actions';
 
 const headerRender = (props: SpreadsheetProps, col: number): Handsontable.renderers.Base => function(this: any, _, td) {
@@ -174,7 +174,6 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         rowHeaders={false}
         minSpareRows={1}
         data={data}
-        colWidths="100"
         width="100%"
         height="100%"
         licenseKey="non-commercial-and-evaluation"
@@ -224,11 +223,11 @@ const mapStateToProps = (state: State): SpreadsheetState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): SpreadsheetDispatch => ({
-  onCustomerIDCellChange: (s) => dispatch(orderCustomerIDCellChangedAction(s)),
-  onProviderIDCellChange: (s) => dispatch(orderProviderIDCellChangedAction(s)),
-  onTypeCellChange: (s) => dispatch(orderTypeCellChangedAction(s)),
-  onLoadingDateCellChange: (s) => dispatch(orderLoadingDateCellChangedAction(s)),
-  onShippingDateCellChange: (s) => dispatch(orderShippingDateCellChangedAction(s))
+  onCustomerIDCellChange: (s) => dispatch(orderCustomerIDCellChangeAction(s)),
+  onProviderIDCellChange: (s) => dispatch(orderProviderIDCellChangeAction(s)),
+  onTypeCellChange: (s) => dispatch(orderTypeCellChangeAction(s)),
+  onLoadingDateCellChange: (s) => dispatch(orderLoadingDateCellChangeAction(s)),
+  onShippingDateCellChange: (s) => dispatch(orderShippingDateCellChangeAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Spreadsheet);

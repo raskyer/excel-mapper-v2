@@ -2,24 +2,14 @@ import { createSelector } from 'reselect';
 
 import State from 'src/entities/State';
 
-import {
-  extractSheetNames,
-  extractSheet,
-  extractCells,
-  extractMap,
-  extractFileStatus,
-  extractSheetStatus,
-  extractIDStatus,
-  extractOptionsStatus,
-  extractCellStatus,
-  extractCellAggregateStatus,
-  extractRateStatus,
-  extractProjectionStatus,
-  extractRankedOrders
-} from './extractors';
+import * as Extractors from './extractors';
 
 const getDbWorkbook = (state: State) => state.dbWorkbook;
 const getOrderWorkbook = (state: State) => state.orderWorkbook;
+
+const getCustomerSheet = (state: State) => state.customerSheet;
+const getProviderSheet = (state: State) => state.providerSheet;
+const getOrderSheet = (state: State) => state.orderSheet;
 
 const getCustomerSheetName = (state: State) => state.customerSheetName;
 const getProviderSheetName = (state: State) => state.providerSheetName;
@@ -42,47 +32,43 @@ const getDateMarkRate = (state: State) => state.dateMarkRate;
 
 const getProjections = (state: State) => state.projections;
 
-export const getDbSheetNames = createSelector(getDbWorkbook, extractSheetNames());
-export const getOrderSheetNames = createSelector(getOrderWorkbook, extractSheetNames());
+export const getDbSheetNames = createSelector(getDbWorkbook, Extractors.extractSheetNames());
+export const getOrderSheetNames = createSelector(getOrderWorkbook, Extractors.extractSheetNames());
 
-export const getCustomerSheet = createSelector([getCustomerSheetName, getDbWorkbook], extractSheet());
-export const getProviderSheet = createSelector([getProviderSheetName, getDbWorkbook], extractSheet());
-export const getOrderSheet = createSelector([getOrderSheetName, getOrderWorkbook], extractSheet());
+export const getCustomerCells = createSelector(getCustomerSheet, Extractors.extractCells());
+export const getProviderCells = createSelector(getProviderSheet, Extractors.extractCells());
+export const getOrderCells = createSelector(getOrderSheet, Extractors.extractCells());
 
-export const getCustomerCells = createSelector(getCustomerSheet, extractCells());
-export const getProviderCells = createSelector(getProviderSheet, extractCells());
-export const getOrderCells = createSelector(getOrderSheet, extractCells());
+export const getCustomerMap = createSelector([getCustomerSheet, getCustomerIDCell], Extractors.extractMap());
+export const getProviderMap = createSelector([getProviderSheet, getProviderIDCell], Extractors.extractMap());
+export const getOrderCustomerMap = createSelector([getOrderSheet, getOrderCustomerIDCell], Extractors.extractMap());
+export const getOrderProviderMap = createSelector([getOrderSheet, getOrderProviderIDCell], Extractors.extractMap());
 
-export const getCustomerMap = createSelector([getCustomerSheet, getCustomerIDCell], extractMap());
-export const getProviderMap = createSelector([getProviderSheet, getProviderIDCell], extractMap());
-export const getOrderCustomerMap = createSelector([getOrderSheet, getOrderCustomerIDCell], extractMap());
-export const getOrderProviderMap = createSelector([getOrderSheet, getOrderProviderIDCell], extractMap());
-
-export const getFileStatus = createSelector([getDbWorkbook, getOrderWorkbook], extractFileStatus());
+export const getFileStatus = createSelector([getDbWorkbook, getOrderWorkbook], Extractors.extractFileStatus());
 export const getSheetStatus = createSelector(
   [getDbSheetNames, getOrderSheetNames, getCustomerSheetName, getProviderSheetName, getOrderSheetName],
-  extractSheetStatus()
+  Extractors.extractSheetStatus()
 );
 
-export const getCustomerIDCellStatus = createSelector([getCustomerCells, getCustomerIDCell], extractCellStatus());
-export const getProviderIDCellStatus = createSelector([getProviderCells, getProviderIDCell], extractCellStatus());
-export const getOrderCustomerIDCellStatus = createSelector([getOrderCells, getOrderCustomerIDCell], extractCellStatus());
-export const getOrderProviderIDCellStatus = createSelector([getOrderCells, getOrderProviderIDCell], extractCellStatus());
+export const getCustomerIDCellStatus = createSelector([getCustomerCells, getCustomerIDCell], Extractors.extractCellStatus());
+export const getProviderIDCellStatus = createSelector([getProviderCells, getProviderIDCell], Extractors.extractCellStatus());
+export const getOrderCustomerIDCellStatus = createSelector([getOrderCells, getOrderCustomerIDCell], Extractors.extractCellStatus());
+export const getOrderProviderIDCellStatus = createSelector([getOrderCells, getOrderProviderIDCell], Extractors.extractCellStatus());
 
-export const getCustomerIDCellAggregateStatus = createSelector([getCustomerIDCellStatus, getOrderCustomerIDCellStatus], extractCellAggregateStatus());
-export const getProviderIDCellAggregateStatus = createSelector([getProviderIDCellStatus, getOrderProviderIDCellStatus], extractCellAggregateStatus());
+export const getCustomerIDCellAggregateStatus = createSelector([getCustomerIDCellStatus, getOrderCustomerIDCellStatus], Extractors.extractCellAggregateStatus());
+export const getProviderIDCellAggregateStatus = createSelector([getProviderIDCellStatus, getOrderProviderIDCellStatus], Extractors.extractCellAggregateStatus());
 
-export const getCustomerIDStatus = createSelector([getCustomerMap, getOrderCustomerMap, getCustomerIDCellAggregateStatus], extractIDStatus());
-export const getProviderIDStatus = createSelector([getProviderMap, getOrderCustomerMap, getProviderIDCellAggregateStatus], extractIDStatus());
+export const getCustomerIDStatus = createSelector([getCustomerMap, getOrderCustomerMap, getCustomerIDCellAggregateStatus], Extractors.extractIDStatus());
+export const getProviderIDStatus = createSelector([getProviderMap, getOrderCustomerMap, getProviderIDCellAggregateStatus], Extractors.extractIDStatus());
 
 export const getOptionsStatus = createSelector(
   [getCustomerMarkCell, getProviderMarkCell, getOrderTypeCell, getOrderLoadingDateCell, getOrderShippingDateCell],
-  extractOptionsStatus()
+  Extractors.extractOptionsStatus()
 );
 
-export const getRateStatus = createSelector([getCustomerMarkRate, getProviderMarkRate, getDateMarkRate], extractRateStatus());
+export const getRatesStatus = createSelector([getCustomerMarkRate, getProviderMarkRate, getDateMarkRate], Extractors.extractRatesStatus());
 
-export const getProjectionStatus = createSelector([getProjections, getOrderCells], extractProjectionStatus());
+export const getProjectionsStatus = createSelector([getProjections, getOrderCells], Extractors.extractProjectionsStatus());
 
 
 export const getCells = createSelector(
@@ -114,5 +100,5 @@ export const getRankedOrders = createSelector(
     getOrderSheet,
     getProjections
   ],
-  extractRankedOrders()
+  Extractors.extractRankedOrders()
 );

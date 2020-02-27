@@ -1,22 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Container from '@material-ui/core/Container';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import { Button } from '@material-ui/core';
-
 import Dropzone from '../common/Dropzone';
 import Select from '../common/Select';
 
 import State from 'src/entities/State';
 
 import { getDbSheetNames, getCustomerCells, getProviderCells } from 'src/redux/selectors';
-import { dbFileChangedAction } from 'src/redux/actions';
+import { dbFileChangeAction } from 'src/redux/actions';
+import Database from '../common/Database';
 
 interface ImportProps extends ImportState, ImportDispatch {}
 
@@ -45,16 +37,18 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
     if (f.length > 0) props.onFileChange(f[0]);
   };
 
-  if (props.customerSheet.length < 1) {
-    return (
-      <Container>
+  return (
+    <>
+      <section className="bg-white p-5 shadow-md rounded m-5">
+        <h1 className="font-bold text-xl mb-5 text-gray-700 border-b-2">Import</h1>
+
         <form>
-          <div>
+          <div className="px-20">
             <label>Fichier <strong>Clients / Transporteurs</strong> :</label>
             <Dropzone onChange={onFileUpload} />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+          <div className="flex justify-evenly mt-5">
             <Select
               title="Feuille Client"
               value={props.customerSheetName}
@@ -69,7 +63,7 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+          <div className="flex justify-evenly mt-5">
             <Select
               title="Cellule ID Client"
               value={props.customerIDCell}
@@ -82,7 +76,7 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+          <div className="flex justify-evenly mt-5">
             <Select
               title="Cellule note Client"
               value={props.customerMarkCell}
@@ -94,46 +88,22 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
               options={props.providerCells}
             />
           </div>
-
-          <div>
-            <Button variant="contained" color="primary">Importer</Button>
-          </div>
         </form>
-      </Container>
-    );
-  }
+      </section>
 
-  return (
-    <>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {props.customerSheet[0].map((header, index) => (
-                <TableCell key={index}>{header}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {props.customerSheet.slice(1, props.customerSheet.length).map((row, index) => (
-              <TableRow key={index}>
-                {row.map((cell, index) => (
-                  <TableCell key={index}>{cell}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <section className="mt-5 bg-white p-5 shadow-md rounded m-5">
+        <h1 className="font-bold text-xl mb-5 text-gray-700 border-b-2">Base de données</h1>
+
+        <Database title="Client" sheet={props.customerSheet} />
+        <Database title="Transporteur" sheet={props.providerSheet} />
+      </section>
     </>
   );
 };
 
 const mapStateToProps = (state: State): ImportState => ({
-  //customerSheet: getCustomerSheet(state),
-  //providerSheet: getProviderSheet(state)
-  customerSheet: [],
-  providerSheet: [],
+  customerSheet: state.customerSheet,
+  providerSheet: state.providerSheet,
   customerSheetName: state.customerSheetName,
   providerSheetName: state.providerSheetName,
   sheetNames: getDbSheetNames(state),
@@ -146,7 +116,7 @@ const mapStateToProps = (state: State): ImportState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): ImportDispatch => ({
-  onFileChange: (f: File) => dispatch(dbFileChangedAction(f))
+  onFileChange: (f: File) => dispatch(dbFileChangeAction(f))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Import);

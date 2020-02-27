@@ -8,7 +8,7 @@ import Badge from 'react-bootstrap/Badge';
 import State from 'src/entities/State';
 import Status from 'src/entities/Status';
 
-import { eventKeyToggledAction } from 'src/redux/actions';
+import { eventKeyToggleAction } from 'src/redux/actions';
 
 interface StepProps extends StepState, StepDispatch {
   eventKey: string;
@@ -73,7 +73,7 @@ const mapStateToProps = (state: State): StepState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): StepDispatch => ({
-  onEventKeyToggle: (s: string) => dispatch(eventKeyToggledAction(s))
+  onEventKeyToggle: (s: string) => dispatch(eventKeyToggleAction(s))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Step);

@@ -13,19 +13,34 @@ import {
   getCustomerIDStatus,
   getProviderIDStatus,
   getOptionsStatus,
-  getProjectionStatus
+  getProjectionsStatus
 } from './selectors';
 
 import Locator, { LocatorKey } from 'src/services/Locator';
+import { extractCells } from './extractors';
+
+const customerSheet: any[][] = Locator.findArray(LocatorKey.LOCAL_CUSTOMER_SHEET);
+const providerSheet: any[][] = Locator.findArray(LocatorKey.LOCAL_PROVIDER_SHEET);
+const customerCells = extractCells()(customerSheet);
+const providerCells = extractCells()(providerSheet);
 
 export const INITIAL_STATE: State = {
+  // DATA
+  customerSheet,
+  providerSheet,
+  orderSheet: [],
+  // CELL
+  customerIDCell: Locator.findCell(customerCells, LocatorKey.CUSTOMER_ID),
+  providerIDCell: Locator.findCell(providerCells, LocatorKey.PROVIDER_ID),
+  customerMarkCell: Locator.findCell(customerCells, LocatorKey.CUSTOMER_MARK),
+  providerMarkCell: Locator.findCell(providerCells, LocatorKey.PROVIDER_MARK),
+  // RATE
   customerMarkRate: Locator.findRate(LocatorKey.CUSTOMER_RATE),
   providerMarkRate: Locator.findRate(LocatorKey.PROVIDER_RATE),
   dateMarkRate: Locator.findRate(LocatorKey.DATE_RATE),
+  // UI
   activeKeys: new Set<string>().add('1'),
-  projections: Locator.findArray(LocatorKey.PROJECTIONS),
-  localCustomerSheet: Locator.findArray(LocatorKey.LOCAL_CUSTOMER_SHEET),
-  localProviderSheet: Locator.findArray(LocatorKey.LOCAL_PROVIDER_SHEET)
+  projections: Locator.findArray(LocatorKey.PROJECTIONS)
 };
 
 class StateBuilder {
@@ -81,8 +96,10 @@ class StateBuilder {
     }
 
     Locator.save(LocatorKey.CUSTOMER_SHEET, customerSheetName);
-    const customerCells = getCustomerCells({ ...this.state });
+    this.state.customerSheet = this.getSheet(this.state.dbWorkbook, customerSheetName);
+    Locator.saveArray(LocatorKey.LOCAL_CUSTOMER_SHEET, this.state.customerSheet);
 
+    const customerCells = getCustomerCells({ ...this.state });
     this.state.customerIDCell = Locator.findCell(customerCells, LocatorKey.CUSTOMER_ID);
     this.state.customerMarkCell = Locator.findCell(customerCells, LocatorKey.CUSTOMER_MARK);
     this.hasToCompute = true;
@@ -98,8 +115,10 @@ class StateBuilder {
     }
 
     Locator.save(LocatorKey.PROVIDER_SHEET, providerSheetName);
+    this.state.providerSheet = this.getSheet(this.state.dbWorkbook, providerSheetName);
+    Locator.saveArray(LocatorKey.LOCAL_PROVIDER_SHEET, this.state.providerSheet);
+  
     const providerCells = getProviderCells({ ...this.state });
-
     this.state.providerIDCell = Locator.findCell(providerCells, LocatorKey.PROVIDER_ID);
     this.state.providerMarkCell = Locator.findCell(providerCells, LocatorKey.PROVIDER_MARK);
     this.hasToCompute = true;
@@ -115,8 +134,9 @@ class StateBuilder {
     }
 
     Locator.save(LocatorKey.ORDER_SHEET, orderSheetName);
-    const orderCells = getOrderCells({ ...this.state });
+    this.state.orderSheet = this.getSheet(this.state.orderWorkbook, orderSheetName);
 
+    const orderCells = getOrderCells({ ...this.state });
     this.state.orderCustomerIDCell = Locator.findCell(orderCells, LocatorKey.ORDER_CUSTOMER_ID);
     this.state.orderProviderIDCell = Locator.findCell(orderCells, LocatorKey.ORDER_PROVIDER_ID);
     this.state.orderTypeCell = Locator.findCell(orderCells, LocatorKey.ORDER_TYPE);
@@ -240,6 +260,11 @@ class StateBuilder {
     return this.state;
   }
 
+  private getSheet(workbook?: WorkBookAdaptor, sheetName?: string) {
+    if (workbook === undefined || sheetName === undefined) return [];
+    return workbook.getSheet(sheetName);
+  }
+
   private setCell(key: keyof StateCell, locatorKey: LocatorKey, cells: string[], str?: string): StateBuilder {
     if (str === undefined) {
       this.state[key] = undefined;
@@ -279,12 +304,14 @@ class StateBuilder {
   }
 
   private resetCustomerCells(): StateBuilder {
+    this.state.customerSheet = [];
     this.state.customerIDCell = undefined;
     this.state.customerMarkCell = undefined;
     return this;
   }
 
   private resetProviderCells(): StateBuilder {
+    this.state.providerSheet = [];
     this.state.providerIDCell = undefined;
     this.state.providerMarkCell = undefined;
     return this;
@@ -302,6 +329,7 @@ class StateBuilder {
   }
 
   private resetOrderCells(): StateBuilder {
+    this.state.orderSheet = [];
     this.state.orderCustomerIDCell = undefined;
     this.state.orderProviderIDCell = undefined;
     this.state.orderTypeCell = undefined;
@@ -334,7 +362,7 @@ class StateBuilder {
       set.add('5');
     }
 
-    if (getProjectionStatus(state) === 'danger') {
+    if (getProjectionsStatus(state) === 'danger') {
       set.add('7');
     }
 

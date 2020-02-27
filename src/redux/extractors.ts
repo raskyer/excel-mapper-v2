@@ -10,11 +10,6 @@ export const extractSheetNames = () => (workbook?: WorkBookAdaptor): string[] =>
   return workbook ? workbook.getSheetNames() : [];
 };
 
-export const extractSheet = () => (sheetName?: string, workbook?: WorkBookAdaptor): any[][] => {
-  if (workbook === undefined || sheetName === undefined) return [];
-  return workbook.getSheet(sheetName);
-};
-
 export const extractCells = () => (sheet: any[][]): string[] => {
   if (sheet.length === 0) return [];
   return sheet[0];
@@ -134,14 +129,14 @@ export const extractOptionsStatus = () => (customerMarkCell?: number, providerMa
   return 'warning';
 };
 
-export const extractRateStatus = () => (customerMarkRate: number, providerMarkRate: number, dateMarkRate: number): Status => {
+export const extractRatesStatus = () => (customerMarkRate: number, providerMarkRate: number, dateMarkRate: number): Status => {
   if (customerMarkRate < 0 || providerMarkRate < 0 || dateMarkRate < 0) {
     return 'danger';
   }
   return 'success';
 };
 
-export const extractProjectionStatus = () => (projection: Projection[], orderCells: string[]): Status => {
+export const extractProjectionsStatus = () => (projection: Projection[], orderCells: string[]): Status => {
   if (orderCells.length < 1) {
     return 'dark';
   }

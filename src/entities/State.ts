@@ -1,12 +1,17 @@
 import WorkBookAdaptor from './WorkbookAdaptor';
-import RankedOrder from './RankedOrder';
 import Projection from './Projection';
 
-interface State extends StateWorkbook, StateSheet, StateCell, StateRate, StateUI {}
+interface State extends StateWorkbook, StateData, StateSheet, StateCell, StateRate, StateUI {}
 
 export interface StateWorkbook {
   dbWorkbook?: WorkBookAdaptor;
   orderWorkbook?: WorkBookAdaptor;
+}
+
+export interface StateData {
+  customerSheet: any[][];
+  providerSheet: any[][];
+  orderSheet: any[][];
 }
 
 export interface StateSheet {
@@ -36,9 +41,6 @@ export interface StateRate {
 export interface StateUI {
   activeKeys: Set<string>;
   projections: Projection[];
-  rankedOrders?: RankedOrder[];
-  localCustomerSheet?: any[][];
-  localProviderSheet?: any[][];
 }
 
 export default State;

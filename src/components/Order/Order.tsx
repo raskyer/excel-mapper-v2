@@ -6,8 +6,7 @@ import Spreadsheet from './Spreadsheet';
 
 import State from 'src/entities/State';
 
-import { getOrderSheet } from 'src/redux/selectors';
-import { orderFileChangedAction } from 'src/redux/actions';
+import { orderFileChangeAction } from 'src/redux/actions';
 
 interface OrderProps extends OrderState, OrderDispatch {}
 
@@ -29,11 +28,11 @@ const Order: React.FC<OrderProps> = (props: OrderProps) => {
 };
 
 const mapStateToProps = (state: State): OrderState => ({
-  orderSheet: getOrderSheet(state)
+  orderSheet: state.orderSheet
 });
 
 const mapDispatchToProps = (dispatch: Function): OrderDispatch => ({
-  onOrderChange: (f: File) => dispatch(orderFileChangedAction(f))
+  onOrderChange: (f: File) => dispatch(orderFileChangeAction(f))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Order);

@@ -44,6 +44,8 @@ class Locator {
     this.defaultKeys.set(LocatorKey.PROVIDER_RATE, '1');
     this.defaultKeys.set(LocatorKey.DATE_RATE, '1');
     this.defaultKeys.set(LocatorKey.PROJECTIONS, '[]');
+    this.defaultKeys.set(LocatorKey.LOCAL_CUSTOMER_SHEET, '[]');
+    this.defaultKeys.set(LocatorKey.LOCAL_PROVIDER_SHEET, '[]');
   }
 
   findSheet(arr: string[], key: LocatorKey): string | undefined {
