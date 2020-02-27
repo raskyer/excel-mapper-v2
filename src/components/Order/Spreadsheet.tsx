@@ -38,7 +38,7 @@ const headerRender = (props: SpreadsheetProps, col: number): Handsontable.render
   let icon = '';
   switch (col) {
     case props.orderCustomerIDCell:
-      icon = renderToString(<FontAwesomeIcon icon={faPortrait} color="blue" />) + ' ';
+      icon = renderToString(<FontAwesomeIcon icon={faPortrait} className="text-blue-600" />) + ' ';
       break;
     case props.orderProviderIDCell:
       icon = renderToString(<FontAwesomeIcon icon={faTruck} color="red" />) + ' ';
@@ -58,16 +58,20 @@ const columnRender = (props: SpreadsheetProps, col: number): Handsontable.render
   Handsontable.renderers.TextRenderer.apply(this, arguments as any);
   switch (col) {
     case props.orderCustomerIDCell:
-      td.style.backgroundColor = 'blue';
+      td.style.color = '#fff';
+      td.style.backgroundColor = '#4299e1';
       break;
     case props.orderProviderIDCell:
+      td.style.color = '#fff';
       td.style.backgroundColor = 'red';
       break;
     case props.orderTypeCell:
+      td.style.color = '#fff';
       td.style.backgroundColor = 'grey';
       break;
     case props.orderLoadingDateCell:
     case props.orderShippingDateCell:
+      td.style.color = '#fff';
       td.style.backgroundColor = 'purple';
       break;
   }
@@ -172,7 +176,6 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
       <HotTable
         colHeaders={false}
         rowHeaders={false}
-        minSpareRows={1}
         data={data}
         width="100%"
         height="100%"
