@@ -1,29 +1,38 @@
-export const DB_FILE_CHANGE = 'change::file::db';
-export const ORDER_FILE_CHANGE = 'change::file::order';
+export enum FILE_CHANGE {
+  DB = 'change::file::db',
+  ORDER = 'change::file::order'
+}
 
-export const CUSTOMER_SHEET_CHANGE = 'change::sheet::customer';
-export const PROVIDER_SHEET_CHANGE = 'change::sheet::provider';
-export const ORDER_SHEET_CHANGE = 'change::sheet::order';
+export enum SHEET_NAME_CHANGE {
+  CUSTOMER = 'change::sheet::customer',
+  PROVIDER = 'change::sheet::provider',
+  ORDER = 'change::sheet::order'
+}
 
-export const CUSTOMER_ID_CELL_CHANGE = 'change::cell::id::customer';
-export const PROVIDER_ID_CELL_CHANGE = 'change::cell::id::provider';
-export const ORDER_CUSTOMER_ID_CELL_CHANGE = 'change::cell::id::customer::order';
-export const ORDER_PROVIDER_ID_CELL_CHANGE = 'change::cell::id::provider::order';
-export const ORDER_TYPE_CELL_CHANGE = 'change::cell::type::order';
-export const ORDER_LOADING_DATE_CELL_CHANGE = 'change::cell::date::loading::order';
-export const ORDER_SHIPPING_DATE_CELL_CHANGE = 'change::cell::date::shipping::order';
+export enum CELL_CHANGE {
+  CUSTOMER_ID = 'change::cell::id::customer',
+  PROVIDER_ID = 'change::cell::id::provider',
+  ORDER_CUSTOMER_ID = 'change::cell::id::customer::order',
+  ORDER_PROVIDER_ID = 'change::cell::id::provider::order',
+  ORDER_TYPE = 'change::cell::type::order',
+  ORDER_LOADING_DATE = 'change::cell::date::loading::order',
+  ORDER_SHIPPING_DATE = 'change::cell::date::shipping::order',
+  CUSTOMER_MARK = 'change::cell::mark::customer',
+  PROVIDER_MARK = 'change::cell::mark::provider'
+}
 
-export const CUSTOMER_MARK_CELL_CHANGE = 'change::cell::mark::customer';
-export const PROVIDER_MARK_CELL_CHANGE = 'change::cell::mark::provider';
+export enum RATE_CHANGE {
+  CUSTOMER = 'change::rate::mark::customer',
+  PROVIDER = 'change::rate::mark::provider',
+  DATE = 'change::rate::mark::date'
+}
 
-export const CUSTOMER_MARK_RATE_CHANGE = 'change::rate::mark::customer';
-export const PROVIDER_MARK_RATE_CHANGE = 'change::rate::mark::provider';
-export const DATE_MARK_RATE_CHANGE = 'change::rate::mark::date';
+export enum PROJECTION {
+  ADD = 'add::projection',
+  REMOVE = 'remove::projection',
+  UP = 'up::projection',
+  DOWN = 'down::projection'
+}
 
-export const EVENT_KEY_TOGGLE = 'toggle::key::event';
-export const PROJECTION_ADD = 'add::projection';
-export const PROJECTION_REMOVE = 'remove::projection';
-export const PROJECTION_UP = 'up::projection';
-export const PROJECTION_DOWN = 'down::projection';
 export const PROJECTION_ADD_ALL = 'add::all::projection';
 export const PROJECTION_REMOVE_ALL = 'remove::all::projection';

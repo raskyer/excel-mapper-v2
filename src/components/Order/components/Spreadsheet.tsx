@@ -12,6 +12,7 @@ import { faTruck } from '@fortawesome/free-solid-svg-icons/faTruck';
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
 
+// TODO : Remove these dependencies
 import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -34,9 +35,9 @@ import {
 const headerRender = (props: SpreadsheetProps, col: number): Handsontable.renderers.Base => function(this: any, _, td) {
   Handsontable.renderers.TextRenderer.apply(this, arguments as any);
   td.style.fontWeight = 'bold';
-  
+
   let icon = '';
-  switch (col) {
+  switch (props.projections[col].index) {
     case props.orderCustomerIDCell:
       icon = renderToString(<FontAwesomeIcon icon={faPortrait} className="text-blue-600" />) + ' ';
       break;
@@ -56,7 +57,7 @@ const headerRender = (props: SpreadsheetProps, col: number): Handsontable.render
 
 const columnRender = (props: SpreadsheetProps, col: number): Handsontable.renderers.Base => function(this: any, _, td) {
   Handsontable.renderers.TextRenderer.apply(this, arguments as any);
-  switch (col) {
+  switch (props.projections[col].index) {
     case props.orderCustomerIDCell:
       td.style.color = '#fff';
       td.style.backgroundColor = '#4299e1';
@@ -107,11 +108,11 @@ interface SpreadsheetState {
 }
 
 interface SpreadsheetDispatch {
-  onCustomerIDCellChange: (s: string) => void;
-  onProviderIDCellChange: (s: string) => void;
-  onTypeCellChange: (s: string) => void;
-  onLoadingDateCellChange: (s: string) => void;
-  onShippingDateCellChange: (s: string) => void;
+  onCustomerIDCellChange: (n: number) => void;
+  onProviderIDCellChange: (n: number) => void;
+  onTypeCellChange: (n: number) => void;
+  onLoadingDateCellChange: (n: number) => void;
+  onShippingDateCellChange: (n: number) => void;
 }
 
 const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
@@ -125,14 +126,14 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         name: 'Définir comme cellule d\'<strong>ID Client</strong>',
         callback: function(key, selections) {
           const cell = extractCell(selections);
-          props.onCustomerIDCellChange(cell.toString());
+          props.onCustomerIDCellChange(cell);
         }
       },
       providerIDCell: {
         name: 'Définir comme cellule d\'<strong>ID Transporteur</strong>',
         callback: (_, selections) => {
           const cell = extractCell(selections);
-          props.onProviderIDCellChange(cell.toString());
+          props.onProviderIDCellChange(cell);
         }
       },
       'step2': { name: '---------' },
@@ -140,21 +141,21 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         name: 'Définir comme cellule de <strong>Type</strong>',
         callback: (_, selections) => {
           const cell = extractCell(selections);
-          props.onTypeCellChange(cell.toString());
+          props.onTypeCellChange(cell);
         }
       },
       dateLoadingCell: {
         name: 'Définir comme cellule de <strong>Date Chargement</strong>',
         callback: (_, selections) => {
           const cell = extractCell(selections);
-          props.onLoadingDateCellChange(cell.toString());
+          props.onLoadingDateCellChange(cell);
         }
       },
       dateShippingCell: {
         name: 'Définir comme cellule de <strong>Date Livraison</strong>',
         callback: (_, selections) => {
           const cell = extractCell(selections);
-          props.onShippingDateCellChange(cell.toString());
+          props.onShippingDateCellChange(cell);
         }
       }
     }
@@ -178,7 +179,7 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         rowHeaders={false}
         data={data}
         width="100%"
-        height="100%"
+        height="400px"
         licenseKey="non-commercial-and-evaluation"
         contextMenu={contextMenu}
         selectionMode="single"
@@ -226,11 +227,11 @@ const mapStateToProps = (state: State): SpreadsheetState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): SpreadsheetDispatch => ({
-  onCustomerIDCellChange: (s) => dispatch(orderCustomerIDCellChangeAction(s)),
-  onProviderIDCellChange: (s) => dispatch(orderProviderIDCellChangeAction(s)),
-  onTypeCellChange: (s) => dispatch(orderTypeCellChangeAction(s)),
-  onLoadingDateCellChange: (s) => dispatch(orderLoadingDateCellChangeAction(s)),
-  onShippingDateCellChange: (s) => dispatch(orderShippingDateCellChangeAction(s))
+  onCustomerIDCellChange: cell => dispatch(orderCustomerIDCellChangeAction(cell)),
+  onProviderIDCellChange: cell => dispatch(orderProviderIDCellChangeAction(cell)),
+  onTypeCellChange: cell => dispatch(orderTypeCellChangeAction(cell)),
+  onLoadingDateCellChange: cell => dispatch(orderLoadingDateCellChangeAction(cell)),
+  onShippingDateCellChange: cell => dispatch(orderShippingDateCellChangeAction(cell))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Spreadsheet);

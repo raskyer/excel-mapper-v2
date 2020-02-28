@@ -70,6 +70,17 @@ export const getRatesStatus = createSelector([getCustomerMarkRate, getProviderMa
 
 export const getProjectionsStatus = createSelector([getProjections, getOrderCells], Extractors.extractProjectionsStatus());
 
+export const getOrderStatus = createSelector(
+  [
+    getOrderSheet,
+    getOrderCustomerIDCell,
+    getOrderProviderIDCell,
+    getOrderTypeCell,
+    getOrderLoadingDateCell,
+    getOrderShippingDateCell
+  ],
+  Extractors.extractOrderStatus()
+);
 
 export const getCells = createSelector(
   [

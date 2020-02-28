@@ -146,6 +146,27 @@ export const extractProjectionsStatus = () => (projection: Projection[], orderCe
   return 'success';
 };
 
+export const extractOrderStatus = () => (
+  sheet: any[][],
+  customerIDCell?: number,
+  providerIDCell?: number,
+  typeCell?: number,
+  loadingDateCell?: number,
+  shippingDateCell?: number
+): Status => {
+  if (
+    sheet.length < 1
+    || customerIDCell === undefined
+    || providerIDCell === undefined
+    || typeCell === undefined
+    || loadingDateCell === undefined
+    || shippingDateCell === undefined
+  ) {
+    return 'danger';
+  }
+  return 'success';
+};
+
 export const extractRankedOrders = () => (
     customerMap: CellMap,
     providerMap: CellMap,

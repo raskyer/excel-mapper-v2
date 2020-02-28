@@ -148,52 +148,52 @@ class StateBuilder {
     return this;
   }
 
-  setCustomerIDCell(str?: string): StateBuilder {
-    return this.setCell('customerIDCell', LocatorKey.CUSTOMER_ID, getCustomerCells(this.state), str);
+  setCustomerIDCell(cell: number): StateBuilder {
+    return this.setCell('customerIDCell', LocatorKey.CUSTOMER_ID, getCustomerCells(this.state), cell);
   }
 
-  setProviderIDCell(str?: string): StateBuilder {
-    return this.setCell('providerIDCell', LocatorKey.PROVIDER_ID, getProviderCells(this.state), str);
+  setProviderIDCell(cell: number): StateBuilder {
+    return this.setCell('providerIDCell', LocatorKey.PROVIDER_ID, getProviderCells(this.state), cell);
   }
 
-  setOrderCustomerIDCell(str?: string): StateBuilder {
-    return this.setCell('orderCustomerIDCell', LocatorKey.ORDER_CUSTOMER_ID, getOrderCells(this.state), str);
+  setOrderCustomerIDCell(cell: number): StateBuilder {
+    return this.setCell('orderCustomerIDCell', LocatorKey.ORDER_CUSTOMER_ID, getOrderCells(this.state), cell);
   }
 
-  setOrderProviderIDCell(str?: string): StateBuilder {
-    return this.setCell('orderProviderIDCell', LocatorKey.ORDER_PROVIDER_ID, getOrderCells(this.state), str);
+  setOrderProviderIDCell(cell: number): StateBuilder {
+    return this.setCell('orderProviderIDCell', LocatorKey.ORDER_PROVIDER_ID, getOrderCells(this.state), cell);
   }
 
-  setOrderTypeCell(str?: string): StateBuilder {
-    return this.setCell('orderTypeCell', LocatorKey.ORDER_TYPE, getOrderCells(this.state), str);
+  setOrderTypeCell(cell: number): StateBuilder {
+    return this.setCell('orderTypeCell', LocatorKey.ORDER_TYPE, getOrderCells(this.state), cell);
   }
 
-  setOrderLoadingDateCell(str?: string): StateBuilder {
-    return this.setCell('orderLoadingDateCell', LocatorKey.ORDER_LOADING_DATE, getOrderCells(this.state), str);
+  setOrderLoadingDateCell(cell: number): StateBuilder {
+    return this.setCell('orderLoadingDateCell', LocatorKey.ORDER_LOADING_DATE, getOrderCells(this.state), cell);
   }
 
-  setOrderShippingDateCell(str?: string): StateBuilder {
-    return this.setCell('orderShippingDateCell', LocatorKey.ORDER_SHIPPING_DATE, getOrderCells(this.state), str);
+  setOrderShippingDateCell(cell: number): StateBuilder {
+    return this.setCell('orderShippingDateCell', LocatorKey.ORDER_SHIPPING_DATE, getOrderCells(this.state), cell);
   }
 
-  setCustomerMarkCell(str?: string): StateBuilder {
-    return this.setCell('customerMarkCell', LocatorKey.CUSTOMER_MARK, getCustomerCells(this.state), str);
+  setCustomerMarkCell(cell: number): StateBuilder {
+    return this.setCell('customerMarkCell', LocatorKey.CUSTOMER_MARK, getCustomerCells(this.state), cell);
   }
 
-  setProviderMarkCell(str?: string): StateBuilder {
-    return this.setCell('providerMarkCell', LocatorKey.PROVIDER_MARK, getProviderCells(this.state), str);
+  setProviderMarkCell(cell: number): StateBuilder {
+    return this.setCell('providerMarkCell', LocatorKey.PROVIDER_MARK, getProviderCells(this.state), cell);
   }
 
-  setCustomerMarkRate(str: string): StateBuilder {
-    return this.setRate('customerMarkRate', LocatorKey.CUSTOMER_RATE, str);
+  setCustomerMarkRate(rate: number): StateBuilder {
+    return this.setRate('customerMarkRate', LocatorKey.CUSTOMER_RATE, rate);
   }
 
-  setProviderMarkRate(str: string): StateBuilder {
-    return this.setRate('providerMarkRate', LocatorKey.PROVIDER_RATE, str);
+  setProviderMarkRate(rate: number): StateBuilder {
+    return this.setRate('providerMarkRate', LocatorKey.PROVIDER_RATE, rate);
   }
 
-  setDateMarkRate(str: string): StateBuilder {
-    return this.setRate('dateMarkRate', LocatorKey.DATE_RATE, str);
+  setDateMarkRate(rate: number): StateBuilder {
+    return this.setRate('dateMarkRate', LocatorKey.DATE_RATE, rate);
   }
 
   toggleEventKey(eventKey: string): StateBuilder {
@@ -207,7 +207,12 @@ class StateBuilder {
     return this;
   }
 
-  addProjection(projection: Projection): StateBuilder {
+  addProjection(cell: string): StateBuilder {
+    const projection: Projection = {
+      type: 'text',
+      name: cell,
+      index: getOrderCells(this.state).indexOf(cell)
+    };
     this.state.projections = [...this.state.projections, projection];
     Locator.saveArray(LocatorKey.PROJECTIONS, this.state.projections);
     return this;
@@ -265,28 +270,15 @@ class StateBuilder {
     return workbook.getSheet(sheetName);
   }
 
-  private setCell(key: keyof StateCell, locatorKey: LocatorKey, cells: string[], str?: string): StateBuilder {
-    if (str === undefined) {
-      this.state[key] = undefined;
-      return this;
-    }
-
-    const index = parseInt(str, 10);
-    this.state[key] = index;
-    Locator.save(locatorKey, cells[index]);
-    
+  private setCell(key: keyof StateCell, locatorKey: LocatorKey, cells: string[], cell: number): StateBuilder {
+    this.state[key] = cell;
+    Locator.save(locatorKey, cells[cell]);
     return this;
   }
 
-  private setRate(key: keyof StateRate, locatorKey: LocatorKey, str: string): StateBuilder {
-    let rate = parseInt(str, 10);
-    if (isNaN(rate)) {
-      rate = 0;
-    }
-
+  private setRate(key: keyof StateRate, locatorKey: LocatorKey, rate: number): StateBuilder {
     this.state[key] = rate;
     Locator.save(locatorKey, rate.toString());
-    
     return this;
   }
 

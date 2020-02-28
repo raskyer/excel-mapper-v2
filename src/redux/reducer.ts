@@ -1,98 +1,94 @@
 import State from 'src/entities/State';
-import Action from 'src/entities/Action';
+import Action, { ActionFile, ActionString, ActionNumber } from 'src/entities/Action';
 
 import * as C from './constants';
 import StateBuilder, { INITIAL_STATE } from './StateBuilder';
 
 const AppReducer = (state: State = INITIAL_STATE, action: Action): State => {
   switch (action.type) {
-    case C.DB_FILE_CHANGE:
+    case C.FILE_CHANGE.DB:
       return new StateBuilder(state)
-        .setWorkbook(action.payload)
+        .setWorkbook((action as ActionFile).payload)
         .build();
-    case C.ORDER_FILE_CHANGE:
+    case C.FILE_CHANGE.ORDER:
       return new StateBuilder(state)
-        .setOrderWorkbook(action.payload)
+        .setOrderWorkbook((action as ActionFile).payload)
         .build();
-    case C.CUSTOMER_SHEET_CHANGE:
+    case C.SHEET_NAME_CHANGE.CUSTOMER:
       return new StateBuilder(state)
-        .setCustomerSheetName(action.payload)
+        .setCustomerSheetName((action as ActionString).payload)
         .build();
-    case C.PROVIDER_SHEET_CHANGE:
+    case C.SHEET_NAME_CHANGE.PROVIDER:
       return new StateBuilder(state)
-        .setProviderSheetName(action.payload)
+        .setProviderSheetName((action as ActionString).payload)
         .build();
-    case C.ORDER_SHEET_CHANGE:
+    case C.SHEET_NAME_CHANGE.ORDER:
       return new StateBuilder(state)
-        .setOrderSheetName(action.payload)
+        .setOrderSheetName((action as ActionString).payload)
         .build();
-    case C.CUSTOMER_ID_CELL_CHANGE:
+    case C.CELL_CHANGE.CUSTOMER_ID:
       return new StateBuilder(state)
-        .setCustomerIDCell(action.payload)
+        .setCustomerIDCell((action as ActionNumber).payload)
         .build();
-    case C.PROVIDER_ID_CELL_CHANGE:
+    case C.CELL_CHANGE.PROVIDER_ID:
       return new StateBuilder(state)
-        .setProviderIDCell(action.payload)
+        .setProviderIDCell((action as ActionNumber).payload)
         .build();
-    case C.ORDER_CUSTOMER_ID_CELL_CHANGE:
+    case C.CELL_CHANGE.ORDER_CUSTOMER_ID:
       return new StateBuilder(state)
-        .setOrderCustomerIDCell(action.payload)
+        .setOrderCustomerIDCell((action as ActionNumber).payload)
         .build();
-    case C.ORDER_PROVIDER_ID_CELL_CHANGE:
+    case C.CELL_CHANGE.ORDER_PROVIDER_ID:
       return new StateBuilder(state)
-        .setOrderProviderIDCell(action.payload)
+        .setOrderProviderIDCell((action as ActionNumber).payload)
         .build();
-    case C.ORDER_TYPE_CELL_CHANGE:
+    case C.CELL_CHANGE.ORDER_TYPE:
       return new StateBuilder(state)
-        .setOrderTypeCell(action.payload)
+        .setOrderTypeCell((action as ActionNumber).payload)
         .build();
-    case C.ORDER_LOADING_DATE_CELL_CHANGE:
+    case C.CELL_CHANGE.ORDER_LOADING_DATE:
       return new StateBuilder(state)
-        .setOrderLoadingDateCell(action.payload)
+        .setOrderLoadingDateCell((action as ActionNumber).payload)
         .build();
-    case C.ORDER_SHIPPING_DATE_CELL_CHANGE:
+    case C.CELL_CHANGE.ORDER_SHIPPING_DATE:
       return new StateBuilder(state)
-        .setOrderShippingDateCell(action.payload)
+        .setOrderShippingDateCell((action as ActionNumber).payload)
         .build();
-    case C.CUSTOMER_MARK_CELL_CHANGE:
+    case C.CELL_CHANGE.CUSTOMER_MARK:
       return new StateBuilder(state)
-        .setCustomerMarkCell(action.payload)
+        .setCustomerMarkCell((action as ActionNumber).payload)
         .build();
-    case C.PROVIDER_MARK_CELL_CHANGE:
+    case C.CELL_CHANGE.PROVIDER_MARK:
       return new StateBuilder(state)
-        .setProviderMarkCell(action.payload)
+        .setProviderMarkCell((action as ActionNumber).payload)
         .build();
-    case C.CUSTOMER_MARK_RATE_CHANGE:
+    case C.RATE_CHANGE.CUSTOMER:
       return new StateBuilder(state)
-        .setCustomerMarkRate(action.payload)
+        .setCustomerMarkRate((action as ActionNumber).payload)
         .build();
-    case C.PROVIDER_MARK_RATE_CHANGE:
+    case C.RATE_CHANGE.PROVIDER:
       return new StateBuilder(state)
-        .setProviderMarkRate(action.payload)
+        .setProviderMarkRate((action as ActionNumber).payload)
         .build();
-    case C.DATE_MARK_RATE_CHANGE:
+    case C.RATE_CHANGE.DATE:
       return new StateBuilder(state)
-        .setDateMarkRate(action.payload)
+        .setDateMarkRate((action as ActionNumber).payload)
         .build();
-    case C.EVENT_KEY_TOGGLE:
+    case C.PROJECTION.ADD:
       return new StateBuilder(state)
-        .toggleEventKey(action.payload)
+        .addProjection((action as ActionString).payload)
         .build();
-    case C.PROJECTION_ADD:
+    case C.PROJECTION.REMOVE:
       return new StateBuilder(state)
-        .addProjection(action.payload)
+        .removeProjection((action as ActionNumber).payload)
         .build();
-    case C.PROJECTION_REMOVE:
+    case C.PROJECTION.UP:
       return new StateBuilder(state)
-        .removeProjection(action.payload)
+        .upProjection((action as ActionNumber).payload)
         .build();
-    case C.PROJECTION_UP:
+    case C.PROJECTION.DOWN:
       return new StateBuilder(state)
-        .upProjection(action.payload)
-        .build();
-    case C.PROJECTION_DOWN:
-      return new StateBuilder(state)
-        .downProjection(action.payload)
+        .downProjection((action as ActionNumber).payload)
         .build();
     case C.PROJECTION_ADD_ALL:
       return new StateBuilder(state)

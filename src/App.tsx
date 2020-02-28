@@ -12,7 +12,7 @@ const App: React.FC = () => {
     <HashRouter>
       <Navbar />
 
-      <main style={{ height: 'calc(100vh - 500px)' }}>
+      <main>
         <Switch>
           <Route path="/" exact>
             <Order />

@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Section from '../common/Section';
 import Dropzone from '../common/Dropzone';
 import Select from '../common/Select';
+import Database from '../common/Database';
 
 import State from 'src/entities/State';
 
 import { getDbSheetNames, getCustomerCells, getProviderCells } from 'src/redux/selectors';
 import { dbFileChangeAction } from 'src/redux/actions';
-import Database from '../common/Database';
 
 interface ImportProps extends ImportState, ImportDispatch {}
 
@@ -29,21 +30,19 @@ interface ImportState {
 }
 
 interface ImportDispatch {
-  onFileChange: (f: File) => void;
+  onFileUpload: (f: File) => void;
 }
 
 const Import: React.FC<ImportProps> = (props: ImportProps) => {
   const onFileUpload = (f: File[]) => {
-    if (f.length > 0) props.onFileChange(f[0]);
+    if (f.length > 0) props.onFileUpload(f[0]);
   };
 
   return (
     <>
-      <section className="bg-white p-5 shadow-md rounded m-5">
-        <h1 className="font-bold text-xl mb-5 text-gray-700 border-b-2">Import</h1>
-
+      <Section title="Import">
         <form>
-          <div className="px-20">
+          <div>
             <label>Fichier <strong>Clients / Transporteurs</strong> :</label>
             <Dropzone onChange={onFileUpload} />
           </div>
@@ -89,14 +88,12 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
             />
           </div>
         </form>
-      </section>
+      </Section>
 
-      <section className="mt-5 bg-white p-5 shadow-md rounded m-5">
-        <h1 className="font-bold text-xl mb-5 text-gray-700 border-b-2">Base de données</h1>
-
-        <Database title="Client" sheet={props.customerSheet} />
-        <Database title="Transporteur" sheet={props.providerSheet} />
-      </section>
+      <Section title="Base de données">
+        <Database title="Clients" sheet={props.customerSheet} />
+        <Database title="Transporteurs" sheet={props.providerSheet} />
+      </Section>
     </>
   );
 };
@@ -116,7 +113,7 @@ const mapStateToProps = (state: State): ImportState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): ImportDispatch => ({
-  onFileChange: (f: File) => dispatch(dbFileChangeAction(f))
+  onFileUpload: (f: File) => dispatch(dbFileChangeAction(f))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Import);
