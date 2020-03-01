@@ -24,7 +24,7 @@ const Rate: React.FC<RateProps> = (props: RateProps) => {
         value={props.value}
         onChange={onChange}
         min={0}
-        className="appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none"
+        className="appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight"
       />
     </div>
   );

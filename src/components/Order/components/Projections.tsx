@@ -47,6 +47,7 @@ const Projections: React.FC<ProjectionsProps> = (props: ProjectionsProps) => {
   return (
     <div className="flex justify-center">
       <div className="w-full">
+        <h2>Cellules Commandes</h2>
         <ul className="border rounded h-64 overflow-y-auto">
           {props.orderCells.map((cell, index) => (
             <li key={index} className="px-5 py-2 border-b last:border-b-0 flex justify-between items-center">
@@ -69,6 +70,7 @@ const Projections: React.FC<ProjectionsProps> = (props: ProjectionsProps) => {
       </div>
 
       <div className="w-full">
+        <h2>Cellules Export</h2>
         <ul className="border rounded h-64 overflow-y-auto">
           {props.projections.map((projection, index) => (
             <li key={index} className="px-5 py-2 border-b last:border-b-0 flex justify-between items-center">
@@ -100,7 +102,7 @@ const Projections: React.FC<ProjectionsProps> = (props: ProjectionsProps) => {
           ))}
         </ul>
 
-        <div className="mt-2 flex justify-between">
+        <div className="mt-2">
           <input
             value={header}
             onChange={e => setHeader(e.currentTarget.value)}
