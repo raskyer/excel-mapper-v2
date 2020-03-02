@@ -2,7 +2,7 @@ import Excel from 'exceljs';
 import FileSaver from 'file-saver';
 
 import LibraryAdaptor from 'src/entities/LibraryAdaptor';
-import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
+import WorkBookAdaptor from 'src/entities/WorkBookAdaptor';
 import RankedOrder from 'src/entities/RankedOrder';
 
 const TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -33,10 +33,10 @@ class ExceljsWorkBookAdaptor implements WorkBookAdaptor {
     return data;
   }
 
-  download(): void {
+  download(fileName: string): void {
     this.workbook.xlsx.writeBuffer().then(data => {
       const blob = new Blob([data], { type: TYPE }); 
-      FileSaver.saveAs(blob, 'test.xlsx');
+      FileSaver.saveAs(blob, `${fileName}.xlsx`);
     });
   }
 }

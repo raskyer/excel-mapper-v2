@@ -1,6 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPortrait } from '@fortawesome/free-solid-svg-icons/faPortrait';
+import { faTruck } from '@fortawesome/free-solid-svg-icons/faTruck';
+
 import ProgressBar from 'src/components/common/ProgressBar';
 
 import State from 'src/entities/State';
@@ -21,22 +25,26 @@ interface IDMatchState {
 const IDMatch: React.FC<IDMatchProps> = (props: IDMatchProps) => {
   return (
     <>
-      <div className="grid grid-cols-3">
+      <div className="flex justify-between items-center">
         <div>
-          {props.customerID && props.customerCells[props.customerID]}
+          <FontAwesomeIcon icon={faPortrait} className="text-blue-600" /> {props.customerID ? props.customerCells[props.customerID] : <span className="text-red-600">Non défini</span>}
         </div>
-        <ProgressBar percent={25} />
+        <div className="w-64">
+          <ProgressBar percent={25} />
+        </div>
         <div>
-          {props.orderCustomerID && props.orderCells[props.orderCustomerID]}
+          <FontAwesomeIcon icon={faPortrait} className="text-blue-600" /> {props.orderCustomerID ? props.orderCells[props.orderCustomerID] : <span className="text-red-600">Non défini</span>}
         </div>
       </div>
-      <div>
+      <div className="flex justify-between items-center">
         <div>
-          {props.providerID && props.providerCells[props.providerID]}
+          <FontAwesomeIcon icon={faTruck} className="text-red-600" /> {props.providerID ? props.providerCells[props.providerID] : <span className="text-red-600">Non défini</span>}
         </div>
-        <ProgressBar percent={80} />
+        <div className="w-64">
+          <ProgressBar percent={80} />
+        </div>
         <div>
-          {props.orderProviderID && props.orderCells[props.orderProviderID]}
+          <FontAwesomeIcon icon={faTruck} className="text-red-600" /> {props.orderProviderID ? props.orderCells[props.orderProviderID] : <span className="text-red-600">Non défini</span>}
         </div>
       </div>
     </>

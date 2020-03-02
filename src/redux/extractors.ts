@@ -1,4 +1,4 @@
-import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
+import WorkBookAdaptor from 'src/entities/WorkBookAdaptor';
 import Status from 'src/entities/Status';
 import CellMap from 'src/entities/CellMap';
 import Projection from 'src/entities/Projection';

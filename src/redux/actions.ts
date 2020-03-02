@@ -1,13 +1,13 @@
 import Dispatcher from 'src/entities/Dispatcher';
 import Action from 'src/entities/Action';
-import RankedOrder from 'src/entities/RankedOrder';
 
 import * as C from './constants';
 
-import { DefaultLibraryAdaptor } from 'src/services/LibraryAdaptorFactory'; 
+import { parseFile } from 'src/services/DefaultLibraryAdaptor'; 
 
+// TODO : Remove
 export const dbFileChangeAction = (dbFile: File) => (dispatch: Dispatcher): void => {
-  DefaultLibraryAdaptor.parseFile(dbFile).then(workbook => {
+  parseFile(dbFile).then(workbook => {
     dispatch({
       type: C.FILE_CHANGE.DB,
       payload: workbook
@@ -17,7 +17,7 @@ export const dbFileChangeAction = (dbFile: File) => (dispatch: Dispatcher): void
 
 
 export const orderFileChangeAction = (orderFile: File) => (dispatch: Dispatcher): void => {
-  DefaultLibraryAdaptor.parseFile(orderFile).then(workbook => {
+  parseFile(orderFile).then(workbook => {
     dispatch({
       type: C.FILE_CHANGE.ORDER,
       payload: workbook
@@ -129,11 +129,3 @@ export const projectionRemoveAllAction = (): Action => ({
   type: C.PROJECTION_REMOVE_ALL,
   payload: undefined
 });*/
-
-// TODO : REMOVE
-export const download = (headers: string[], rankedOrders: RankedOrder[]) => {
-  DefaultLibraryAdaptor.createWorkbook(headers, rankedOrders).download();
-  return {
-    type: ''
-  };
-};

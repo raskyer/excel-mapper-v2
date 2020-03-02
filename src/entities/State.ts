@@ -1,4 +1,4 @@
-import WorkBookAdaptor from './WorkbookAdaptor';
+import WorkBookAdaptor from './WorkBookAdaptor';
 import Projection from './Projection';
 
 interface State extends StateWorkbook, StateData, StateSheet, StateCell, StateRate, StateUI {}

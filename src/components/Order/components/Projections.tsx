@@ -55,7 +55,7 @@ const Projections: React.FC<ProjectionsProps> = (props: ProjectionsProps) => {
 
               <button
                 onClick={() => props.onProjectionAdd(cell)}
-                className={`bg-green-500 text-white px-5 py-2 rounded ${disableds[index] && 'opacity-50 cursor-not-allowed'}`}
+                className={`font-bold bg-green-500 hover:bg-green-400 text-white border rounded px-5 py-2 ${disableds[index] && 'opacity-50 cursor-not-allowed'}`}
                 disabled={disableds[index]}
               >
                 <FontAwesomeIcon icon={faArrowRight} size="xs" />
@@ -109,7 +109,7 @@ const Projections: React.FC<ProjectionsProps> = (props: ProjectionsProps) => {
             type="text"
             className="border rounded px-5 py-2"
           />
-          <button onClick={onHeaderAdd} className="bg-green-600 text-white px-5 py-2 rounded">
+          <button onClick={onHeaderAdd} className="font-bold bg-green-500 hover:bg-green-400 text-white border rounded px-5 py-2">
             <FontAwesomeIcon icon={faPlus} size="xs" />
           </button>
         </div>

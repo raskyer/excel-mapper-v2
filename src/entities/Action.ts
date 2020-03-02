@@ -1,5 +1,5 @@
 import { FILE_CHANGE, SHEET_NAME_CHANGE, CELL_CHANGE, RATE_CHANGE, PROJECTION } from '../redux/constants';
-import WorkBookAdaptor from './WorkbookAdaptor';
+import WorkBookAdaptor from './WorkBookAdaptor';
 
 export interface ActionFile {
   type: FILE_CHANGE;

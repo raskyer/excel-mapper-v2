@@ -37,7 +37,7 @@ const Database: React.FC<DatabaseProps> = (props: DatabaseProps) => {
           ))}
           <tr>
             <td colSpan={props.sheet.length > 0 ? props.sheet[0].length + 1 : 1} className="border text-center px-4 py-2">
-              <button className="font-bold border rounded py-2 px-4 text-white bg-green-600">
+              <button className="font-bold bg-green-500 hover:bg-green-400 text-white border rounded px-5 py-2">
                 Ajouter
               </button>
             </td>

@@ -12,16 +12,9 @@ import { faTruck } from '@fortawesome/free-solid-svg-icons/faTruck';
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog';
 import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
 
-// TODO : Remove these dependencies
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-
 import State from 'src/entities/State';
 import RankedOrder from 'src/entities/RankedOrder';
 import Projection from 'src/entities/Projection';
-
-import { formatDate } from 'src/utils/core';
 
 import { getRankedOrders } from 'src/redux/selectors';
 import {
@@ -31,6 +24,8 @@ import {
   orderLoadingDateCellChangeAction,
   orderShippingDateCellChangeAction
 } from 'src/redux/actions';
+
+import { createWorkBook } from 'src/services/DefaultLibraryAdaptor';
 
 const headerRender = (props: SpreadsheetProps, col: number): Handsontable.renderers.Base => function(this: any, _, td) {
   Handsontable.renderers.TextRenderer.apply(this, arguments as any);
@@ -42,7 +37,7 @@ const headerRender = (props: SpreadsheetProps, col: number): Handsontable.render
       icon = renderToString(<FontAwesomeIcon icon={faPortrait} className="text-blue-600" />) + ' ';
       break;
     case props.orderProviderIDCell:
-      icon = renderToString(<FontAwesomeIcon icon={faTruck} color="red" />) + ' ';
+      icon = renderToString(<FontAwesomeIcon icon={faTruck} className="text-red-600" />) + ' ';
       break;
     case props.orderTypeCell:
       icon = renderToString(<FontAwesomeIcon icon={faCog} color="grey" />) + ' ';
@@ -172,6 +167,18 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLTableCellElement | null>(null);
   const [ro, setRo] = React.useState<RankedOrder | undefined>(undefined);
 
+  const onDownload = () => {
+    const fileName = prompt('Nom du fichier ?', 'out');
+    console.log(fileName);
+
+    if (fileName === null || fileName === '') {
+      return;
+    }
+
+    const headers = props.projections.map(p => p.name);
+    createWorkBook(headers, props.rankedOrders).download(fileName);
+  };
+
   return (
     <>
       <HotTable
@@ -198,17 +205,14 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         }}
       />
 
-      <Popper id={'simple-popper'} open={Boolean(anchorEl)} anchorEl={anchorEl}>
-        <Paper>
-          {ro && (
-            <Typography>
-              <b>Client</b> : {ro.customer.id}, <b>Note</b> : {ro.customer.mark ? ro.customer.mark : 'Non trouvé'} ({ro.customer.ranking}/{5 * props.customerMarkRate}),<br/>
-              <b>Transporteur</b> : {ro.provider.id}, <b>Note</b> : {ro.provider.mark ? ro.provider.mark : 'Non trouvé'} ({ro.provider.ranking}/{5 * props.providerMarkRate}),<br/>
-              <b>Date</b> : {formatDate(ro.date.date)}, <b>Note</b> : {ro.date.ranking.toFixed(2)}/{5 * props.dateMarkRate}
-            </Typography>
-          )}
-        </Paper>
-      </Popper>
+      <div className="flex justify-end m-5">
+        <button
+          onClick={onDownload}
+          className="font-bold bg-green-500 hover:bg-green-400 text-white border rounded px-5 py-2"
+        >
+          Télécharger
+        </button>
+      </div>
     </>
   );
 };

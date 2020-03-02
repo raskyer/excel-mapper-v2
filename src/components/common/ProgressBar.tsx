@@ -13,7 +13,7 @@ const ProgressBar: React.FC<ProgressBarProps> = (props: ProgressBarProps) => {
   }
 
   return (
-    <div className="shadow w-full bg-gray-300 mt-2">
+    <div className="shadow w-full bg-gray-300">
       <div 
         className={`${color} text-xs leading-none py-1 text-center text-white font-bold`}
         style={{ width: `${props.percent}%` }}

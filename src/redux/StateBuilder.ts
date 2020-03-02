@@ -1,5 +1,5 @@
 import State, { StateCell, StateRate } from 'src/entities/State';
-import WorkBookAdaptor from 'src/entities/WorkbookAdaptor';
+import WorkBookAdaptor from 'src/entities/WorkBookAdaptor';
 import Projection from 'src/entities/Projection';
 
 import {
