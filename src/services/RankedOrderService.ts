@@ -98,7 +98,11 @@ class RankedOrderService {
   }
 
   private sortStrategy(a: RankedOrder, b: RankedOrder): number {
-    if (this.orderTypeCell !== undefined && a.order[this.orderTypeCell] !== b.order[this.orderTypeCell]) {
+    if (
+      this.orderTypeCell !== undefined
+      && a.order[this.orderTypeCell] !== b.order[this.orderTypeCell]
+      && typeof a.order[this.orderTypeCell].localeCompare === 'function'
+    ) {
       return a.order[this.orderTypeCell].localeCompare(b.order[this.orderTypeCell]);
     }
     return b.ranking - a.ranking

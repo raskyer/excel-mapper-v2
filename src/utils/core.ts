@@ -1,6 +1,7 @@
 import CellMap from 'src/entities/CellMap';
 import RankedOrder from "src/entities/RankedOrder";
 import Projection from "src/entities/Projection";
+import Difference from 'src/entities/Difference';
 
 export function createMap(sheet: any[][], idCell: number): CellMap {
   const map = new Map();
@@ -18,7 +19,7 @@ export function createMap(sheet: any[][], idCell: number): CellMap {
   return map;
 }
 
-export function difference(orderMap: CellMap, itemMap: CellMap): { present: any[][],  missing: any[][] } {
+export function difference(orderMap: CellMap, itemMap: CellMap): Difference {
   const present: any[][] = [];
   const missing: any[][] = [];
 
@@ -31,6 +32,10 @@ export function difference(orderMap: CellMap, itemMap: CellMap): { present: any[
   }
 
   return { present, missing };
+}
+
+export function differencePercentage(diff: Difference): number {
+  return diffPercentage(diff.present.length + diff.missing.length, diff.missing.length);
 }
 
 export function diffPercentage(size: number, missingSize: number): number {

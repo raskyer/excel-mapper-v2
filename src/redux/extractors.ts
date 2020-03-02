@@ -2,6 +2,7 @@ import WorkBookAdaptor from 'src/entities/WorkBookAdaptor';
 import Status from 'src/entities/Status';
 import CellMap from 'src/entities/CellMap';
 import Projection from 'src/entities/Projection';
+import Difference from 'src/entities/Difference';
 
 import RankedOrderService from 'src/services/RankedOrderService';
 import { createMap, difference, diffPercentage, project } from 'src/utils/core';
@@ -18,6 +19,10 @@ export const extractCells = () => (sheet: any[][]): string[] => {
 export const extractMap = () => (sheet: any[][], idCell?: number): CellMap => {
   if (sheet.length === 0 || idCell === undefined) return new Map();
   return createMap(sheet, idCell);
+};
+
+export const extractDifference = () => (itemMap: CellMap, orderMap: CellMap): Difference => {
+  return difference(orderMap, itemMap);
 };
 
 export const extractFileStatus = () => (dbWorkbook?: WorkBookAdaptor, orderWorkbook?: WorkBookAdaptor): Status => {
@@ -208,7 +213,7 @@ export const extractRankedOrders = () => (
     customerMarkRate,
     providerMarkRate,
     dateMarkRate,
-    console.log
+    () => {} // console.log
   );
 
   const rankedOrders = rankedOrderService.build(orderSheet);

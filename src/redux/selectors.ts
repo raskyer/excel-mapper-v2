@@ -43,6 +43,8 @@ export const getCustomerMap = createSelector([getCustomerSheet, getCustomerIDCel
 export const getProviderMap = createSelector([getProviderSheet, getProviderIDCell], Extractors.extractMap());
 export const getOrderCustomerMap = createSelector([getOrderSheet, getOrderCustomerIDCell], Extractors.extractMap());
 export const getOrderProviderMap = createSelector([getOrderSheet, getOrderProviderIDCell], Extractors.extractMap());
+export const getCustomerDifference = createSelector([getCustomerMap, getOrderCustomerMap], Extractors.extractDifference());
+export const getProviderDifference = createSelector([getProviderMap, getOrderProviderMap], Extractors.extractDifference());
 
 export const getFileStatus = createSelector([getDbWorkbook, getOrderWorkbook], Extractors.extractFileStatus());
 export const getSheetStatus = createSelector(

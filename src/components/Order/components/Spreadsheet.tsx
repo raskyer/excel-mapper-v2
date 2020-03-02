@@ -1,6 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server'
 import { connect } from 'react-redux';
+import { createPopper } from '@popperjs/core';
 
 import { HotTable } from '@handsontable/react';
 import Handsontable from 'handsontable';
@@ -26,6 +27,7 @@ import {
 } from 'src/redux/actions';
 
 import { createWorkBook } from 'src/services/DefaultLibraryAdaptor';
+import { formatDate } from 'src/utils/core';
 
 const headerRender = (props: SpreadsheetProps, col: number): Handsontable.renderers.Base => function(this: any, _, td) {
   Handsontable.renderers.TextRenderer.apply(this, arguments as any);
@@ -164,12 +166,11 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
   });
   data.unshift(props.projections.map(p => p.name));
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLTableCellElement | null>(null);
   const [ro, setRo] = React.useState<RankedOrder | undefined>(undefined);
+  const tooltip = React.useRef<HTMLDivElement>(null);
 
   const onDownload = () => {
     const fileName = prompt('Nom du fichier ?', 'out');
-    console.log(fileName);
 
     if (fileName === null || fileName === '') {
       return;
@@ -185,6 +186,7 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         colHeaders={false}
         rowHeaders={false}
         data={data}
+        readOnly={true}
         width="100%"
         height="400px"
         licenseKey="non-commercial-and-evaluation"
@@ -192,9 +194,10 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         selectionMode="single"
         afterOnCellMouseUp={(event, coords, td) => {
           const { row } = coords;
-          if (props.rankedOrders[row - 1] !== undefined) {
-            setRo(props.rankedOrders[row - 1]);
-            setAnchorEl(td);
+          const newRo = props.rankedOrders[row - 1];
+          if (newRo !== undefined && tooltip.current !== null) {
+            setRo(newRo);
+            createPopper(td, tooltip.current);
           }
         }}
         cells={(row, col) => {
@@ -205,13 +208,24 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
         }}
       />
 
-      <div className="flex justify-end m-5">
+      <div className="m-5">
         <button
           onClick={onDownload}
-          className="font-bold bg-green-500 hover:bg-green-400 text-white border rounded px-5 py-2"
+          className="w-full font-bold bg-green-500 hover:bg-green-400 text-white border rounded px-5 py-2"
         >
           Télécharger
         </button>
+      </div>
+
+      <div
+        ref={tooltip}
+        onClick={() => setRo(undefined)}
+        className={'bg-white shadow px-5 py-2 ' + (ro === undefined ? 'hidden' : '')}
+      >
+        <b>Note global</b> : {ro?.ranking.toFixed(2)} <br/>
+        <b>Client</b> : {ro?.customer.id}, <b>Note</b> : {ro?.customer.mark ? ro?.customer.mark : 'Non trouvé'} ({ro?.customer.ranking}/{5 * props.customerMarkRate}),<br/>
+        <b>Transporteur</b> : {ro?.provider.id}, <b>Note</b> : {ro?.provider.mark ? ro?.provider.mark : 'Non trouvé'} ({ro?.provider.ranking}/{5 * props.providerMarkRate}),<br/>
+        <b>Date</b> : {formatDate(ro?.date.date)}, <b>Note</b> : {ro?.date.ranking.toFixed(2)}/{5 * props.dateMarkRate}
       </div>
     </>
   );
