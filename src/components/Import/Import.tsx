@@ -9,7 +9,15 @@ import Database from '../common/Database';
 import State from 'src/entities/State';
 
 import { getDbSheetNames, getCustomerCells, getProviderCells } from 'src/redux/selectors';
-import { dbFileChangeAction } from 'src/redux/actions';
+import {
+  dbFileChangeAction,
+  customerSheetChangeAction,
+  providerSheetChangeAction,
+  customerIDCellChangeAction,
+  providerIDCellChangeAction,
+  customerMarkCellChangeAction,
+  providerMarkCellChangeAction
+} from 'src/redux/actions';
 
 interface ImportProps extends ImportState, ImportDispatch {}
 
@@ -31,6 +39,12 @@ interface ImportState {
 
 interface ImportDispatch {
   onFileUpload: (f: File) => void;
+  onCustomerSheetChange: (s: string) => void;
+  onProviderSheetChange: (s: string) => void;
+  onCustomerIDChange: (n: number) => void;
+  onProviderIDChange: (n: number) => void;
+  onCustomerMarkChange: (n: number) => void;
+  onProviderMarkChange: (n: number) => void;
 }
 
 const Import: React.FC<ImportProps> = (props: ImportProps) => {
@@ -52,12 +66,14 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
               title="Feuille Client"
               value={props.customerSheetName}
               options={props.sheetNames}
+              onChange={props.onCustomerSheetChange}
               byValue
             />
             <Select
               title="Feuille Transporteur"
               value={props.providerSheetName}
               options={props.sheetNames}
+              onChange={props.onProviderSheetChange}
               byValue
             />
           </div>
@@ -66,11 +82,13 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
             <Select
               title="Cellule ID Client"
               value={props.customerIDCell}
+              onChange={props.onCustomerIDChange}
               options={props.customerCells}
             />
             <Select
               title="Cellule ID Transporteur"
               value={props.providerIDCell}
+              onChange={props.onProviderIDChange}
               options={props.providerCells}
             />
           </div>
@@ -79,11 +97,13 @@ const Import: React.FC<ImportProps> = (props: ImportProps) => {
             <Select
               title="Cellule note Client"
               value={props.customerMarkCell}
+              onChange={props.onCustomerMarkChange}
               options={props.customerCells}
             />
             <Select
               title="Cellule note Transporteur"
               value={props.providerMarkCell}
+              onChange={props.onProviderMarkChange}
               options={props.providerCells}
             />
           </div>
@@ -113,7 +133,13 @@ const mapStateToProps = (state: State): ImportState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): ImportDispatch => ({
-  onFileUpload: (f: File) => dispatch(dbFileChangeAction(f))
+  onFileUpload: f => dispatch(dbFileChangeAction(f)),
+  onCustomerSheetChange: s => dispatch(customerSheetChangeAction(s)),
+  onProviderSheetChange: s => dispatch(providerSheetChangeAction(s)),
+  onCustomerIDChange: n => dispatch(customerIDCellChangeAction(n)),
+  onProviderIDChange: n => dispatch(providerIDCellChangeAction(n)),
+  onCustomerMarkChange: n => dispatch(customerMarkCellChangeAction(n)),
+  onProviderMarkChange: n => dispatch(providerMarkCellChangeAction(n))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Import);
