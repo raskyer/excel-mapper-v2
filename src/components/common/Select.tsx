@@ -27,7 +27,7 @@ function Select<T extends string | number>(props: SelectProps<T>) {
           onChange={onChange}
           disabled={props.options.length < 1}
           required
-          className={`block appearance-none w-full ${props.value === undefined ? 'bg-gray-200 border-red-600' : 'bg-white border-green-500'} border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+          className={`block appearance-none w-full ${props.value === undefined ? 'bg-gray-200 border-red-600' : 'bg-white border-green-500'} border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white`}
         >
           <option disabled value={-1}>--- Choissir une option --</option>
           {props.options.map((option, index) => (
