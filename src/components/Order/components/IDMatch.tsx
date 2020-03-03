@@ -30,15 +30,17 @@ interface IDMatchState {
 const IDMatch: React.FC<IDMatchProps> = (props: IDMatchProps) => {
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="grid grid-cols-3 text-center">
         <div>
           <FontAwesomeIcon icon={faPortrait} className="text-blue-600" /> {props.customerID !== undefined ?
             props.customerCells[props.customerID]
             :
             <span className="text-red-600">Non défini</span>
           }
+          <br/>
+          <span className="italic">(Base de données)</span>
         </div>
-        <div className="w-64">
+        <div className="w-full">
           <ProgressBar percent={differencePercentage(props.customerDiff)} />
         </div>
         <div>
@@ -47,17 +49,21 @@ const IDMatch: React.FC<IDMatchProps> = (props: IDMatchProps) => {
             :
             <span className="text-red-600">Non défini</span>
           }
+          <br/>
+          <span className="italic">(Fichier commandes)</span>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-5">
+      <div className="grid grid-cols-3 text-center mt-5">
         <div>
           <FontAwesomeIcon icon={faTruck} className="text-red-600" /> {props.providerID !== undefined ?
             props.providerCells[props.providerID]
             :
             <span className="text-red-600">Non défini</span>
           }
+          <br/>
+          <span className="italic">(Base de données)</span>
         </div>
-        <div className="w-64">
+        <div className="w-full">
           <ProgressBar percent={differencePercentage(props.providerDiff)} />
         </div>
         <div>
@@ -66,6 +72,8 @@ const IDMatch: React.FC<IDMatchProps> = (props: IDMatchProps) => {
             :
             <span className="text-red-600">Non défini</span>
           }
+          <br/>
+          <span className="italic">(Fichier commandes)</span>
         </div>
       </div>
     </>

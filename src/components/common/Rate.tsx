@@ -13,7 +13,7 @@ const Rate: React.FC<RateProps> = (props: RateProps) => {
   };
   
   return (
-    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+    <div className="w-full pr-10">
       <label htmlFor="grid-first-name" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
         {props.label}
       </label>

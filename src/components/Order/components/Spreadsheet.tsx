@@ -183,11 +183,11 @@ const Spreadsheet: React.FC<SpreadsheetProps> = (props: SpreadsheetProps) => {
   return (
     <>
       <HotTable
+        className="m-5"
         colHeaders={false}
         rowHeaders={false}
         data={data}
         readOnly={true}
-        width="100%"
         height="400px"
         licenseKey="non-commercial-and-evaluation"
         contextMenu={contextMenu}

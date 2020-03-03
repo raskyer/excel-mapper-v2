@@ -1,18 +1,18 @@
 import React from 'react';
 
-interface SelectProps {
+interface SelectProps<T extends string | number> {
   title: string;
-  value?: string | number;
-  onChange?: (s?: string) => void;
+  value?: T;
   options: string[];
+  onChange?: (s: T) => void;
   byValue?: boolean;
-  addon?: React.ReactElement;
 }
 
-const Select: React.FC<SelectProps> = (props) => {
+function Select<T extends string | number>(props: SelectProps<T>) {
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     if (!props.onChange) return;
-    props.onChange(e.currentTarget.value);
+    const value = props.byValue ? e.currentTarget.value : parseInt(e.currentTarget.value, 10);
+    props.onChange(value as T);
   };
 
   return (

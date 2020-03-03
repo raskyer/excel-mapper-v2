@@ -7,7 +7,15 @@ import Select from 'src/components/common/Select';
 
 import State from 'src/entities/State';
 
-import { orderFileChangeAction } from 'src/redux/actions';
+import {
+  orderFileChangeAction,
+  orderSheetChangeAction,
+  orderCustomerIDCellChangeAction,
+  orderProviderIDCellChangeAction,
+  orderTypeCellChangeAction,
+  orderLoadingDateCellChangeAction,
+  orderShippingDateCellChangeAction
+} from 'src/redux/actions';
 import { getOrderSheetNames, getOrderCells } from 'src/redux/selectors';
 
 interface UploadProps extends UploadState, UploadDispatch {}
@@ -25,7 +33,13 @@ interface UploadState {
 }
 
 interface UploadDispatch {
-  onFileUpload: (file: File) => void;
+  onFileUpload: (f: File) => void;
+  onSheetChange: (s : string) => void;
+  onCustomerIDChange: (n: number) => void;
+  onProviderIDChange: (n: number) => void;
+  onTypeChange: (n: number) => void;
+  onLoadingDateChange: (n: number) => void;
+  onShippingDateChange: (n: number) => void;
 }
 
 const Upload: React.FC<UploadProps> = (props: UploadProps) => {
@@ -47,6 +61,7 @@ const Upload: React.FC<UploadProps> = (props: UploadProps) => {
               title="Feuille Commandes"
               value={props.orderSheetName}
               options={props.orderSheetNames}
+              onChange={props.onSheetChange}
               byValue
             />
           </div>
@@ -56,11 +71,13 @@ const Upload: React.FC<UploadProps> = (props: UploadProps) => {
               title="Cellule ID Client"
               value={props.orderCustomerIDCell}
               options={props.orderCells}
+              onChange={props.onCustomerIDChange}
             />
             <Select
               title="Cellule ID Transporteur"
               value={props.orderProviderIDCell}
               options={props.orderCells}
+              onChange={props.onProviderIDChange}
             />
           </div>
 
@@ -69,16 +86,19 @@ const Upload: React.FC<UploadProps> = (props: UploadProps) => {
               title="Cellule de Type"
               value={props.orderTypeCell}
               options={props.orderCells}
+              onChange={props.onTypeChange}
             />
             <Select
               title="Cellule date Chargement"
               value={props.orderLoadingDateCell}
               options={props.orderCells}
+              onChange={props.onLoadingDateChange}
             />
             <Select
               title="Cellule date Livraison"
               value={props.orderShippingDateCell}
               options={props.orderCells}
+              onChange={props.onShippingDateChange}
             />
           </div>
       </form>
@@ -98,7 +118,13 @@ const mapStateToProps = (state: State): UploadState => ({
 });
 
 const mapDispatchToProps = (dispatch: Function): UploadDispatch => ({
-  onFileUpload: f => dispatch(orderFileChangeAction(f))
+  onFileUpload: f => dispatch(orderFileChangeAction(f)),
+  onSheetChange: s => dispatch(orderSheetChangeAction(s)),
+  onCustomerIDChange: n => dispatch(orderCustomerIDCellChangeAction(n)),
+  onProviderIDChange: n => dispatch(orderProviderIDCellChangeAction(n)),
+  onTypeChange: n => dispatch(orderTypeCellChangeAction(n)),
+  onLoadingDateChange: n => dispatch(orderLoadingDateCellChangeAction(n)),
+  onShippingDateChange: n => dispatch(orderShippingDateCellChangeAction(n))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Upload);
