@@ -95,7 +95,7 @@ class Compute {
   }
 
   private getCustomerMark(customerKey: string | number): string | undefined {
-    if (this.isValid(customerKey, this.customerMap, this.$.customerMarkCell)) {
+    if (!this.isValid(customerKey, this.customerMap, this.$.customerMarkCell)) {
       return undefined;
     }
     const customer = this.getInMap(customerKey, this.customerMap);
@@ -197,7 +197,7 @@ class Compute {
       return false;
     }
 
-    return false;
+    return true;
   }
 
   private getInMap(key: string | number, map: CellMap): any[] | undefined {
