@@ -72,7 +72,7 @@ export const getCustomerIDCellAggregateStatus = createSelector([getCustomerIDCel
 export const getProviderIDCellAggregateStatus = createSelector([getProviderIDCellStatus, getOrderProviderIDCellStatus], extractCellAggregateStatus());
 
 export const getCustomerIDStatus = createSelector([getCustomerMap, getOrderCustomerMap, getCustomerIDCellAggregateStatus], extractIDStatus());
-export const getProviderIDStatus = createSelector([getProviderMap, getOrderCustomerMap, getProviderIDCellAggregateStatus], extractIDStatus());
+export const getProviderIDStatus = createSelector([getProviderMap, getOrderProviderMap, getProviderIDCellAggregateStatus], extractIDStatus());
 
 export const getOptionsStatus = createSelector(
   [getCustomerMarkCell, getProviderMarkCell, getOrderTypeCell, getOrderLoadingDateCell, getOrderShippingDateCell],
